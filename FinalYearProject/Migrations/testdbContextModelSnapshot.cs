@@ -237,11 +237,11 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.StudentAnswer", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int?>("StudentId")
                         .HasColumnType("int")
                         .HasColumnName("student_id");
 
-                    b.Property<int>("ExamQuestionsId")
+                    b.Property<int?>("ExamQuestionsId")
                         .HasColumnType("int")
                         .HasColumnName("exam_questions_id");
 

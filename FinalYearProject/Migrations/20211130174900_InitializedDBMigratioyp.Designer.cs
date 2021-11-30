@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(testdbContext))]
-    [Migration("20211129113539_DBsetupWithCascades")]
-    partial class DBsetupWithCascades
+    [Migration("20211130174900_InitializedDBMigratioyp")]
+    partial class InitializedDBMigratioyp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,11 +114,11 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.ExamQuestion", b =>
                 {
-                    b.Property<int>("ExamId")
+                    b.Property<int?>("ExamId")
                         .HasColumnType("int")
                         .HasColumnName("exam_id");
 
-                    b.Property<int>("QuestionId")
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int")
                         .HasColumnName("question_id");
 
@@ -239,11 +239,11 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.StudentAnswer", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int?>("StudentId")
                         .HasColumnType("int")
                         .HasColumnName("student_id");
 
-                    b.Property<int>("ExamQuestionsId")
+                    b.Property<int?>("ExamQuestionsId")
                         .HasColumnType("int")
                         .HasColumnName("exam_questions_id");
 
@@ -301,14 +301,13 @@ namespace FinalYearProject.Migrations
                         .WithMany("ExamQuestions")
                         .HasForeignKey("ExamId")
                         .HasConstraintName("FK_ExamQuestions_Exam")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FinalYearProject.Models.Question", "Question")
                         .WithMany("ExamQuestions")
                         .HasForeignKey("QuestionId")
                         .HasConstraintName("FK_ExamQuestions_Question")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Exam");

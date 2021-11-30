@@ -146,6 +146,8 @@ namespace FinalYearProject.Models
                     .HasConstraintName("FK_ExamQuestions_Question");
             });
 
+            
+
             modelBuilder.Entity<Faculty>(entity =>
             {
                 entity.ToTable("Faculty");

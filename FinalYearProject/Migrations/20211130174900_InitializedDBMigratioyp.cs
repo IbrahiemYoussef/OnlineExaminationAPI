@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class DBsetupWithCascades : Migration
+    public partial class InitializedDBMigratioyp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -140,13 +140,12 @@ namespace FinalYearProject.Migrations
                         column: x => x.exam_id,
                         principalTable: "Exam",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ExamQuestions_Question",
                         column: x => x.question_id,
                         principalTable: "Question",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
