@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20211201105814_removedType")]
-    partial class removedType
+    [Migration("20211201171503_Hello2")]
+    partial class Hello2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -235,7 +235,7 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("hint");
 
-                    b.Property<string>("Question1")
+                    b.Property<string>("Questionx")
                         .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)")

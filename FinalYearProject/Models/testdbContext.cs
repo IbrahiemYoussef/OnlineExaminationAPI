@@ -207,7 +207,7 @@ namespace FinalYearProject.Models
                     .IsUnicode(false)
                     .HasColumnName("Diffculty");
 
-                entity.Property(e => e.Question1)
+                entity.Property(e => e.Questionx)
                     .IsRequired()
                     .IsUnicode(false)
                     .HasColumnName("question");

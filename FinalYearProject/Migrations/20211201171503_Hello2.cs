@@ -2,7 +2,7 @@
 
 namespace FinalYearProject.Migrations
 {
-    public partial class mydb : Migration
+    public partial class Hello2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

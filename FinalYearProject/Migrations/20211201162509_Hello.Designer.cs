@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20211130203034_mydb2")]
-    partial class mydb2
+    [Migration("20211201162509_Hello")]
+    partial class Hello
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -168,16 +168,30 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("Email");
 
                     b.Property<bool>("Isdisabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Is_Disabled");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Name");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("Password");
 
                     b.HasKey("Id");
 
@@ -202,29 +216,30 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("int")
                         .HasColumnName("course_id");
 
-                    b.Property<string>("Goal")
+                    b.Property<string>("Difficulty")
                         .IsRequired()
+                        .HasMaxLength(15)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(15)")
+                        .HasColumnName("Diffculty");
+
+                    b.Property<string>("Goal")
                         .HasMaxLength(1)
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)")
                         .HasColumnName("goal");
 
                     b.Property<string>("Hint")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("hint");
 
-                    b.Property<string>("Question1")
+                    b.Property<string>("Questionx")
                         .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)")
                         .HasColumnName("question");
-
-                    b.Property<bool>("Type")
-                        .HasColumnType("bit")
-                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
@@ -267,16 +282,30 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("Email");
 
                     b.Property<bool>("Isdisabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Is_Disabled");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Name");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("Password");
 
                     b.HasKey("Id");
 

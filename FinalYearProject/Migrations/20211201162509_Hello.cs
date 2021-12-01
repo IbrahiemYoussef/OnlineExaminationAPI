@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class InitializedDBMigratioyp : Migration
+    public partial class Hello : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,22 @@ namespace FinalYearProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Faculty", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Professor",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Is_Disabled = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Professor", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,6 +52,22 @@ namespace FinalYearProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Student",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Is_Disabled = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Student", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Course",
                 columns: table => new
                 {
@@ -49,6 +81,12 @@ namespace FinalYearProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Course", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Course_Professor",
+                        column: x => x.professor_id,
+                        principalTable: "Professor",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Course_Schedule",
                         column: x => x.schedule_id,
@@ -73,6 +111,12 @@ namespace FinalYearProject.Migrations
                         name: "FK_Enrollment_Course",
                         column: x => x.course_id,
                         principalTable: "Course",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Enrollment_Student",
+                        column: x => x.student_id,
+                        principalTable: "Student",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -106,10 +150,10 @@ namespace FinalYearProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     question = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     answer = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    hint = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    goal = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: false),
-                    type = table.Column<bool>(type: "bit", nullable: false),
-                    course_id = table.Column<int>(type: "int", nullable: false)
+                    hint = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    goal = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
+                    course_id = table.Column<int>(type: "int", nullable: false),
+                    Diffculty = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,12 +209,28 @@ namespace FinalYearProject.Migrations
                         principalTable: "ExamQuestions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswer_Student_student_id",
+                        column: x => x.student_id,
+                        principalTable: "Student",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Course_professor_id",
+                table: "Course",
+                column: "professor_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Course_schedule_id",
                 table: "Course",
                 column: "schedule_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enrollment_student_id",
+                table: "Enrollment",
+                column: "student_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Exam_course_id",
@@ -214,6 +274,9 @@ namespace FinalYearProject.Migrations
                 name: "ExamQuestions");
 
             migrationBuilder.DropTable(
+                name: "Student");
+
+            migrationBuilder.DropTable(
                 name: "Exam");
 
             migrationBuilder.DropTable(
@@ -221,6 +284,9 @@ namespace FinalYearProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Course");
+
+            migrationBuilder.DropTable(
+                name: "Professor");
 
             migrationBuilder.DropTable(
                 name: "Schedule");
