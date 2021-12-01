@@ -15,10 +15,11 @@ namespace FinalYearProject.Models
         public int Id { get; set; }
         public string Question1 { get; set; }
         public string Answer { get; set; }
-        public string Hint { get; set; }
-        public string Goal { get; set; }
-        public bool Type { get; set; }
+        public string? Hint { get; set; }
+        public string? Goal { get; set; }
+        
         public int CourseId { get; set; }
+        public string Difficulty { get; set; }
 
         public virtual Course Course { get; set; }
         public virtual ICollection<ExamQuestion> ExamQuestions { get; set; }

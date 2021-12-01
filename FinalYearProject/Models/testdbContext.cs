@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FinalYearProject.Models
 {
-    public partial class testdbContext : DbContext
+    public partial class mydbcon : DbContext
     {
-        public testdbContext()
+        public mydbcon()
         {
         }
 
-        public testdbContext(DbContextOptions<testdbContext> options)
+        public mydbcon(DbContextOptions<mydbcon> options)
             : base(options)
         {
         }
@@ -25,13 +25,19 @@ namespace FinalYearProject.Models
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<StudentAnswer> StudentAnswers { get; set; }
+        public virtual DbSet<Professor> Professors { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
+        public object Course { get; internal set; }
+        public object Schedule { get; internal set; }
+        public object Professor { get; internal set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=LAPTOP-GSR45SKK;Initial Catalog=testdb;Integrated Security=True;Pooling=False");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-3Q7GNT9;Initial Catalog=mydbcon;Integrated Security=True;Pooling=False");
             }
         }
 
@@ -56,6 +62,12 @@ namespace FinalYearProject.Models
 
                 entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
 
+                entity.HasOne(d => d.Professor)
+                    .WithMany(p => p.Courses)
+                    .HasForeignKey(d => d.ProfessorId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Course_Professor");
+
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.ScheduleId)
@@ -79,6 +91,12 @@ namespace FinalYearProject.Models
                     .HasColumnName("grade");
 
                 entity.Property(e => e.TotalMarks).HasColumnName("totalMarks");
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.Enrollments)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Enrollment_Student");
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Enrollments)
@@ -175,23 +193,25 @@ namespace FinalYearProject.Models
                 entity.Property(e => e.CourseId).HasColumnName("course_id");
 
                 entity.Property(e => e.Goal)
-                    .IsRequired()
                     .HasMaxLength(1)
                     .IsUnicode(false)
                     .HasColumnName("goal");
 
                 entity.Property(e => e.Hint)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("hint");
+                entity.Property(e => e.Difficulty)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .HasColumnName("Diffculty");
 
                 entity.Property(e => e.Question1)
                     .IsRequired()
                     .IsUnicode(false)
                     .HasColumnName("question");
 
-                entity.Property(e => e.Type).HasColumnName("type");
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Questions)
@@ -241,6 +261,60 @@ namespace FinalYearProject.Models
                     .HasForeignKey(d => d.ExamQuestionsId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_StudentAnswer_ExamQuestions");
+            });
+
+
+            modelBuilder.Entity<Professor>(entity =>
+            {
+                entity.ToTable("Professor");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("Name");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("Email");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("Password");
+                entity.Property(e => e.Isdisabled)
+                    .IsRequired()
+                    .HasColumnName("Is_Disabled");
+
+            });
+
+
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.ToTable("Student");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("Name");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("Email");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("Password");
+                entity.Property(e => e.Isdisabled)
+                    .IsRequired()
+                    .HasColumnName("Is_Disabled");
+
             });
 
             OnModelCreatingPartial(modelBuilder);

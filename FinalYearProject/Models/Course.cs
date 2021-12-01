@@ -21,6 +21,7 @@ namespace FinalYearProject.Models
         public int ScheduleId { get; set; }
 
         public virtual Schedule Schedule { get; set; }
+        public virtual Professor Professor { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual ICollection<Exam> Exams { get; set; }
         public virtual ICollection<Question> Questions { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FinalYearProject.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -7,40 +8,243 @@ using System.Threading.Tasks;
 
 namespace FinalYearProject.Data.Models
 {
+
     public class AppInitializer
     {
         public static void seed(IApplicationBuilder applicationBuilder)
         {
-            //using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
-            //{
-            //    var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<mydbcon>();
+                if (!context.Professors.Any())
+                {
+                    context.Professors.AddRange(
+                        new Professor()
+                        {
+                            Name = "MohamedAbosri3",
+                            Email = "mohamedaf@gmail.com",
+                            Password = "mo123456",
+                            Isdisabled = false
+                        },
+                        new Professor()
+                        {
+                            Name = "ikillhumanity",
+                            Email = "ikillhumanity@gmail.com",
+                            Password = "mo123456",
+                            Isdisabled = false
+                        },
+                        new Professor()
+                        {
+                            Name = "asemaljazar",
+                            Email = "asemaljazar@gmail.com",
+                            Password = "mo123456",
+                            Isdisabled = false
+                        }
+                        );
 
-            //    if (!context.Books.Any())
-            //    {
-            //        context.Books.AddRange(
-            //            new Book()
-            //            {
-            //                Name="casper"
+                }
 
-            //            },
-            //            new Book()
-            //            {
-            //                Name = "cyber"
-            //            },
-            //            new Book()
-            //            {
-            //                Name = "jwt"
+                if (!context.Schedules.Any())
+                {
+                    context.Schedules.AddRange(
+                        new Schedule()
+                        {
+                            Name = "AI",
+                            Description = "the AI exam will be at ",
+                            Time = new DateTime(2022, 05, 09, 9, 15, 00)
 
-            //            },
-            //            new Book()
-            //            {
-            //                Name = "jwt2"
+                        },
+                        new Schedule()
+                        {
+                            Name = "Informatics",
+                            Description = "the Informatics exam will be at ",
+                            Time = new DateTime(2022, 05, 09, 12, 15, 00)
 
-            //            }
-            //         );
-            //    }
-            //    context.SaveChanges();
-            //}
+                        },
+                        new Schedule()
+                        {
+                            Name = "Network",
+                            Description = "the Network exam will be at ",
+                            Time = new DateTime(2022, 05, 08, 12, 15, 00)
+                        },
+                        new Schedule()
+                        {
+                            Name = "ComputerGraphics",
+                            Description = "the Computer Graphics exam will be at ",
+                            Time = new DateTime(2022, 05, 08, 10, 15, 00)
+                        }
+
+
+
+                        );
+
+                };
+                if (!context.Courses.Any())
+                {
+                    context.Courses.AddRange(
+                        new Course()
+                        {
+                            Name = "AI",
+                            CreditHrs = 4,
+                            ProfessorId = 2,
+                            ScheduleId = 3
+                        },
+                         new Course()
+                         {
+                             Name = "ComputerGraphics",
+                             CreditHrs = 3,
+                             ProfessorId = 4,
+                             ScheduleId = 6
+                         },
+                          new Course()
+                          {
+                              Name = "Informatics",
+                              CreditHrs = 3,
+                              ProfessorId = 3,
+                              ScheduleId = 4
+                          },
+                           new Course()
+                           {
+                               Name = "Network",
+                               CreditHrs = 4,
+                               ProfessorId = 2,
+                               ScheduleId = 5
+                           }
+                        );
+                    //if (!context.Questions.Any())
+                    //{
+                    //    context.Questions.AddRange(
+                    //        new Question()
+                    //        {
+                    //            Question1 = "The World Wide Web was not viable to the general public until ________.",
+                    //            Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty="Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "In the 1980s, only large universities and ________ were able to access the Internet including e - mail.",
+                    //            Answer = "{'A':'news organizations','B':'TV stations','C':'the U.S. government','D':'corporations'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "A printer is classified as a(n) ________.",
+                    //            Answer = "{'A':' integral part of every computer','B':'processing device','C':' output device','D':'system device'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Which item below is not part of the computer IPOS cycle?",
+                    //            Answer = "{'A':'Information','B':'Processing','C':'Output','D':'Storage'}",
+                    //            Hint = null,
+                    //            Goal = "A",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "________ software controls all devices and operations completed by a computer.",
+                    //            Answer = "{'A':'Major','B':'Application','C':'Program','D':'System'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = " A series of steps that describe what a computer must do to solve a problem or perform a task is a(n) ________.",
+                    //            Answer = "{'A':'system procedure','B':'function','C':'scenario','D':'algorithm'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Which of the below is NOT a(n) output device?",
+                    //            Answer = "{'A':'Speaker','B':'Monitor','C':'Microphone','D':'Printer'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Information stored in a computer's RAM is ________.",
+                    //            Answer = "{'A':'permanent','B':'non-volatile','C':'temporary','D':'slower than secondary memory'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "If you assign different user names for each user of your computer, the operating system creates a special ________ for each user.",
+                    //            Answer = "{'A':'network','B':'disk drive','C':'profile','D':'email account'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Windows and Macs are equipped with ________ capabilities to allow different devices to automatically be recognized by the system.",
+                    //            Answer = "{'A':'plug-and-play','B':' library modules','C':'special nodes','D':'device recognition'}",
+                    //            Hint = null,
+                    //            Goal = "A",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "When one task uses its ________ or is interrupted by a task of higher priority, the task is suspended and the other task starts.",
+                    //            Answer = "{'A':'CPA','B':'RAM','C':'buffer','D':'time slice'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "To ensure that programs run quickly, operating systems use the computer's RAM as a(n) ________.",
+                    //            Answer = "{'A':'accelerator','B':'command enhancer','C':'buffer','D':'quick access system'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Starting more than one application at a time is known as ________.",
+                    //            Answer = "{'A':'multitasking','B':'convergence','C':'loading foreground','D':'workload increase'}",
+                    //            Hint = null,
+                    //            Goal = "A",
+                    //            CourseId = 1,
+                    //            Difficulty = "Middle"
+                    //        }
+
+
+
+
+                           // );
+
+
+                    }
+                    context.SaveChanges();
+
+                }
+
+            }
         }
     }
-}
+
+

@@ -16,6 +16,8 @@ namespace FinalYearProject
     {
         public string ConnectionString { get; set; }
         private string _contentRootPath = "";
+
+        
         public Startup(IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             Configuration = configuration;
@@ -35,7 +37,7 @@ namespace FinalYearProject
         public void ConfigureServices(IServiceCollection services)
 {
             services.AddControllers();
-            services.AddDbContext<testdbContext>(options => options.UseSqlServer(ConnectionString));
+            services.AddDbContext<mydbcon>(options => options.UseSqlServer(ConnectionString));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalYearProject", Version = "v1" });
@@ -63,7 +65,7 @@ namespace FinalYearProject
                 endpoints.MapControllers();
             });
 
-            //AppInitializer.seed(app);
+            AppInitializer.seed(app);
 
         }
     }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20211130174900_InitializedDBMigratioyp")]
-    partial class InitializedDBMigratioyp
+    [Migration("20211130205140_mydb3")]
+    partial class mydb3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,6 +50,8 @@ namespace FinalYearProject.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfessorId");
+
                     b.HasIndex("ScheduleId");
 
                     b.ToTable("Course");
@@ -76,6 +78,8 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("totalMarks");
 
                     b.HasKey("CourseId", "StudentId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollment");
                 });
@@ -159,6 +163,30 @@ namespace FinalYearProject.Migrations
                     b.ToTable("Faculty");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.Professor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Isdisabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Professor");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -237,6 +265,30 @@ namespace FinalYearProject.Migrations
                     b.ToTable("Schedule");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Isdisabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Student");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.StudentAnswer", b =>
                 {
                     b.Property<int?>("StudentId")
@@ -261,12 +313,21 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.Course", b =>
                 {
+                    b.HasOne("FinalYearProject.Models.Professor", "Professor")
+                        .WithMany("Courses")
+                        .HasForeignKey("ProfessorId")
+                        .HasConstraintName("FK_Course_Professor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FinalYearProject.Models.Schedule", "Schedule")
                         .WithMany("Courses")
                         .HasForeignKey("ScheduleId")
                         .HasConstraintName("FK_Course_Schedule")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Professor");
 
                     b.Navigation("Schedule");
                 });
@@ -280,7 +341,16 @@ namespace FinalYearProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FinalYearProject.Models.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId")
+                        .HasConstraintName("FK_Enrollment_Student")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Course");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Exam", b =>
@@ -337,6 +407,12 @@ namespace FinalYearProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FinalYearProject.Models.Student", null)
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ExamQuestions");
                 });
 
@@ -359,6 +435,11 @@ namespace FinalYearProject.Migrations
                     b.Navigation("StudentAnswers");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.Professor", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.Question", b =>
                 {
                     b.Navigation("ExamQuestions");
@@ -367,6 +448,13 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.Student", b =>
+                {
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("StudentAnswers");
                 });
 #pragma warning restore 612, 618
         }
