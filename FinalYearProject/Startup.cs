@@ -1,6 +1,7 @@
 using FinalYearProject.Data;
 using FinalYearProject.Data.Models;
 using FinalYearProject.Models;
+using FinalYearProject.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ namespace FinalYearProject
 {
             services.AddControllers();
             services.AddDbContext<mydbcon>(options => options.UseSqlServer(ConnectionString));
+            services.AddTransient<ExamsService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalYearProject", Version = "v1" });
