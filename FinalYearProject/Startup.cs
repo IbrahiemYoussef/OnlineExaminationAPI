@@ -15,20 +15,19 @@ namespace FinalYearProject
     public class Startup
     {
         public string ConnectionString { get; set; }
-        private string _contentRootPath = "";
 
         
         public Startup(IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             Configuration = configuration;
-            //20160718 JPC enable portable dev database
-            string conn = Configuration.GetConnectionString("DefaultConnectionString");
-            if (conn.Contains("%CONTENTROOTPATH%"))
-            {
-                conn = conn.Replace("%CONTENTROOTPATH%", _contentRootPath);
-            }
+            string conn="";
+
+            if(System.Environment.MachineName == "LAPTOP-GSR45SKK")
+                conn = Configuration.GetConnectionString("Abusarie");
+            else
+                conn = Configuration.GetConnectionString("DefaultConnectionString");
             ConnectionString = conn;
-            _contentRootPath = env.ContentRootPath;
+ 
         }
 
         public IConfiguration Configuration { get; }
