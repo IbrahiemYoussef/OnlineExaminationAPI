@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace FinalYearProject.Data.Models
 {
@@ -371,22 +372,31 @@ namespace FinalYearProject.Data.Models
                 context.Questions.AddRange(
                     new Question()
                     {
-                        Question1 = "The World Wide Web was not viable to the general public until ________.",
-                        Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
+                        Questionx = "A(n) ________ is a set of instructions that a computer uses to accomplish a task, such as word processing.",
+                        Answer = JsonSerializer.Serialize(new Answer() { A="icon",B="command",C="file",D="program" }),
                         Hint = null,
                         Goal = "D",
-                        CourseId = 1,
+                        CourseId = 2,
                         Difficulty = "Hard"
                     },
                     new Question()
                     {
-                        Question1 = "The World Wide Web was not viable to the general public until ________.",
+                        Questionx = "The World Wide Web was not viable to the general public until ________.",
                         Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
                         Hint = null,
                         Goal = "D",
-                        CourseId = 1,
+                        CourseId = 2,
                         Difficulty = "Hard"
-                    }
+                    },
+                    new Question()
+                    {
+                        Questionx = "The World Wide Web was not viable to the general public until ________.",
+                        Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
+                        Hint = null,
+                        Goal = "D",
+                        CourseId = 2,
+                        Difficulty = "Hard"
+                    },
                );
             }
 
