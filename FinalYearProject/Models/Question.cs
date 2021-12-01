@@ -13,7 +13,7 @@ namespace FinalYearProject.Models
         }
 
         public int Id { get; set; }
-        public string Question1 { get; set; }
+        public string Questionx { get; set; }
         public string Answer { get; set; }
         public string? Hint { get; set; }
         public string? Goal { get; set; }

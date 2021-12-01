@@ -364,9 +364,32 @@ namespace FinalYearProject.Data.Models
 
             //  );
         }
-        public void addQuestionToCourse(c_id)
+        public void addQuestionToCourse(dynamic context,int c_id)
         {
-            Console.WriteLine("ss");
+            if (!context.Questions.Any())
+            {
+                context.Questions.AddRange(
+                    new Question()
+                    {
+                        Question1 = "The World Wide Web was not viable to the general public until ________.",
+                        Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
+                        Hint = null,
+                        Goal = "D",
+                        CourseId = 1,
+                        Difficulty = "Hard"
+                    },
+                    new Question()
+                    {
+                        Question1 = "The World Wide Web was not viable to the general public until ________.",
+                        Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
+                        Hint = null,
+                        Goal = "D",
+                        CourseId = 1,
+                        Difficulty = "Hard"
+                    }
+               );
+            }
+
         }
     }
 }
