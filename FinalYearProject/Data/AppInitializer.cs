@@ -121,7 +121,7 @@ namespace FinalYearProject.Data.Models
                     //            Hint = null,
                     //            Goal = "D",
                     //            CourseId = 1,
-                    //            Difficulty="Hard"
+                    //            Difficulty = "Hard"
                     //        },
                     //        new Question()
                     //        {
@@ -229,13 +229,130 @@ namespace FinalYearProject.Data.Models
                     //            Hint = null,
                     //            Goal = "A",
                     //            CourseId = 1,
-                    //            Difficulty = "Middle"
-                    //        }
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Program instructions and data are divided into fixed sized units called ________.",
+                    //            Answer = {"A":"blocks","B":"batches","C":"pages","D":"packets"},
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "Press [Alt]+[Ctrl]+[Delete] to access the Windows ________.",
+                    //            Answer = "{'A':'processor','B':' Task Manager','C':'shut-down sequence','D':'print function'}",
+                    //            Hint = null,
+                    //            Goal = "B",
+                    //            CourseId = 1,
+                    //            Difficulty = "Moderate"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "When Task Manager is visible, select the ________ tab to view a list of processes running.",
+                    //            Answer = "{'A':'Processes','B':'Procedures','C':'Programs','D':'People'}",
+                    //            Hint = null,
+                    //            Goal = "A",
+                    //            CourseId = 1,
+                    //            Difficulty = "Moderate"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "The status bar of the Task Manager provides information about the ________ and memory usage.",
+                    //            Answer = "{'A':'disk drive','B':'input/output','C':'CPU','D':'printer'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "To enable a printer to keep up with the amount of data sent to it by the computer, a ________ program is used.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "A type of computer operating system user interface that is commonly used today is ________.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "The lower edge of the PC desktop screen displays a ________.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "D",
+                    //            CourseId = 1,
+                    //            Difficulty = "Easy"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "In a command line operating system, the command copy C:\myfile.txt F:\myfile.txt will copy ________.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "A",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = " ________ is a feature that enables subtle animations and translucent glass windows that can be custom colored.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "A",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "An operating system available at no cost is the ________ operating system.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = "The original Macintosh operating system called Mac OS was released in:",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = " The Linux operating system called ________ was released to promote One Laptop per Child.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "C",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
+                    //        new Question()
+                    //        {
+                    //            Question1 = " Windows dominates the market for operating systems at about ________ percent.",
+                    //            Answer = "{'A':'blocks','B':'batches','C':'pages','D':'packets'}",
+                    //            Hint = null,
+                    //            Goal = "B",
+                    //            CourseId = 1,
+                    //            Difficulty = "Hard"
+                    //        },
 
 
 
 
-                           // );
+                          //  );
 
 
                     }
