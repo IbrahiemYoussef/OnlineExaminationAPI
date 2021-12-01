@@ -370,33 +370,43 @@ namespace FinalYearProject.Data.Models
             if (!context.Questions.Any())
             {
                 context.Questions.AddRange(
-                    new Question()
-                    {
-                        Questionx = "A(n) ________ is a set of instructions that a computer uses to accomplish a task, such as word processing.",
-                        Answer = JsonSerializer.Serialize(new Answer() { A="icon",B="command",C="file",D="program" }),
-                        Hint = null,
-                        Goal = "D",
-                        CourseId = 2,
-                        Difficulty = "Hard"
-                    },
-                    new Question()
-                    {
-                        Questionx = "The World Wide Web was not viable to the general public until ________.",
-                        Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
-                        Hint = null,
-                        Goal = "D",
-                        CourseId = 2,
-                        Difficulty = "Hard"
-                    },
-                    new Question()
-                    {
-                        Questionx = "The World Wide Web was not viable to the general public until ________.",
-                        Answer = "{'A':'1980','B':'1990','C':'1995','D':'1993'}",
-                        Hint = null,
-                        Goal = "D",
-                        CourseId = 2,
-                        Difficulty = "Hard"
-                    },
+new Question()
+{
+    Questionx = "A(n) ________ is a set of instructions that a computer uses to accomplish a task, such as word processing.",
+    Answer = JsonSerializer.Serialize(new Answer() { A="icon",B="command",C="file",D="program" }),
+    Hint = null,
+    Goal = "D",
+    CourseId = 2,
+    Difficulty = "Hard"
+},
+new Question()
+{
+    Questionx = "A(n) ________ is a collection of information that is stored on a computer under a single name.",
+    Answer = JsonSerializer.Serialize(new Answer() 
+    {   A = "document",
+        B = "catalog",
+        C = "file",
+        D = "section" 
+    }),
+    Hint = null,
+    Goal = "C",
+    CourseId = 2,
+    Difficulty = "Hard"
+},
+new Question()
+{
+    Questionx = "Every file is stored in a(n) ________.",
+    Answer = JsonSerializer.Serialize(new Answer() 
+    {   A = "icon",
+        B = "command",
+        C = "file",
+        D = "program" 
+    }),
+    Hint = null,
+    Goal = "D",
+    CourseId = 2,
+    Difficulty = "Hard"
+}
                );
             }
 
