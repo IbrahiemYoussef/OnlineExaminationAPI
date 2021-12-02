@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinalYearProject.Models.ResponseModels
+namespace FinalYearProject.Models.DTOs
 {
-    public class ExaminationQuestion
+    public class QuestionDTO
     {
         public int Id { get; set; }
         public string Questionx { get; set; }

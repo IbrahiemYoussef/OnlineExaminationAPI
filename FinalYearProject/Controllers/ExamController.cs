@@ -1,12 +1,7 @@
-﻿using FinalYearProject.Models;
-using FinalYearProject.Models.ResponseModels;
+﻿using FinalYearProject.Models.DTOs;
 using FinalYearProject.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FinalYearProject.Controllers
 {
@@ -22,7 +17,7 @@ namespace FinalYearProject.Controllers
 
         [HttpGet]
 
-        public List<ExaminationQuestion> GetUniqueExam(string course_name,int n,int neasy,int nmod,int nhard,string type)
+        public List<QuestionDTO> GetUniqueExam(string course_name,int n,int neasy,int nmod,int nhard,string type)
         {
              return _examService.GetUniqueExam(course_name, n,neasy, nmod, nhard, type);
         }

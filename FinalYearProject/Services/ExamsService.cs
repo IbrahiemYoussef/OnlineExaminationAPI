@@ -1,5 +1,5 @@
 ﻿using FinalYearProject.Models;
-using FinalYearProject.Models.ResponseModels;
+using FinalYearProject.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace FinalYearProject.Services
             _context = context;
         }
 
-        public List<ExaminationQuestion> GetUniqueExam(string course_name, int n,int neasy, int nmod, int nhard, string type)
+        public List<QuestionDTO> GetUniqueExam(string course_name, int n,int neasy, int nmod, int nhard, string type)
         {
             //if n > nrows in the table
 
@@ -50,11 +50,11 @@ namespace FinalYearProject.Services
 
             }
 
-            List<ExaminationQuestion>  examinationQuestions = new List<ExaminationQuestion>( new ExaminationQuestion[questions.Count] );
+            List<QuestionDTO>  examinationQuestions = new List<QuestionDTO>( new QuestionDTO[questions.Count] );
 
             for(int i=0;i< questions.Count; i++)
             {
-                examinationQuestions[i] = new ExaminationQuestion();
+                examinationQuestions[i] = new QuestionDTO();
 
                 examinationQuestions[i].Id = questions[i].Id;
                 examinationQuestions[i].Questionx = questions[i].Questionx;

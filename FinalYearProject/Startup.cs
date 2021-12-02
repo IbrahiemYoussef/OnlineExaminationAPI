@@ -39,6 +39,7 @@ namespace FinalYearProject
             services.AddControllers();
             services.AddDbContext<mydbcon>(options => options.UseSqlServer(ConnectionString));
             services.AddTransient<ExamsService>();
+            services.AddTransient<CoursesService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalYearProject", Version = "v1" });
