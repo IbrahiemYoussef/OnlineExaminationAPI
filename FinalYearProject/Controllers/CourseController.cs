@@ -1,4 +1,5 @@
-﻿using FinalYearProject.Services;
+﻿using AutoMapper;
+using FinalYearProject.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,6 +17,7 @@ namespace FinalYearProject.Controllers
         public CourseController(CoursesService courseService)
         {
             _courseService = courseService;
+            
         }
 
         [HttpGet("{prof_id}")]

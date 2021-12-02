@@ -1,4 +1,5 @@
-﻿using FinalYearProject.Models;
+﻿using AutoMapper;
+using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,18 @@ namespace FinalYearProject.Services
     public class CoursesService
     {
         private mydbcon _context;
-        public CoursesService(mydbcon context)
+        private readonly IMapper _mapper;
+        public CoursesService(mydbcon context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<CourseDTO> GetManagedCourses(int prof_id)
         {
-            //return _context.Courses.Where(x => x.ProfessorId == prof_id).ToList();
+            var res= _context.Courses.Where(x => x.ProfessorId == prof_id).ToList();
+            return _mapper.Map<List<CourseDTO>>(res);
+
         }
     }
 }

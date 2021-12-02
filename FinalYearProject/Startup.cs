@@ -18,7 +18,7 @@ namespace FinalYearProject
         public string ConnectionString { get; set; }
 
         
-        public Startup(IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             string conn="";
@@ -40,6 +40,9 @@ namespace FinalYearProject
             services.AddDbContext<mydbcon>(options => options.UseSqlServer(ConnectionString));
             services.AddTransient<ExamsService>();
             services.AddTransient<CoursesService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalYearProject", Version = "v1" });

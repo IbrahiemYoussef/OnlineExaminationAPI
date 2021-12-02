@@ -1,4 +1,5 @@
-﻿using FinalYearProject.Models;
+﻿using AutoMapper;
+using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ namespace FinalYearProject.Services
     public class ExamsService
     {
         private mydbcon _context;
-        public ExamsService(mydbcon context)
+        private readonly IMapper _mapper;
+        public ExamsService(mydbcon context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<QuestionDTO> GetUniqueExam(string course_name, int n,int neasy, int nmod, int nhard, string type)
@@ -50,23 +53,7 @@ namespace FinalYearProject.Services
 
             }
 
-            List<QuestionDTO>  examinationQuestions = new List<QuestionDTO>( new QuestionDTO[questions.Count] );
-
-            for(int i=0;i< questions.Count; i++)
-            {
-                examinationQuestions[i] = new QuestionDTO();
-
-                examinationQuestions[i].Id = questions[i].Id;
-                examinationQuestions[i].Questionx = questions[i].Questionx;
-                examinationQuestions[i].Answer = questions[i].Answer;
-                if (questions[i].Goal == null)
-                    examinationQuestions[i].Answer = null;
-                examinationQuestions[i].Hint = questions[i].Hint;
-                examinationQuestions[i].CourseId = questions[i].CourseId;
-            }
-
-
-            return examinationQuestions;
+            return _mapper.Map<List<QuestionDTO>>(questions);
 
         }
     }
