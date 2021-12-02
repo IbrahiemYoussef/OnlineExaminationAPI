@@ -1,4 +1,5 @@
 ﻿using FinalYearProject.Models;
+using FinalYearProject.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace FinalYearProject.Services
             _context = context;
         }
 
-        public List<Course> GetManagedCourses(int prof_id)
+        public List<CourseDTO> GetManagedCourses(int prof_id)
         {
-            return _context.Courses.Where(x => x.ProfessorId == prof_id).ToList();
+            //return _context.Courses.Where(x => x.ProfessorId == prof_id).ToList();
         }
     }
 }
