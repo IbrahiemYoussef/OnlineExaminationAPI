@@ -26,11 +26,9 @@ namespace FinalYearProject.Models
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<StudentAnswer> StudentAnswers { get; set; }
-        public virtual DbSet<Professor> Professors { get; set; }
-        public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public object Course { get; internal set; }
         public object Schedule { get; internal set; }
-        public object Professor { get; internal set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,17 +48,17 @@ namespace FinalYearProject.Models
                     .HasMaxLength(30)
                     .HasColumnName("name");
 
-                entity.Property(e => e.ProfessorId).HasColumnName("professor_id");
+                entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
 
                 entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
 
-                entity.HasOne(d => d.Professor)
+                entity.HasOne(d => d.ApplicationUsers)
                     .WithMany(p => p.Courses)
-                    .HasForeignKey(d => d.ProfessorId)
+                    .HasForeignKey(d => d.ApplicationUserId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Course_Professor");
+                    .HasConstraintName("FK_ApplicationUser");
 
-                entity.HasOne(d => d.Schedule)
+                entity.HasOne(d => d.Schedules)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.ScheduleId)
                     .OnDelete(DeleteBehavior.Cascade)
@@ -69,13 +67,13 @@ namespace FinalYearProject.Models
 
             modelBuilder.Entity<Enrollment>(entity =>
             {
-                entity.HasKey(e => new { e.CourseId, e.StudentId });
+                entity.HasKey(e => new { e.CourseId, e.ApplicationUserId });
 
                 entity.ToTable("Enrollment");
 
                 entity.Property(e => e.CourseId).HasColumnName("course_id");
 
-                entity.Property(e => e.StudentId).HasColumnName("student_id");
+                entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
 
                 entity.Property(e => e.Grade)
                     .IsRequired()
@@ -84,13 +82,13 @@ namespace FinalYearProject.Models
 
                 entity.Property(e => e.TotalMarks).HasColumnName("totalMarks");
 
-                entity.HasOne(d => d.Student)
+                entity.HasOne(d => d.ApplicationUsers)
                     .WithMany(p => p.Enrollments)
-                    .HasForeignKey(d => d.StudentId)
+                    .HasForeignKey(d => d.ApplicationUserId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Enrollment_Student");
 
-                entity.HasOne(d => d.Course)
+                entity.HasOne(d => d.Courses)
                     .WithMany(p => p.Enrollments)
                     .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.Cascade)
@@ -235,11 +233,11 @@ namespace FinalYearProject.Models
 
             modelBuilder.Entity<StudentAnswer>(entity =>
             {
-                entity.HasKey(e => new { e.StudentId, e.ExamQuestionsId });
+                entity.HasKey(e => new { e.ApplicationUserId, e.ExamQuestionsId });
 
                 entity.ToTable("StudentAnswer");
 
-                entity.Property(e => e.StudentId).HasColumnName("student_id");
+                entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
 
                 entity.Property(e => e.ExamQuestionsId).HasColumnName("exam_questions_id");
 
@@ -253,61 +251,15 @@ namespace FinalYearProject.Models
                     .HasForeignKey(d => d.ExamQuestionsId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_StudentAnswer_ExamQuestions");
+
+                entity.HasOne(d => d.ApplicationUsers)
+                    .WithMany(p => p.StudentAnswers)
+                    .HasPrincipalKey(p => p.Id)
+                    .HasForeignKey(d => d.ApplicationUserId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_StudentAnswer_ApplicationUsers");
             });
 
-
-            modelBuilder.Entity<Professor>(entity =>
-            {
-                entity.ToTable("Professor");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("Name");
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(40)
-                    .HasColumnName("Email");
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(40)
-                    .HasColumnName("Password");
-                entity.Property(e => e.Isdisabled)
-                    .IsRequired()
-                    .HasColumnName("Is_Disabled");
-
-            });
-
-
-            modelBuilder.Entity<Student>(entity =>
-            {
-                entity.ToTable("Student");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("Name");
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(40)
-                    .HasColumnName("Email");
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(40)
-                    .HasColumnName("Password");
-                entity.Property(e => e.Isdisabled)
-                    .IsRequired()
-                    .HasColumnName("Is_Disabled");
-
-            });
 
             OnModelCreatingPartial(modelBuilder);
         }

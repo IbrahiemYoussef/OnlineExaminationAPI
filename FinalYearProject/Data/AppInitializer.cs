@@ -17,34 +17,34 @@ namespace FinalYearProject.Data.Models
                 using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetService<mydbcon>();
-                    if (!context.Professors.Any())
-                    {
-                        context.Professors.AddRange(
-                            new Professor()
-                            {
-                                Name = "MohamedAbosri3",
-                                Email = "mohamedaf@gmail.com",
-                                Password = "mo123456",
-                                Isdisabled = false
-                            },
-                            new Professor()
-                            {
-                                Name = "ikillhumanity",
-                                Email = "ikillhumanity@gmail.com",
-                                Password = "mo123456",
-                                Isdisabled = false
-                            },
-                            new Professor()
-                            {
-                                Name = "asemaljazar",
-                                Email = "asemaljazar@gmail.com",
-                                Password = "mo123456",
-                                Isdisabled = false
-                            }
-                            );
+                    //if (!context.ApplicationUsers.Any())
+                    //{
+                    //    context.ApplicationUsers.AddRange(
+                    //        new ApplicationUser()
+                    //        {
+                    //            UserName = "MohamedAbosri3",
+                    //            Email = "mohamedaf@gmail.com",
+                    //            Password = "mo123456",
+                    //            Isdisabled = false
+                    //        },
+                    //        new ApplicationUser()
+                    //        {
+                    //            Name = "ikillhumanity",
+                    //            Email = "ikillhumanity@gmail.com",
+                    //            Password = "mo123456",
+                    //            Isdisabled = false
+                    //        },
+                    //        new ApplicationUser()
+                    //        {
+                    //            Name = "asemaljazar",
+                    //            Email = "asemaljazar@gmail.com",
+                    //            Password = "mo123456",
+                    //            Isdisabled = false
+                    //        }
+                    //        );
 
-                    }
-                    if (!context.Schedules.Any())
+                    //}
+                if (!context.Schedules.Any())
                     {
                         context.Schedules.AddRange(
                             new Schedule()
@@ -86,28 +86,28 @@ namespace FinalYearProject.Data.Models
                         {
                             Name = "AI",
                             CreditHrs = 4,
-                            ProfessorId = 7,
+                            ApplicationUserId = 7,
                             ScheduleId = 4
                         },
                          new Course()
                          {
                              Name = "ComputerGraphics",
                              CreditHrs = 3,
-                             ProfessorId = 8,
+                             ApplicationUserId = 8,
                              ScheduleId = 1
                          },
                           new Course()
                           {
                               Name = "Informatics",
                               CreditHrs = 3,
-                              ProfessorId = 9,
+                              ApplicationUserId = 9,
                               ScheduleId = 2
                           },
                            new Course()
                            {
                                Name = "Network",
                                CreditHrs = 4,
-                               ProfessorId = 7,
+                               ApplicationUserId = 7,
                                ScheduleId = 3
                            }
                         );
