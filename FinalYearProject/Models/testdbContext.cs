@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FinalYearProject.Models
 {
-    public partial class mydbcon : DbContext
+    public partial class mydbcon : IdentityDbContext<ApplicationUser>
     {
         public mydbcon()
         {
@@ -31,15 +32,6 @@ namespace FinalYearProject.Models
         public object Schedule { get; internal set; }
         public object Professor { get; internal set; }
         
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-3Q7GNT9;Initial Catalog=mydbcon;Integrated Security=True;Pooling=False");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
