@@ -35,6 +35,8 @@ namespace FinalYearProject.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Course>(entity =>
             {
                 entity.ToTable("Course");
@@ -52,13 +54,13 @@ namespace FinalYearProject.Models
 
                 entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
 
-                entity.HasOne(d => d.ApplicationUsers)
+                entity.HasOne(d => d.ApplicationUser)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.ApplicationUserId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ApplicationUser");
 
-                entity.HasOne(d => d.Schedules)
+                entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.ScheduleId)
                     .OnDelete(DeleteBehavior.Cascade)
@@ -82,16 +84,16 @@ namespace FinalYearProject.Models
 
                 entity.Property(e => e.TotalMarks).HasColumnName("totalMarks");
 
-                entity.HasOne(d => d.ApplicationUsers)
+                entity.HasOne(d => d.ApplicationUser)
                     .WithMany(p => p.Enrollments)
                     .HasForeignKey(d => d.ApplicationUserId)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Enrollment_Student");
 
-                entity.HasOne(d => d.Courses)
+                entity.HasOne(d => d.Course)
                     .WithMany(p => p.Enrollments)
                     .HasForeignKey(d => d.CourseId)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Enrollment_Course");
             });
 
@@ -245,14 +247,14 @@ namespace FinalYearProject.Models
                     .IsRequired()
                     .HasColumnName("answer");
 
-                entity.HasOne(d => d.ExamQuestions)
+                entity.HasOne(d => d.ExamQuestion)
                     .WithMany(p => p.StudentAnswers)
                     .HasPrincipalKey(p => p.Id)
                     .HasForeignKey(d => d.ExamQuestionsId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_StudentAnswer_ExamQuestions");
 
-                entity.HasOne(d => d.ApplicationUsers)
+                entity.HasOne(d => d.ApplicationUser)
                     .WithMany(p => p.StudentAnswers)
                     .HasPrincipalKey(p => p.Id)
                     .HasForeignKey(d => d.ApplicationUserId)

@@ -18,7 +18,7 @@ namespace FinalYearProject.Services
             _mapper = mapper;
         }
 
-        public List<CourseDTO> GetManagedCourses(int prof_id)
+        public List<CourseDTO> GetManagedCourses(string prof_id)
         {
             var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();
             return _mapper.Map<List<CourseDTO>>(res);

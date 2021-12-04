@@ -86,28 +86,28 @@ namespace FinalYearProject.Data.Models
                         {
                             Name = "AI",
                             CreditHrs = 4,
-                            ApplicationUserId = 7,
+                            ApplicationUserId = "7",
                             ScheduleId = 4
                         },
                          new Course()
                          {
                              Name = "ComputerGraphics",
                              CreditHrs = 3,
-                             ApplicationUserId = 8,
+                             ApplicationUserId = "8",
                              ScheduleId = 1
                          },
                           new Course()
                           {
                               Name = "Informatics",
                               CreditHrs = 3,
-                              ApplicationUserId = 9,
+                              ApplicationUserId = "9",
                               ScheduleId = 2
                           },
                            new Course()
                            {
                                Name = "Network",
                                CreditHrs = 4,
-                               ApplicationUserId = 7,
+                               ApplicationUserId = "7",
                                ScheduleId = 3
                            }
                         );
