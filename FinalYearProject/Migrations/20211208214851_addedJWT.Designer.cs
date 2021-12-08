@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20211204173950_EFIdentityFullDbconfig2")]
-    partial class EFIdentityFullDbconfig2
+    [Migration("20211208214851_addedJWT")]
+    partial class addedJWT
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

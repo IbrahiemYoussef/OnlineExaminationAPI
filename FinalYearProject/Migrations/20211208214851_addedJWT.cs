@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class EFIdentityFullDbconfig : Migration
+    public partial class addedJWT : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -234,13 +234,13 @@ namespace FinalYearProject.Migrations
                         column: x => x.course_id,
                         principalTable: "Course",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Enrollment_Student",
                         column: x => x.application_user_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
