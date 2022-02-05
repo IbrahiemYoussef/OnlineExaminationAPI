@@ -4,14 +4,16 @@ using FinalYearProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    partial class mydbconModelSnapshot : ModelSnapshot
+    [Migration("20211226214645_addedExamDetailss")]
+    partial class addedExamDetailss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,8 +219,7 @@ namespace FinalYearProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Course_id")
-                        .IsUnique();
+                    b.HasIndex("Course_id");
 
                     b.ToTable("ExamDetails");
                 });
@@ -566,13 +567,13 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.ExamDetails", b =>
                 {
-                    b.HasOne("FinalYearProject.Models.Course", "Course")
-                        .WithOne("ExamDetails")
-                        .HasForeignKey("FinalYearProject.Models.ExamDetails", "Course_id")
+                    b.HasOne("FinalYearProject.Models.Course", "Courses")
+                        .WithMany("ExamDetails")
+                        .HasForeignKey("Course_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.ExamQuestion", b =>

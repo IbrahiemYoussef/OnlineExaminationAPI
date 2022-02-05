@@ -23,6 +23,7 @@ namespace FinalYearProject.Models
         public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
         public virtual DbSet<Faculty> Faculties { get; set; }
+        public virtual DbSet<ExamDetails> ExamDetails { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<StudentAnswer> StudentAnswers { get; set; }
@@ -65,7 +66,13 @@ namespace FinalYearProject.Models
                     .HasForeignKey(d => d.ScheduleId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Course_Schedule");
+                entity.HasOne(d => d.ExamDetails)
+                .WithOne(i => i.Course)
+                .HasForeignKey<ExamDetails>(b => b.Course_id);
             });
+
+
+
 
             modelBuilder.Entity<Enrollment>(entity =>
             {
