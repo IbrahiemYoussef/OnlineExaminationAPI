@@ -1,11 +1,13 @@
 ﻿using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
 using FinalYearProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace FinalYearProject.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ExamController : ControllerBase

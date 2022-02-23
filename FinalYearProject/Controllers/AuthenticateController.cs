@@ -1,5 +1,7 @@
 ﻿using FinalYearProject.Models;
 using FinalYearProject.Models.Security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +16,11 @@ using System.Threading.Tasks;
 
 namespace FinalYearProject.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
+
     public class AuthenticateController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -28,9 +33,9 @@ namespace FinalYearProject.Controllers
             this.roleManager = roleManager;
             _configuration = configuration;
         }
-
+        
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await userManager.FindByNameAsync(model.Username);
@@ -69,9 +74,10 @@ namespace FinalYearProject.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
+            
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
@@ -80,11 +86,14 @@ namespace FinalYearProject.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                FacultyId=model.FacultyId,
+                firstname=model.firstname,
+                lastname=model.lastname
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return StatusCode(StatusCodes.Status500InternalServerError,  new Response { Status = "error" , Message = "User creation failed! Please check user details and try again." });
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
@@ -101,7 +110,10 @@ namespace FinalYearProject.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                FacultyId = model.FacultyId,
+                firstname = model.firstname,
+                lastname = model.lastname
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)

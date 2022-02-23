@@ -38,17 +38,28 @@ namespace FinalYearProject
         }
 
         public IConfiguration Configuration { get; }
+        readonly string allowmyspecificcors = "_allowmyspecificcors";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-{
+        {
+            //for cors
+            services.AddCors(c =>
+            {
+                c.AddPolicy("_allowmyspecificcors",
+                    options => options.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            });
+
+
             services.AddControllers();
             services.AddDbContext<mydbcon>(options => options.UseSqlServer(ConnectionString));
             services.AddTransient<ExamsService>();
             services.AddTransient<CoursesService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+            
             // For Identity  
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<mydbcon>()
@@ -93,9 +104,12 @@ namespace FinalYearProject
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FinalYearProject v1"));
             }
 
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors(allowmyspecificcors);
 
             app.UseAuthentication();
             app.UseAuthorization();
