@@ -4,12 +4,15 @@ using FinalYearProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
+using FinalYearProject.Models.Params;
 
 namespace FinalYearProject.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
+    
     public class ExamController : ControllerBase
     {
         private ExamsService _examService;
@@ -42,6 +45,11 @@ namespace FinalYearProject.Controllers
             return Ok(_examService.GetExamdetailsByCourseId(course_id));
         }
 
+        [HttpPost("GetMyExam")]
+        public IActionResult GetMyExam([FromBody] GetMyExamP Obj)
+        {
+            return Ok(_examService.GetUniqueExam(Obj.course_id));
+        }
         [HttpPost("Examinate")]
         public IActionResult Examinate(int? std_id, int coursee_id, [FromBody]List<AnswerDTO> answers=null)
         {

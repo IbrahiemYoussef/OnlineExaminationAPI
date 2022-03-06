@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20211227211946_SomeModifedinExamDetailsClass")]
-    partial class SomeModifedinExamDetailsClass
+    [Migration("20220306112339_addedanotherdb")]
+    partial class addedanotherdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -149,7 +149,7 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("nvarchar(2)")
                         .HasColumnName("grade");
 
-                    b.Property<int>("TotalMarks")
+                    b.Property<int?>("TotalMarks")
                         .HasColumnType("int")
                         .HasColumnName("totalMarks");
 
@@ -280,15 +280,26 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("A")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)")
                         .HasColumnName("answer");
 
+                    b.Property<string>("B")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CourseId")
                         .HasColumnType("int")
                         .HasColumnName("course_id");
+
+                    b.Property<string>("D")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Difficulty")
                         .IsRequired()
@@ -298,9 +309,9 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("Diffculty");
 
                     b.Property<string>("Goal")
-                        .HasMaxLength(1)
+                        .HasMaxLength(15)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1)")
+                        .HasColumnType("varchar(15)")
                         .HasColumnName("goal");
 
                     b.Property<string>("Hint")
@@ -308,6 +319,10 @@ namespace FinalYearProject.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("hint");
+
+                    b.Property<string>("Qtype")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Questionx")
                         .IsRequired()

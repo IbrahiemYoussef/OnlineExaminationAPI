@@ -185,14 +185,13 @@ namespace FinalYearProject.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Answer)
-                    .IsRequired()
                     .IsUnicode(false)
                     .HasColumnName("answer");
 
                 entity.Property(e => e.CourseId).HasColumnName("course_id");
 
                 entity.Property(e => e.Goal)
-                    .HasMaxLength(1)
+                    .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("goal");
 

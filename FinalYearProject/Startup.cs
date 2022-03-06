@@ -2,6 +2,7 @@ using FinalYearProject.Data;
 using FinalYearProject.Data.Models;
 using FinalYearProject.Models;
 using FinalYearProject.Services;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,6 +65,11 @@ namespace FinalYearProject
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<mydbcon>()
                 .AddDefaultTokenProviders();
+            
+            
+            services.AddAuthentication(
+        CertificateAuthenticationDefaults.AuthenticationScheme)
+        .AddCertificate();
 
             // Adding Authentication  
             services.AddAuthentication(options =>
@@ -71,8 +77,9 @@ namespace FinalYearProject
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
 
+            })
+                
             // Adding Jwt Bearer  
             .AddJwtBearer(options =>
             {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class addedJWT : Migration
+    public partial class ChangedAlotOfThings : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -265,13 +265,42 @@ namespace FinalYearProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExamDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumberOfQuestions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfEasyQuestions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfModQuestions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfHardQuestions = table.Column<int>(type: "int", nullable: false),
+                    TypeOfQuestions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Course_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExamDetails_Course_Course_id",
+                        column: x => x.Course_id,
+                        principalTable: "Course",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Question",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     question = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    answer = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    answer = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    Qtype = table.Column<string>(type: "nvarchar(1)", nullable: false),
+                    A = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    B = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    C = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    D = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     hint = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     goal = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
                     course_id = table.Column<int>(type: "int", nullable: false),
@@ -404,6 +433,12 @@ namespace FinalYearProject.Migrations
                 column: "course_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamDetails_Course_id",
+                table: "ExamDetails",
+                column: "Course_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ExamQuestions_question_id",
                 table: "ExamQuestions",
                 column: "question_id");
@@ -444,6 +479,9 @@ namespace FinalYearProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Enrollment");
+
+            migrationBuilder.DropTable(
+                name: "ExamDetails");
 
             migrationBuilder.DropTable(
                 name: "StudentAnswer");

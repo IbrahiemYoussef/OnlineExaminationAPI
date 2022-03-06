@@ -19,7 +19,7 @@ namespace FinalYearProject.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors]
+    
 
     public class AuthenticateController : ControllerBase
     {

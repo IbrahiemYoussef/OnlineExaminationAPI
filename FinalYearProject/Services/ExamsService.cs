@@ -11,6 +11,7 @@ namespace FinalYearProject.Services
 
     public class ExamsService
     {
+        //hemajoo-001 hosting id
         private mydbcon _context;
         private readonly IMapper _mapper;
         public ExamsService(mydbcon context, IMapper mapper)
@@ -27,6 +28,7 @@ namespace FinalYearProject.Services
                     NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions,
                     NumberOfModQuestions = examdetail.NumberOfModQuestions,
                     NumberOfHardQuestions = examdetail.NumberOfHardQuestions,
+                    TypeOfQuestions=examdetail.TypeOfQuestions,
                     Course_id = examdetail.Course_id
 
                 };
@@ -118,9 +120,9 @@ namespace FinalYearProject.Services
                 int numofwr = Convert.ToInt32(Math.Ceiling(.2 * n));
                 int numofmcq = n - numofwr;
 
-                questions = _context.Questions.Where(x => x.CourseId == coursee_id).ToList();
-                List<Question> wr_ques = questions.Where(x => x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr).ToList();
-                List<Question> mcq_ques = questions.Where(x => x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq).ToList();
+                //questions = _context.Questions.Where(x => x.CourseId == coursee_id).ToList();
+                List<Question> wr_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr).ToList();
+                List<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq).ToList();
                 questions = wr_ques.Concat(mcq_ques).ToList();
 
             }

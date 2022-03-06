@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20211208214851_addedJWT")]
-    partial class addedJWT
+    [Migration("20220304195806_ChangedAlotOfThings")]
+    partial class ChangedAlotOfThings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -192,6 +192,39 @@ namespace FinalYearProject.Migrations
                     b.ToTable("Exam");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.ExamDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Course_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfEasyQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfHardQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfModQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeOfQuestions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Course_id")
+                        .IsUnique();
+
+                    b.ToTable("ExamDetails");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.ExamQuestion", b =>
                 {
                     b.Property<int?>("ExamId")
@@ -247,15 +280,26 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("A")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)")
                         .HasColumnName("answer");
 
+                    b.Property<string>("B")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("C")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CourseId")
                         .HasColumnType("int")
                         .HasColumnName("course_id");
+
+                    b.Property<string>("D")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Difficulty")
                         .IsRequired()
@@ -275,6 +319,10 @@ namespace FinalYearProject.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("hint");
+
+                    b.Property<string>("Qtype")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Questionx")
                         .IsRequired()
@@ -533,6 +581,17 @@ namespace FinalYearProject.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.ExamDetails", b =>
+                {
+                    b.HasOne("FinalYearProject.Models.Course", "Course")
+                        .WithOne("ExamDetails")
+                        .HasForeignKey("FinalYearProject.Models.ExamDetails", "Course_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.ExamQuestion", b =>
                 {
                     b.HasOne("FinalYearProject.Models.Exam", "Exam")
@@ -650,6 +709,8 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.Course", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("ExamDetails");
 
                     b.Navigation("Exams");
 
