@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class ChangedAlotOfThings : Migration
+    public partial class newchangedinDBb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,21 +32,6 @@ namespace FinalYearProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Faculty", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Schedule",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    time = table.Column<DateTime>(type: "datetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Schedule", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,6 +87,29 @@ namespace FinalYearProject.Migrations
                         principalTable: "Faculty",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedule",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    Is_set = table.Column<bool>(type: "bit", nullable: false),
+                    FacultyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedule", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Faculty_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculty",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -224,7 +232,7 @@ namespace FinalYearProject.Migrations
                     course_id = table.Column<int>(type: "int", nullable: false),
                     application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     grade = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
-                    totalMarks = table.Column<int>(type: "int", nullable: false)
+                    totalMarks = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -241,27 +249,6 @@ namespace FinalYearProject.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Exam",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    duration = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    course_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Exam", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Exam_Course",
-                        column: x => x.course_id,
-                        principalTable: "Course",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -302,7 +289,7 @@ namespace FinalYearProject.Migrations
                     C = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     D = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     hint = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    goal = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
+                    goal = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true),
                     course_id = table.Column<int>(type: "int", nullable: false),
                     Diffculty = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false)
                 },
@@ -330,12 +317,6 @@ namespace FinalYearProject.Migrations
                 {
                     table.PrimaryKey("PK_ExamQuestions_1", x => new { x.exam_id, x.question_id });
                     table.UniqueConstraint("AK_ExamQuestions_id", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_ExamQuestions_Exam",
-                        column: x => x.exam_id,
-                        principalTable: "Exam",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ExamQuestions_Question",
                         column: x => x.question_id,
@@ -428,11 +409,6 @@ namespace FinalYearProject.Migrations
                 column: "application_user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exam_course_id",
-                table: "Exam",
-                column: "course_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ExamDetails_Course_id",
                 table: "ExamDetails",
                 column: "Course_id",
@@ -453,6 +429,12 @@ namespace FinalYearProject.Migrations
                 name: "IX_Question_course_id",
                 table: "Question",
                 column: "course_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedule_FacultyId",
+                table: "Schedule",
+                column: "FacultyId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentAnswer_exam_questions_id",
@@ -491,9 +473,6 @@ namespace FinalYearProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExamQuestions");
-
-            migrationBuilder.DropTable(
-                name: "Exam");
 
             migrationBuilder.DropTable(
                 name: "Question");

@@ -49,6 +49,7 @@ namespace FinalYearProject.Controllers
                         var MCQques = csvReader.GetRecords<MCQquestions>();
                         foreach (var s in MCQques)
                         {
+                            
                             if (s.goal.Length == 1 && s.c != ""  && s.d !="" )
                             { 
                                 var questionnn = new Question()
@@ -75,7 +76,7 @@ namespace FinalYearProject.Controllers
                                     B = s.b,
                                     C = s.c,
                                     D = s.d,
-                                    Goal = s.goal,
+                                    Goal = String.Concat(s.goal.Replace(",", "").OrderBy(c => c)),
                                     Difficulty = s.Difficulty,
                                     CourseId = CourseIdd
                                 };

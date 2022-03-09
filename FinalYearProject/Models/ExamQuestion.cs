@@ -16,7 +16,6 @@ namespace FinalYearProject.Models
         public int? ExamId { get; set; }
         public int? QuestionId { get; set; }
 
-        public virtual Exam Exam { get; set; }
         public virtual Question Question { get; set; }
         public virtual ICollection<StudentAnswer> StudentAnswers { get; set; }
     }

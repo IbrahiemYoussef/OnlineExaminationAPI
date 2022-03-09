@@ -20,7 +20,6 @@ namespace FinalYearProject.Models
 
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Enrollment> Enrollments { get; set; }
-        public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
         public virtual DbSet<Faculty> Faculties { get; set; }
         public virtual DbSet<ExamDetails> ExamDetails { get; set; }
@@ -29,7 +28,6 @@ namespace FinalYearProject.Models
         public virtual DbSet<StudentAnswer> StudentAnswers { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public object Course { get; internal set; }
-        public object Schedule { get; internal set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,19 +51,13 @@ namespace FinalYearProject.Models
 
                 entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
 
-                entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
-
                 entity.HasOne(d => d.ApplicationUser)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.ApplicationUserId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ApplicationUser");
 
-                entity.HasOne(d => d.Schedule)
-                    .WithMany(p => p.Courses)
-                    .HasForeignKey(d => d.ScheduleId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Course_Schedule");
+               
                 entity.HasOne(d => d.ExamDetails)
                 .WithOne(i => i.Course)
                 .HasForeignKey<ExamDetails>(b => b.Course_id);
@@ -104,35 +96,7 @@ namespace FinalYearProject.Models
                     .HasConstraintName("FK_Enrollment_Course");
             });
 
-            modelBuilder.Entity<Exam>(entity =>
-            {
-                entity.ToTable("Exam");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.CourseId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("course_id");
-
-                entity.Property(e => e.Date)
-                    .HasColumnType("datetime")
-                    .HasColumnName("date");
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .IsUnicode(false)
-                    .HasColumnName("description");
-
-                entity.Property(e => e.Duration).HasColumnName("duration");
-
-                entity.HasOne(d => d.Course)
-                    .WithMany(p => p.Exams)
-                    .HasForeignKey(d => d.CourseId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Exam_Course");
-            });
+            
 
             modelBuilder.Entity<ExamQuestion>(entity =>
             {
@@ -150,11 +114,7 @@ namespace FinalYearProject.Models
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.HasOne(d => d.Exam)
-                    .WithMany(p => p.ExamQuestions)
-                    .HasForeignKey(d => d.ExamId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ExamQuestions_Exam");
+               
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.ExamQuestions)
@@ -167,6 +127,11 @@ namespace FinalYearProject.Models
 
             modelBuilder.Entity<Faculty>(entity =>
             {
+                entity.HasOne(a => a.Schedule)
+                .WithOne(b => b.Faculty)
+                .HasForeignKey<Schedule>(s => s.FacultyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
                 entity.ToTable("Faculty");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -176,6 +141,7 @@ namespace FinalYearProject.Models
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("name");
+
             });
 
             modelBuilder.Entity<Question>(entity =>
@@ -234,9 +200,7 @@ namespace FinalYearProject.Models
                     .HasMaxLength(40)
                     .HasColumnName("name");
 
-                entity.Property(e => e.Time)
-                    .HasColumnType("datetime")
-                    .HasColumnName("time");
+
             });
 
             modelBuilder.Entity<StudentAnswer>(entity =>

@@ -10,20 +10,16 @@ namespace FinalYearProject.Models
         public Course()
         {
             Enrollments = new HashSet<Enrollment>();
-            Exams = new HashSet<Exam>();
+            
             Questions = new HashSet<Question>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public int CreditHrs { get; set; }
-        public int ScheduleId { get; set; }
-        public virtual Schedule Schedule { get; set; }
-
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual ICollection<Exam> Exams { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public ExamDetails ExamDetails { get; set; }
     }

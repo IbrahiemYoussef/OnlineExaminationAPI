@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
+using FinalYearProject.Models.Pojo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FinalYearProject.Services
@@ -131,12 +135,43 @@ namespace FinalYearProject.Services
 
         }
 
+
+        public static async Task<ScoreDTO> give_res(string url, List<string> user_answersx, List<string> model_answersx)
+        {
+            HttpClient _httpClient = new HttpClient();
+            JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var answerito_obj = new Answeito
+            {
+                user_answers = user_answersx,
+                model_answers = model_answersx
+            };
+            var answerito_obj_serialized = JsonSerializer.Serialize(answerito_obj);
+            var requestContent = new StringContent(answerito_obj_serialized, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(url, requestContent);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var given_score = JsonSerializer.Deserialize<ScoreDTO>(content, _options);
+            return given_score;
+
+        }
+
         public ResultDTO GetExamResult(int coursee_id,int? std_id, List<AnswerDTO>? answers)
         {
             var counter = 0;
             foreach (var ans in answers)
             {
-              Question que=  _context.Questions.Where(x => x.CourseId == coursee_id).
+                /*
+                 string target_url = "http://127.0.0.1:5000/evaluate";
+            List<string> ua = new List<string>() { "the dog bites the man", "havana is great", "Water is death" };
+            List<string> ma = new List<string>() { "the dog bites the man", "havana is a good place for vacation", "Water is life" };
+            Task<ScoreDTO> sc = give_res(target_url,ua,ma);
+            Console.WriteLine(sc.Result.score);
+            Console.WriteLine(sc.Result.total_num_of_ques);
+
+            Console.WriteLine("Hi there");
+                 */
+
+                Question que =  _context.Questions.Where(x => x.CourseId == coursee_id).
                     Where(x => x.Id == ans.Id && x.Goal == ans.Answer).FirstOrDefault();
                 if (que != null)
                     counter++;

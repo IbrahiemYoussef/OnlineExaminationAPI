@@ -118,15 +118,9 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("nvarchar(30)")
                         .HasColumnName("name");
 
-                    b.Property<int>("ScheduleId")
-                        .HasColumnType("int")
-                        .HasColumnName("schedule_id");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ScheduleId");
 
                     b.ToTable("Course");
                 });
@@ -156,38 +150,6 @@ namespace FinalYearProject.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Enrollment");
-                });
-
-            modelBuilder.Entity("FinalYearProject.Models.Exam", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<int>("CourseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("course_id");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime")
-                        .HasColumnName("date");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("description");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int")
-                        .HasColumnName("duration");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Exam");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.ExamDetails", b =>
@@ -349,17 +311,28 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("description");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Is_set")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("name");
 
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime")
-                        .HasColumnName("time");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacultyId")
+                        .IsUnique();
 
                     b.ToTable("Schedule");
                 });
@@ -536,16 +509,7 @@ namespace FinalYearProject.Migrations
                         .HasConstraintName("FK_ApplicationUser")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("FinalYearProject.Models.Schedule", "Schedule")
-                        .WithMany("Courses")
-                        .HasForeignKey("ScheduleId")
-                        .HasConstraintName("FK_Course_Schedule")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Enrollment", b =>
@@ -567,18 +531,6 @@ namespace FinalYearProject.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("FinalYearProject.Models.Exam", b =>
-                {
-                    b.HasOne("FinalYearProject.Models.Course", "Course")
-                        .WithMany("Exams")
-                        .HasForeignKey("CourseId")
-                        .HasConstraintName("FK_Exam_Course")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("FinalYearProject.Models.ExamDetails", b =>
                 {
                     b.HasOne("FinalYearProject.Models.Course", "Course")
@@ -592,20 +544,12 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.ExamQuestion", b =>
                 {
-                    b.HasOne("FinalYearProject.Models.Exam", "Exam")
-                        .WithMany("ExamQuestions")
-                        .HasForeignKey("ExamId")
-                        .HasConstraintName("FK_ExamQuestions_Exam")
-                        .IsRequired();
-
                     b.HasOne("FinalYearProject.Models.Question", "Question")
                         .WithMany("ExamQuestions")
                         .HasForeignKey("QuestionId")
                         .HasConstraintName("FK_ExamQuestions_Question")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Exam");
 
                     b.Navigation("Question");
                 });
@@ -620,6 +564,17 @@ namespace FinalYearProject.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
+                {
+                    b.HasOne("FinalYearProject.Models.Faculty", "Faculty")
+                        .WithOne("Schedule")
+                        .HasForeignKey("FinalYearProject.Models.Schedule", "FacultyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.StudentAnswer", b =>
@@ -710,14 +665,7 @@ namespace FinalYearProject.Migrations
 
                     b.Navigation("ExamDetails");
 
-                    b.Navigation("Exams");
-
                     b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("FinalYearProject.Models.Exam", b =>
-                {
-                    b.Navigation("ExamQuestions");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.ExamQuestion", b =>
@@ -728,16 +676,13 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.Faculty", b =>
                 {
                     b.Navigation("ApplicationUsers");
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Question", b =>
                 {
                     b.Navigation("ExamQuestions");
-                });
-
-            modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

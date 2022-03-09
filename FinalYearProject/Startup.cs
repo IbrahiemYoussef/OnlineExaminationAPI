@@ -27,11 +27,13 @@ namespace FinalYearProject
         {
             Configuration = configuration;
             string conn="";
-
+            /*
             if(System.Environment.MachineName == "LAPTOP-GSR45SKK")
                 conn = Configuration.GetConnectionString("Abusarie");
             else
                 conn = Configuration.GetConnectionString("DefaultConnectionString");
+            */
+            conn = Configuration.GetConnectionString("DefaultConnectionString");
             ConnectionString = conn;
 
 
