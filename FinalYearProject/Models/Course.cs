@@ -17,8 +17,12 @@ namespace FinalYearProject.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int CreditHrs { get; set; }
+        public bool Is_open { get; set; }
+        public int FLevel_Id { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
+        
+        public virtual FLevels FLevels { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public ExamDetails ExamDetails { get; set; }

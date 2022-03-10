@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class newchangedinDBb : Migration
+    public partial class LastMigraa : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +32,19 @@ namespace FinalYearProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Faculty", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FLevels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Level_name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FLevels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,8 +218,8 @@ namespace FinalYearProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     credit_hrs = table.Column<int>(type: "int", nullable: false),
-                    schedule_id = table.Column<int>(type: "int", nullable: false),
-                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FLevel_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,10 +231,10 @@ namespace FinalYearProject.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Course_Schedule",
-                        column: x => x.schedule_id,
-                        principalTable: "Schedule",
-                        principalColumn: "id",
+                        name: "FK_FLevels",
+                        column: x => x.FLevel_Id,
+                        principalTable: "FLevels",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -399,9 +412,9 @@ namespace FinalYearProject.Migrations
                 column: "application_user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Course_schedule_id",
+                name: "IX_Course_FLevel_Id",
                 table: "Course",
-                column: "schedule_id");
+                column: "FLevel_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_application_user_id",
@@ -466,6 +479,9 @@ namespace FinalYearProject.Migrations
                 name: "ExamDetails");
 
             migrationBuilder.DropTable(
+                name: "Schedule");
+
+            migrationBuilder.DropTable(
                 name: "StudentAnswer");
 
             migrationBuilder.DropTable(
@@ -484,7 +500,7 @@ namespace FinalYearProject.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Schedule");
+                name: "FLevels");
 
             migrationBuilder.DropTable(
                 name: "Faculty");

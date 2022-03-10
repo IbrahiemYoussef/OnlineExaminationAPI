@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20220308202646_newchangedinDBb")]
-    partial class newchangedinDBb
+    [Migration("20220309192050_LastMigraa")]
+    partial class LastMigraa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,21 +114,20 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("int")
                         .HasColumnName("credit_hrs");
 
+                    b.Property<int>("FLevel_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
                         .HasColumnName("name");
 
-                    b.Property<int>("ScheduleId")
-                        .HasColumnType("int")
-                        .HasColumnName("schedule_id");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("ScheduleId");
+                    b.HasIndex("FLevel_Id");
 
                     b.ToTable("Course");
                 });
@@ -218,6 +217,21 @@ namespace FinalYearProject.Migrations
                         .IsUnique();
 
                     b.ToTable("ExamQuestions");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.FLevels", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Level_name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FLevels");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Faculty", b =>
@@ -517,16 +531,16 @@ namespace FinalYearProject.Migrations
                         .HasConstraintName("FK_ApplicationUser")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("FinalYearProject.Models.Schedule", "Schedule")
+                    b.HasOne("FinalYearProject.Models.FLevels", "FLevels")
                         .WithMany("Courses")
-                        .HasForeignKey("ScheduleId")
-                        .HasConstraintName("FK_Course_Schedule")
+                        .HasForeignKey("FLevel_Id")
+                        .HasConstraintName("FK_FLevels")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("Schedule");
+                    b.Navigation("FLevels");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Enrollment", b =>
@@ -690,6 +704,11 @@ namespace FinalYearProject.Migrations
                     b.Navigation("StudentAnswers");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.FLevels", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.Faculty", b =>
                 {
                     b.Navigation("ApplicationUsers");
@@ -700,11 +719,6 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.Question", b =>
                 {
                     b.Navigation("ExamQuestions");
-                });
-
-            modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

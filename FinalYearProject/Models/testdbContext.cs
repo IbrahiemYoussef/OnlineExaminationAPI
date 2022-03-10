@@ -26,6 +26,7 @@ namespace FinalYearProject.Models
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<StudentAnswer> StudentAnswers { get; set; }
+        public virtual DbSet<FLevels> FLevels { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public object Course { get; internal set; }
         
@@ -57,7 +58,13 @@ namespace FinalYearProject.Models
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ApplicationUser");
 
-               
+                entity.HasOne(d => d.FLevels)
+                    .WithMany(p => p.Courses)
+                    .HasForeignKey(d => d.FLevel_Id)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_FLevels");
+
+
                 entity.HasOne(d => d.ExamDetails)
                 .WithOne(i => i.Course)
                 .HasForeignKey<ExamDetails>(b => b.Course_id);
