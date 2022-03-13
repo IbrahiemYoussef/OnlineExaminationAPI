@@ -96,6 +96,8 @@ namespace FinalYearProject.Services
             //if n > nrows in the table
 
             //get examdetails by course id
+
+            //handle wrong course id
             ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == coursee_id);
             var n = examm.NumberOfQuestions;
             var neasy = examm.NumberOfEasyQuestions;
@@ -146,8 +148,8 @@ namespace FinalYearProject.Services
                 user_answers = user_answersx,
                 model_answers = model_answersx
             };
-            var answerito_obj_serialized = JsonSerializer.Serialize(answerito_obj);
-            var requestContent = new StringContent(answerito_obj_serialized, Encoding.UTF8, "application/json");
+            string answerito_obj_serialized = JsonSerializer.Serialize(answerito_obj);
+            StringContent requestContent = new StringContent(answerito_obj_serialized, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(url, requestContent);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -155,48 +157,47 @@ namespace FinalYearProject.Services
             return given_score;
         }
 
-
-
-        public GlobalResponseDTO GetExamResult(int? std_id,int coursee_id, List<AnswerDTO> answers)
+        public  ResultDTO GetExamResult(int? std_id,int coursee_id, List<AnswerDTO> answers)
         {
             var mcq_counter = 0;
-            List<string> user_answers = answers.AsEnumerable()
+            List<string> user_answers = answers.Where(x=> x.qtype.ToString().ToLower() == "w")
                           .Select(a => a.Answer).ToList();
 
             List<string> model_answers= new List<string>();
             
             foreach (AnswerDTO ans in answers)
             {
-
                 if (ans.qtype.ToString().ToLower() == "w")
                 {
-                    Question que = _context.Questions.Where(x => x.CourseId == coursee_id).
-                    Where(x => x.Id == ans.Id).FirstOrDefault();
+                    Question que = _context.Questions.Where(x => x.Id == ans.Id).FirstOrDefault();
                     model_answers.Add(que.Answer);
                 }
                 else
                 {
+                    var sorted_ans = String.Concat(ans.Answer.OrderBy(c => c));
                     Question que = _context.Questions.Where(x => x.CourseId == coursee_id).
-                    Where(x => x.Id == ans.Id && String.Concat(x.Goal.OrderBy(c => c)) == String.Concat(ans.Answer.OrderBy(c => c))).FirstOrDefault();
+                    Where(x => x.Id == ans.Id && x.Goal == sorted_ans).FirstOrDefault();
                         if (que != null)
                         mcq_counter++;
                 }
             }
 
-            
-            string target_url = "http://127.0.0.1:5000/evaluate";
-            Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
-            
-            // Console.WriteLine(sc.Result.score);
-            //Console.WriteLine(sc.Result.total_num_of_ques);
+            ResultDTO robj = new ResultDTO();
+         
+                string target_url = "http://127.0.0.1:5000/evaluate";
+                Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
 
-            ResultDTO robj = new ResultDTO()
-            {
-                CurrentScore = mcq_counter+ sc.Result.score,
-                TotalScore = answers.Count()
-            };
+                // Console.WriteLine(sc.Result.score);
+                //Console.WriteLine(sc.Result.total_num_of_ques);
+               
+                return new ResultDTO()
+                {
+                    CurrentScore = mcq_counter + sc.Result.score,
+                    TotalScore = answers.Count()
+                };
+         
 
-            return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
+            //return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         }
 
     }

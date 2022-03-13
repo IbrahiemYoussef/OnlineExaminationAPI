@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using FinalYearProject.Models.Params;
+using System.Threading.Tasks;
 
 namespace FinalYearProject.Controllers
 {
@@ -45,20 +46,20 @@ namespace FinalYearProject.Controllers
             return Ok(_examService.GetExamdetailsByCourseId(course_id));
         }
 
-        [HttpPost("GetMyExam")]
-        public IActionResult GetMyExam([FromBody] GetMyExamP Obj)
+        [HttpGet("GetMyExam")]
+        public IActionResult GetMyExam(int course_id)
         {
-            return Ok(_examService.GetUniqueExam(Obj.course_id));
+            return Ok(_examService.GetUniqueExam(course_id));
+        }
+
+        [HttpGet("Examinate")]
+        public IActionResult ExaminateG(int course_id)
+        {
+            return Ok(_examService.GetUniqueExam(course_id));
         }
 
         [HttpPost("Examinate")]
         public IActionResult ExaminateP([FromBody] ExaminateDTO obj)
-        {
-            return Ok(_examService.GetUniqueExam(obj.course_id));
-        }
-
-        [HttpGet("Examinate")]
-        public IActionResult ExaminateG([FromBody] ExaminateDTO obj)
         {
              return Ok(_examService.GetExamResult(obj.std_id,obj.course_id,obj.answers));
         }
