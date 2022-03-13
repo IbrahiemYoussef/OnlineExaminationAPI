@@ -50,15 +50,18 @@ namespace FinalYearProject.Controllers
         {
             return Ok(_examService.GetUniqueExam(Obj.course_id));
         }
+
         [HttpPost("Examinate")]
-        public IActionResult Examinate(int? std_id, int coursee_id, [FromBody]List<AnswerDTO> answers=null)
+        public IActionResult ExaminateP([FromBody] ExaminateDTO obj)
         {
-            if (std_id == null)
-                return Ok(_examService.GetUniqueExam(coursee_id));
-            else
-                return Ok(_examService.GetExamResult(coursee_id, std_id, answers));
+            return Ok(_examService.GetUniqueExam(obj.course_id));
         }
 
+        [HttpGet("Examinate")]
+        public IActionResult ExaminateG([FromBody] ExaminateDTO obj)
+        {
+             return Ok(_examService.GetExamResult(obj.std_id,obj.course_id,obj.answers));
+        }
 
 
         //[HttpGet("SubmittingExam"), HttpPost("SubmittingExam")]

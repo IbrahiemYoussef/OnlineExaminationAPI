@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+
 namespace FinalYearProject.Services
 {
 
@@ -136,7 +137,7 @@ namespace FinalYearProject.Services
         }
 
 
-        public static async Task<ScoreDTO> give_res(string url, List<string> user_answersx, List<string> model_answersx)
+        public static async Task<ScoreDTO> get_written_result(string url, List<string> user_answersx, List<string> model_answersx)
         {
             HttpClient _httpClient = new HttpClient();
             JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -152,37 +153,50 @@ namespace FinalYearProject.Services
             var content = await response.Content.ReadAsStringAsync();
             var given_score = JsonSerializer.Deserialize<ScoreDTO>(content, _options);
             return given_score;
-
         }
 
-        public ResultDTO GetExamResult(int coursee_id,int? std_id, List<AnswerDTO>? answers)
+
+
+        public GlobalResponseDTO GetExamResult(int? std_id,int coursee_id, List<AnswerDTO> answers)
         {
-            var counter = 0;
-            foreach (var ans in answers)
+            var mcq_counter = 0;
+            List<string> user_answers = answers.AsEnumerable()
+                          .Select(a => a.Answer).ToList();
+
+            List<string> model_answers= new List<string>();
+            
+            foreach (AnswerDTO ans in answers)
             {
-                /*
-                 string target_url = "http://127.0.0.1:5000/evaluate";
-            List<string> ua = new List<string>() { "the dog bites the man", "havana is great", "Water is death" };
-            List<string> ma = new List<string>() { "the dog bites the man", "havana is a good place for vacation", "Water is life" };
-            Task<ScoreDTO> sc = give_res(target_url,ua,ma);
-            Console.WriteLine(sc.Result.score);
-            Console.WriteLine(sc.Result.total_num_of_ques);
 
-            Console.WriteLine("Hi there");
-                 */
-
-                Question que =  _context.Questions.Where(x => x.CourseId == coursee_id).
-                    Where(x => x.Id == ans.Id && x.Goal == ans.Answer).FirstOrDefault();
-                if (que != null)
-                    counter++;
-
+                if (ans.qtype.ToString().ToLower() == "w")
+                {
+                    Question que = _context.Questions.Where(x => x.CourseId == coursee_id).
+                    Where(x => x.Id == ans.Id).FirstOrDefault();
+                    model_answers.Add(que.Answer);
+                }
+                else
+                {
+                    Question que = _context.Questions.Where(x => x.CourseId == coursee_id).
+                    Where(x => x.Id == ans.Id && String.Concat(x.Goal.OrderBy(c => c)) == String.Concat(ans.Answer.OrderBy(c => c))).FirstOrDefault();
+                        if (que != null)
+                        mcq_counter++;
+                }
             }
-            ResultDTO r = new ResultDTO()
+
+            
+            string target_url = "http://127.0.0.1:5000/evaluate";
+            Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
+            
+            // Console.WriteLine(sc.Result.score);
+            //Console.WriteLine(sc.Result.total_num_of_ques);
+
+            ResultDTO robj = new ResultDTO()
             {
-                CurrentScore = counter,
+                CurrentScore = mcq_counter+ sc.Result.score,
                 TotalScore = answers.Count()
             };
-            return r;
+
+            return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         }
 
     }

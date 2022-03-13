@@ -9,7 +9,6 @@ namespace FinalYearProject.Models.DTOs
     {
         public int Id { get; set; }
         public string Questionx { get; set; }
-        public string? Answer { get; set; }
         public Char Qtype { get; set; }
         public string A { get; set; }
         public string B { get; set; }

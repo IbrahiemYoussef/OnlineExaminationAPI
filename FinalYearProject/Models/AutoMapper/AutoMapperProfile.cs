@@ -14,10 +14,7 @@ namespace FinalYearProject.Models.AutoMapper
             //source ,destination
             CreateMap<Course, CourseDTO >();
 
-            CreateMap<Question, QuestionDTO>()
-            .ForMember(dest => dest.Answer,
-                  opt => opt.MapFrom
-                  (src => src.Goal==null ? "" : src.Answer));
+            CreateMap<Question, QuestionDTO>();
     
         }
     }
