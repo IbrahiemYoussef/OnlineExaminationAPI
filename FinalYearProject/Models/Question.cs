@@ -7,10 +7,7 @@ namespace FinalYearProject.Models
 {
     public partial class Question
     {
-        public Question()
-        {
-            ExamQuestions = new HashSet<ExamQuestion>();
-        }
+      
 
         public int Id { get; set; }
         public string Questionx { get; set; }
@@ -27,6 +24,6 @@ namespace FinalYearProject.Models
         public string Difficulty { get; set; }
 
         public virtual Course Course { get; set; }
-        public virtual ICollection<ExamQuestion> ExamQuestions { get; set; }
+        
     }
 }

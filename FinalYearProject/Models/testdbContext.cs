@@ -20,12 +20,10 @@ namespace FinalYearProject.Models
 
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Enrollment> Enrollments { get; set; }
-        public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
         public virtual DbSet<Faculty> Faculties { get; set; }
         public virtual DbSet<ExamDetails> ExamDetails { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
-        public virtual DbSet<StudentAnswer> StudentAnswers { get; set; }
         public virtual DbSet<FLevels> FLevels { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public object Course { get; internal set; }
@@ -105,31 +103,7 @@ namespace FinalYearProject.Models
 
             
 
-            modelBuilder.Entity<ExamQuestion>(entity =>
-            {
-                entity.HasKey(e => new { e.ExamId, e.QuestionId })
-                    .HasName("PK_ExamQuestions_1");
-
-                entity.HasIndex(e => e.Id, "unique_eqa_id")
-                    .IsUnique();
-
-                entity.Property(e => e.ExamId).HasColumnName("exam_id");
-
-                entity.Property(e => e.QuestionId).HasColumnName("question_id");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-               
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.ExamQuestions)
-                    .HasForeignKey(d => d.QuestionId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_ExamQuestions_Question");
-            });
-
+           
             
 
             modelBuilder.Entity<Faculty>(entity =>
@@ -210,34 +184,7 @@ namespace FinalYearProject.Models
 
             });
 
-            modelBuilder.Entity<StudentAnswer>(entity =>
-            {
-                entity.HasKey(e => new { e.ApplicationUserId, e.ExamQuestionsId });
-
-                entity.ToTable("StudentAnswer");
-
-                entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
-
-                entity.Property(e => e.ExamQuestionsId).HasColumnName("exam_questions_id");
-
-                entity.Property(e => e.Answer)
-                    .IsRequired()
-                    .HasColumnName("answer");
-
-                entity.HasOne(d => d.ExamQuestion)
-                    .WithMany(p => p.StudentAnswers)
-                    .HasPrincipalKey(p => p.Id)
-                    .HasForeignKey(d => d.ExamQuestionsId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_StudentAnswer_ExamQuestions");
-
-                entity.HasOne(d => d.ApplicationUser)
-                    .WithMany(p => p.StudentAnswers)
-                    .HasPrincipalKey(p => p.Id)
-                    .HasForeignKey(d => d.ApplicationUserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_StudentAnswer_ApplicationUsers");
-            });
+            
 
 
             OnModelCreatingPartial(modelBuilder);
