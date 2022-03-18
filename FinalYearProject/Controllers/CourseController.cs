@@ -25,5 +25,11 @@ namespace FinalYearProject.Controllers
         {
             return Ok(_courseService.GetManagedCourses(prof_id));
         }
+
+        [HttpGet("StudentCourses")]
+        public IActionResult GetStudentCourses(string prof_id)
+        {
+            //return Ok(_courseService.GetManagedCourses(prof_id));
+        }
     }
 }

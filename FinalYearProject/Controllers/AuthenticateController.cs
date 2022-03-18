@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,12 +67,13 @@ namespace FinalYearProject.Controllers
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
 
+                    
                     //return Ok(new{token = new JwtSecurityTokenHandler().WriteToken(token),expiration = token.ValidTo});
                     return new GlobalResponseDTO(true, "successed",
                         new{token = new JwtSecurityTokenHandler().WriteToken(token), 
                             expiration = token.ValidTo,
-                            //_context.ApplicationUsers.Find()
-                        } 
+                            userDetails= _context.ApplicationUsers.Where(x => x.UserName== model.Username).Select(s => new { s.Id,s.firstname,s.lastname,s.UserName,s.Email }).FirstOrDefault()
+                } 
                     );
                 }
                 else
@@ -83,7 +85,6 @@ namespace FinalYearProject.Controllers
             {
                 return new GlobalResponseDTO(false, "wrong username" , null);
             }
-            return new GlobalResponseDTO(false, "something wrong", null);
         }
 
         [HttpPost]

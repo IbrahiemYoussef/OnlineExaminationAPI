@@ -133,9 +133,12 @@ namespace FinalYearProject.Services
                 questions = wr_ques.Concat(mcq_ques).ToList();
 
             }
+            //time of exam in seconds 
+
 
             return _mapper.Map<List<QuestionDTO>>(questions);
-
+           // return new GlobalResponseDTO(true, "Exam Sucessfully Graded",
+           // {q=questions,time=int,course_name=get from db});
         }
 
 

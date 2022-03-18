@@ -24,5 +24,16 @@ namespace FinalYearProject.Services
             return _mapper.Map<List<CourseDTO>>(res);
 
         }
+
+        public List<CourseDTO> GetStudentCourses(string std_id)
+        {
+            var std_courses = _context.Courses.Where(x => x.ApplicationUserId == std_id).ToList();
+            
+            return _mapper.Map<List<CourseDTO>>(std_courses);
+
+            //to be contiunued...........
+        }
+
+
     }
 }

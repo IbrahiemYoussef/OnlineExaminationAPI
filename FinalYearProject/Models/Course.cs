@@ -16,6 +16,8 @@ namespace FinalYearProject.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+        //put course code ya ibrahiem
         public int CreditHrs { get; set; }
         public bool Is_open { get; set; }
         public int FLevel_Id { get; set; }
