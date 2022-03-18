@@ -14,6 +14,7 @@ namespace FinalYearProject.Models
         public int NumberOfModQuestions { get; set; }
         public int NumberOfHardQuestions { get; set; }
         public string TypeOfQuestions { get; set; }
+        public int Duration { get; set; } //in minutes
         public int Course_id { get; set; }
         public Course Course { get; set; }
     }

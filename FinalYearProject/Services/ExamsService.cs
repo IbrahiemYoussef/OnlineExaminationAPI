@@ -157,7 +157,7 @@ namespace FinalYearProject.Services
             return given_score;
         }
 
-        public  ResultDTO GetExamResult(int? std_id,int coursee_id, List<AnswerDTO> answers)
+        public GlobalResponseDTO GetExamResult(int? std_id,int coursee_id, List<AnswerDTO> answers)
         {
             var mcq_counter = 0;
             List<string> user_answers = answers.Where(x=> x.qtype.ToString().ToLower() == "w")
@@ -182,22 +182,22 @@ namespace FinalYearProject.Services
                 }
             }
 
-            ResultDTO robj = new ResultDTO();
+            
          
                 string target_url = "http://127.0.0.1:5000/evaluate";
                 Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
 
-                // Console.WriteLine(sc.Result.score);
-                //Console.WriteLine(sc.Result.total_num_of_ques);
-               
-                return new ResultDTO()
+            // Console.WriteLine(sc.Result.score);
+            //Console.WriteLine(sc.Result.total_num_of_ques);
+
+                ResultDTO robj = new ResultDTO()
                 {
                     CurrentScore = mcq_counter + sc.Result.score,
                     TotalScore = answers.Count()
                 };
-         
 
-            //return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
+
+            return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         }
 
     }
