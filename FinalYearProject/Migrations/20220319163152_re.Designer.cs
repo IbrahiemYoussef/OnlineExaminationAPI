@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20220318194329_addDuration")]
-    partial class addDuration
+    [Migration("20220319163152_re")]
+    partial class re
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,7 +146,6 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("application_user_id");
 
                     b.Property<string>("Grade")
-                        .IsRequired()
                         .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)")
                         .HasColumnName("grade");
@@ -332,10 +331,33 @@ namespace FinalYearProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacultyId")
-                        .IsUnique();
+                    b.HasIndex("FacultyId");
 
                     b.ToTable("Schedule");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.ScheduleWithCourse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("course_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("schedule_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("course_id")
+                        .IsUnique();
+
+                    b.HasIndex("schedule_id")
+                        .IsUnique();
+
+                    b.ToTable("ScheduleWithCourse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -545,12 +567,31 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
                 {
                     b.HasOne("FinalYearProject.Models.Faculty", "Faculty")
-                        .WithOne("Schedule")
-                        .HasForeignKey("FinalYearProject.Models.Schedule", "FacultyId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany("Schedule")
+                        .HasForeignKey("FacultyId")
+                        .HasConstraintName("FK_Schedule_Faculty")
                         .IsRequired();
 
                     b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.ScheduleWithCourse", b =>
+                {
+                    b.HasOne("FinalYearProject.Models.Course", "Course")
+                        .WithOne("ScheduleWithCourse")
+                        .HasForeignKey("FinalYearProject.Models.ScheduleWithCourse", "course_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FinalYearProject.Models.Schedule", "Schedule")
+                        .WithOne("ScheduleWithCourse")
+                        .HasForeignKey("FinalYearProject.Models.ScheduleWithCourse", "schedule_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -618,6 +659,8 @@ namespace FinalYearProject.Migrations
                     b.Navigation("ExamDetails");
 
                     b.Navigation("Questions");
+
+                    b.Navigation("ScheduleWithCourse");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.FLevels", b =>
@@ -630,6 +673,11 @@ namespace FinalYearProject.Migrations
                     b.Navigation("ApplicationUsers");
 
                     b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
+                {
+                    b.Navigation("ScheduleWithCourse");
                 });
 #pragma warning restore 612, 618
         }

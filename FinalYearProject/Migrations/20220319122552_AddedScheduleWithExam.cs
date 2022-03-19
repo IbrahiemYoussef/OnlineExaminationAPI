@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class LastMigraa : Migration
+    public partial class AddedScheduleWithExam : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -218,8 +218,9 @@ namespace FinalYearProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     credit_hrs = table.Column<int>(type: "int", nullable: false),
-                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    FLevel_Id = table.Column<int>(type: "int", nullable: false)
+                    Is_open = table.Column<bool>(type: "bit", nullable: false),
+                    FLevel_Id = table.Column<int>(type: "int", nullable: false),
+                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -275,6 +276,7 @@ namespace FinalYearProject.Migrations
                     NumberOfModQuestions = table.Column<int>(type: "int", nullable: false),
                     NumberOfHardQuestions = table.Column<int>(type: "int", nullable: false),
                     TypeOfQuestions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Duration = table.Column<int>(type: "int", nullable: false),
                     Course_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -318,48 +320,27 @@ namespace FinalYearProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExamQuestions",
+                name: "ScheduleWithCourse",
                 columns: table => new
                 {
-                    exam_id = table.Column<int>(type: "int", nullable: false),
-                    question_id = table.Column<int>(type: "int", nullable: false),
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    schedule_id = table.Column<int>(type: "int", nullable: false),
+                    course_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExamQuestions_1", x => new { x.exam_id, x.question_id });
-                    table.UniqueConstraint("AK_ExamQuestions_id", x => x.id);
+                    table.PrimaryKey("PK_ScheduleWithCourse", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExamQuestions_Question",
-                        column: x => x.question_id,
-                        principalTable: "Question",
+                        name: "FK_ScheduleWithCourse_Course_course_id",
+                        column: x => x.course_id,
+                        principalTable: "Course",
                         principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StudentAnswer",
-                columns: table => new
-                {
-                    exam_questions_id = table.Column<int>(type: "int", nullable: false),
-                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    answer = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentAnswer", x => new { x.application_user_id, x.exam_questions_id });
                     table.ForeignKey(
-                        name: "FK_StudentAnswer_ApplicationUsers",
-                        column: x => x.application_user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StudentAnswer_ExamQuestions",
-                        column: x => x.exam_questions_id,
-                        principalTable: "ExamQuestions",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_ScheduleWithCourse_Schedule_schedule_id",
+                        column: x => x.schedule_id,
+                        principalTable: "Schedule",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -428,17 +409,6 @@ namespace FinalYearProject.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExamQuestions_question_id",
-                table: "ExamQuestions",
-                column: "question_id");
-
-            migrationBuilder.CreateIndex(
-                name: "unique_eqa_id",
-                table: "ExamQuestions",
-                column: "id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Question_course_id",
                 table: "Question",
                 column: "course_id");
@@ -450,9 +420,16 @@ namespace FinalYearProject.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentAnswer_exam_questions_id",
-                table: "StudentAnswer",
-                column: "exam_questions_id");
+                name: "IX_ScheduleWithCourse_course_id",
+                table: "ScheduleWithCourse",
+                column: "course_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduleWithCourse_schedule_id",
+                table: "ScheduleWithCourse",
+                column: "schedule_id",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -479,22 +456,19 @@ namespace FinalYearProject.Migrations
                 name: "ExamDetails");
 
             migrationBuilder.DropTable(
-                name: "Schedule");
+                name: "Question");
 
             migrationBuilder.DropTable(
-                name: "StudentAnswer");
+                name: "ScheduleWithCourse");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "ExamQuestions");
-
-            migrationBuilder.DropTable(
-                name: "Question");
-
-            migrationBuilder.DropTable(
                 name: "Course");
+
+            migrationBuilder.DropTable(
+                name: "Schedule");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

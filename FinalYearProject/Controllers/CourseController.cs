@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FinalYearProject.Models.DTOs;
 using FinalYearProject.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +28,9 @@ namespace FinalYearProject.Controllers
         }
 
         [HttpGet("StudentCourses")]
-        public IActionResult GetStudentCourses(string prof_id)
+        public GlobalResponseDTO GetStudentCourses(string std_id)
         {
-            //return Ok(_courseService.GetManagedCourses(prof_id));
+            return _courseService.GetStudentCourses(std_id);
         }
     }
 }

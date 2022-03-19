@@ -18,5 +18,6 @@ namespace FinalYearProject.Models
         public bool Is_set { get; set; }
         public int FacultyId { get; set; }
         public virtual Faculty Faculty { get; set; }
+        public virtual ScheduleWithCourse ScheduleWithCourse { get; set; }
     }
 }
