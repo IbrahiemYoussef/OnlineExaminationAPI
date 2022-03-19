@@ -9,8 +9,9 @@ namespace FinalYearProject.Models
     {
         public int? CourseId { get; set; }
         public string Grade { get; set; }
+        public int? CurrentMarks { get; set; }
         public int? TotalMarks { get; set; }
-
+        
         public string? ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Course Course { get; set; }
