@@ -66,7 +66,7 @@ namespace FinalYearProject.Services
                 result.Add(new StudentCoursesDTO()
                 {
                     CourseId=mycourses[i].Id,
-                    Name=mycourses[i].Name,
+                    CourseName = mycourses[i].Name,
                     StartTime=examdetail[i].StartTime,
                     DurationInMinutes = examdetail[i].Duration,
                     isExaminated = isExaminated[i]
