@@ -27,27 +27,32 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO GetStudentCourses(string std_id)
         {
-            var std_courses = _context.Enrollments.Where(x => x.ApplicationUserId == std_id).ToList();
+            var student_enrollments = _context.Enrollments.Where(x => x.ApplicationUserId == std_id).ToList();
             List<ScheduleWithCourse> SchCou = new List<ScheduleWithCourse>();
-            List<string> mycourses = new List<string>();
+            List<Course> mycourses = new List<Course>();
             //to check he examinated or not
-            List<bool> statues = new List<bool>();
+            List<bool> isExaminated = new List<bool>();
             List<Schedule> CoursesTime = new List<Schedule>();
 
-            foreach (var sch in std_courses)
+            foreach (var enroll in student_enrollments)
             {
-                 var std_sch = _context.ScheduleWithCourse.Where(x => x.course_id == sch.CourseId).FirstOrDefault();
-                if (sch.TotalMarks == null)
-                    statues.Add(false);
+                if (enroll.TotalMarks == null)
+                {
+                    isExaminated.Add(false);
+                }
                 else
-                    statues.Add(true);
-                SchCou.Add(std_sch);
+                {
+                    isExaminated.Add(true);
+                }
+                var swc = _context.ScheduleWithCourse.Where(x => x.course_id == enroll.CourseId).FirstOrDefault();
+                if(swc!=null)
+                    SchCou.Add(swc);
             }
             
             
             foreach (var examtime in SchCou)
             {
-                var std_corse = _context.Courses.Where(x => x.Id == examtime.course_id).Select(x => new {x.Id, x.Name }).FirstOrDefault().ToString();
+                var std_corse = _context.Courses.Where(x => x.Id == examtime.course_id).FirstOrDefault();
                 mycourses.Add(std_corse);
                 var coursedate = _context.Schedules.Where(x => x.Id == examtime.schedule_id).FirstOrDefault();
                 CoursesTime.Add(coursedate);
@@ -60,16 +65,15 @@ namespace FinalYearProject.Services
             {
                 result.Add(new StudentCoursesDTO()
                 {
-                    CourseId=mycourses[i].Cou
+                    CourseId=mycourses[i].Id,
+                    Name=mycourses[i].Name,
+                    StartTime=examdetail[i].StartTime,
+                    DurationInMinutes = examdetail[i].Duration,
+                    isExaminated = isExaminated[i]
                 });
             }
-            List<object> objectlist = mycourses.Cast<object>().Concat(examdetail).ToList();
-            return new GlobalResponseDTO(true, "successed",
-                        new
-                        {
-                            CoursesData=objectlist
-                        });
-            //to be contiunued...........
+            // List<object> objectlist = mycourses.Cast<object>().Concat(examdetail).ToList();
+            return new GlobalResponseDTO(true, "succeeded",result);
         }
 
 
