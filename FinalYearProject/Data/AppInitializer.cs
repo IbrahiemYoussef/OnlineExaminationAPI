@@ -17,22 +17,22 @@ namespace FinalYearProject.Data.Models
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<mydbcon>();
-                if (!context.Faculties.Any())
-                {
-                    context.Faculties.AddRange(
-                        new Faculty()
-                        {
-                            Name = "IT"
-                        },
-                        new Faculty()
-                        {
-                            Name = "Engineering"
-                        },
-                        new Faculty()
-                        {
-                            Name = "Dentistry"
-                        });
-                }
+                //if (!context.Faculties.Any())
+                //{
+                //    context.Faculties.AddRange(
+                //        new Faculty()
+                //        {
+                //            Name = "IT"
+                //        },
+                //        new Faculty()
+                //        {
+                //            Name = "Engineering"
+                //        },
+                //        new Faculty()
+                //        {
+                //            Name = "Dentistry"
+                //        });
+                //}
 
 
 

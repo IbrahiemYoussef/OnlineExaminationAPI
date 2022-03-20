@@ -44,6 +44,7 @@ namespace FinalYearProject.Services
                 {
                     isExaminated.Add(true);
                 }
+
                 var swc = _context.ScheduleWithCourse.Where(x => x.course_id == enroll.CourseId).FirstOrDefault();
                 if(swc!=null)
                     SchCou.Add(swc);
@@ -69,7 +70,9 @@ namespace FinalYearProject.Services
                     CourseName = mycourses[i].Name,
                     StartTime=examdetail[i].StartTime,
                     DurationInMinutes = examdetail[i].Duration,
-                    isExaminated = isExaminated[i]
+                    isExaminated = isExaminated[i],
+                    CurrentMarks= student_enrollments[i].CurrentMarks,
+                    TotalMarks= student_enrollments[i].TotalMarks
                 });
             }
             // List<object> objectlist = mycourses.Cast<object>().Concat(examdetail).ToList();

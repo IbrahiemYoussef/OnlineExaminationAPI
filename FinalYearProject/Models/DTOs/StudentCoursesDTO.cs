@@ -12,5 +12,7 @@ namespace FinalYearProject.Models.DTOs
         public DateTime StartTime { get; set; }
         public int DurationInMinutes { get; set; }
         public bool isExaminated { get; set; }
+        public int? CurrentMarks { get; set; }
+        public int? TotalMarks { get; set; }
     }
 }
