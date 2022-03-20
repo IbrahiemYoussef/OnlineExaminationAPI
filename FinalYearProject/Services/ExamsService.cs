@@ -160,7 +160,7 @@ namespace FinalYearProject.Services
             return given_score;
         }
 
-        public GlobalResponseDTO GetExamResult(int? std_id,int coursee_id, List<AnswerDTO> answers)
+        public GlobalResponseDTO GetExamResult(string std_id,int coursee_id, List<AnswerDTO> answers)
         {
             var mcq_counter = 0;
             List<string> user_answers = answers.Where(x=> x.qtype.ToString().ToLower() == "w")
@@ -198,6 +198,7 @@ namespace FinalYearProject.Services
                     CurrentScore = mcq_counter + sc.Result.score,
                     TotalScore = answers.Count()
                 };
+            
 
 
             return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
