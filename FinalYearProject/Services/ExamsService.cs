@@ -198,6 +198,11 @@ namespace FinalYearProject.Services
                     CurrentScore = mcq_counter + sc.Result.score,
                     TotalScore = answers.Count()
                 };
+            Enrollment std_enrol = new Enrollment();
+            std_enrol = _context.Enrollments.Where(x => x.ApplicationUserId == std_id && x.CourseId == coursee_id).FirstOrDefault();
+            std_enrol.CurrentMarks = robj.CurrentScore;
+            std_enrol.TotalMarks = robj.TotalScore;
+            _context.SaveChanges();
             
 
 
