@@ -7,12 +7,7 @@ namespace FinalYearProject.Models
 {
     public partial class Course
     {
-        public Course()
-        {
-            Enrollments = new HashSet<Enrollment>();
-            
-            Questions = new HashSet<Question>();
-        }
+       
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -23,7 +18,7 @@ namespace FinalYearProject.Models
         public int FLevel_Id { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
-        public int Faculty_Id { get; set; }
+        public int Faculty_id { get; set; }
         public virtual Faculty Faculty { get; set; }
         public virtual FLevels FLevels { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }

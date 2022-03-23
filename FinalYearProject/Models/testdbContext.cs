@@ -59,9 +59,9 @@ namespace FinalYearProject.Models
 
                 entity.HasOne(f => f.Faculty)
                     .WithMany(p => p.Courses)
-                    .HasForeignKey(d => d.Faculty_Id)
+                    .HasForeignKey(d => d.Faculty_id)
                     .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_Faculty_ID");
+                    .HasConstraintName("FK_Faculty_iD");
 
                 entity.HasOne(d => d.FLevels)
                     .WithMany(p => p.Courses)

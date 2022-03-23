@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class AddedScheduleWithExam : Migration
+    public partial class coursefaculty : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -119,10 +119,11 @@ namespace FinalYearProject.Migrations
                 {
                     table.PrimaryKey("PK_Schedule", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Schedule_Faculty_FacultyId",
+                        name: "FK_Schedule_Faculty",
                         column: x => x.FacultyId,
                         principalTable: "Faculty",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,7 +221,8 @@ namespace FinalYearProject.Migrations
                     credit_hrs = table.Column<int>(type: "int", nullable: false),
                     Is_open = table.Column<bool>(type: "bit", nullable: false),
                     FLevel_Id = table.Column<int>(type: "int", nullable: false),
-                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Faculty_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -231,6 +233,11 @@ namespace FinalYearProject.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Faculty_iD",
+                        column: x => x.Faculty_id,
+                        principalTable: "Faculty",
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_FLevels",
                         column: x => x.FLevel_Id,
@@ -245,7 +252,8 @@ namespace FinalYearProject.Migrations
                 {
                     course_id = table.Column<int>(type: "int", nullable: false),
                     application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    grade = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
+                    grade = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
+                    CurrentMarks = table.Column<int>(type: "int", nullable: true),
                     totalMarks = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -393,6 +401,11 @@ namespace FinalYearProject.Migrations
                 column: "application_user_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Course_Faculty_id",
+                table: "Course",
+                column: "Faculty_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Course_FLevel_Id",
                 table: "Course",
                 column: "FLevel_Id");
@@ -416,8 +429,7 @@ namespace FinalYearProject.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Schedule_FacultyId",
                 table: "Schedule",
-                column: "FacultyId",
-                unique: true);
+                column: "FacultyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScheduleWithCourse_course_id",

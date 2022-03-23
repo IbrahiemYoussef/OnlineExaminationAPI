@@ -115,7 +115,7 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("FLevel_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Faculty_Id")
+                    b.Property<int>("Faculty_id")
                         .HasColumnType("int");
 
                     b.Property<bool>("Is_open")
@@ -133,7 +133,7 @@ namespace FinalYearProject.Migrations
 
                     b.HasIndex("FLevel_Id");
 
-                    b.HasIndex("Faculty_Id");
+                    b.HasIndex("Faculty_id");
 
                     b.ToTable("Course");
                 });
@@ -525,8 +525,8 @@ namespace FinalYearProject.Migrations
 
                     b.HasOne("FinalYearProject.Models.Faculty", "Faculty")
                         .WithMany("Courses")
-                        .HasForeignKey("Faculty_Id")
-                        .HasConstraintName("FK_Faculty_ID")
+                        .HasForeignKey("Faculty_id")
+                        .HasConstraintName("FK_Faculty_iD")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

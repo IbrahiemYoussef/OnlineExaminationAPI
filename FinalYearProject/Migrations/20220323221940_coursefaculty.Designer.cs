@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20220319163152_re")]
-    partial class re
+    [Migration("20220323221940_coursefaculty")]
+    partial class coursefaculty
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,6 +117,9 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("FLevel_Id")
                         .HasColumnType("int");
 
+                    b.Property<int>("Faculty_id")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Is_open")
                         .HasColumnType("bit");
 
@@ -132,6 +135,8 @@ namespace FinalYearProject.Migrations
 
                     b.HasIndex("FLevel_Id");
 
+                    b.HasIndex("Faculty_id");
+
                     b.ToTable("Course");
                 });
 
@@ -144,6 +149,9 @@ namespace FinalYearProject.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("application_user_id");
+
+                    b.Property<int?>("CurrentMarks")
+                        .HasColumnType("int");
 
                     b.Property<string>("Grade")
                         .HasMaxLength(2)
@@ -517,7 +525,16 @@ namespace FinalYearProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FinalYearProject.Models.Faculty", "Faculty")
+                        .WithMany("Courses")
+                        .HasForeignKey("Faculty_id")
+                        .HasConstraintName("FK_Faculty_iD")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Faculty");
 
                     b.Navigation("FLevels");
                 });
@@ -567,7 +584,7 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
                 {
                     b.HasOne("FinalYearProject.Models.Faculty", "Faculty")
-                        .WithMany("Schedule")
+                        .WithMany("Schedules")
                         .HasForeignKey("FacultyId")
                         .HasConstraintName("FK_Schedule_Faculty")
                         .IsRequired();
@@ -672,7 +689,9 @@ namespace FinalYearProject.Migrations
                 {
                     b.Navigation("ApplicationUsers");
 
-                    b.Navigation("Schedule");
+                    b.Navigation("Courses");
+
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
