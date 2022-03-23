@@ -23,7 +23,8 @@ namespace FinalYearProject.Models
         public int FLevel_Id { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
-        
+        public int Faculty_Id { get; set; }
+        public virtual Faculty Faculty { get; set; }
         public virtual FLevels FLevels { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual ICollection<Question> Questions { get; set; }

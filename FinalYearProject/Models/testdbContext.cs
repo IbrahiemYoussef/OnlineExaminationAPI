@@ -57,6 +57,12 @@ namespace FinalYearProject.Models
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ApplicationUser");
 
+                entity.HasOne(f => f.Faculty)
+                    .WithMany(p => p.Courses)
+                    .HasForeignKey(d => d.Faculty_Id)
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .HasConstraintName("FK_Faculty_ID");
+
                 entity.HasOne(d => d.FLevels)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.FLevel_Id)
@@ -186,8 +192,9 @@ namespace FinalYearProject.Models
                 .WithOne(b => b.Schedule)
                 .HasForeignKey<ScheduleWithCourse>(s => s.schedule_id)
                 .OnDelete(DeleteBehavior.NoAction);
+
                 entity.HasOne(d => d.Faculty)
-                    .WithMany(p => p.Schedule)
+                    .WithMany(p => p.Schedules)
                     .HasForeignKey(d => d.FacultyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Schedule_Faculty");

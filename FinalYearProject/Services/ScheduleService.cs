@@ -1,4 +1,5 @@
 ﻿using FinalYearProject.Models;
+using FinalYearProject.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace FinalYearProject.Services
             _context = context;
             
         }
-        public dynamic CreateSchedule()
+        public dynamic CreateSchedule(int fac_id)
         {
             List <Course> mycourses = _context.Courses.Where(x => x.Is_open == true).ToList();
             // error check
@@ -30,7 +31,7 @@ namespace FinalYearProject.Services
             }
             if (badCourses != null)
             {
-                return badCourses;
+                return new GlobalResponseDTO(true,"Some courses are not complete", badCourses);
             }
             else
             {

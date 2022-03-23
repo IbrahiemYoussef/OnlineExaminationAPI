@@ -4,14 +4,16 @@ using FinalYearProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    partial class mydbconModelSnapshot : ModelSnapshot
+    [Migration("20220323220605_course_faculty")]
+    partial class course_faculty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -527,7 +529,7 @@ namespace FinalYearProject.Migrations
                         .WithMany("Courses")
                         .HasForeignKey("Faculty_Id")
                         .HasConstraintName("FK_Faculty_ID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
