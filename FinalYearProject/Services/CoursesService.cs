@@ -10,18 +10,50 @@ namespace FinalYearProject.Services
 {
     public class CoursesService
     {
+        private ExamsService _examService;
         private mydbcon _context;
         private readonly IMapper _mapper;
-        public CoursesService(mydbcon context, IMapper mapper)
+        public CoursesService(mydbcon context, IMapper mapper, ExamsService examService)
         {
             _context = context;
             _mapper = mapper;
+            _examService = examService;
         }
 
-        public List<CourseDTO> GetManagedCourses(string prof_id)
+        public GlobalResponseDTO GetManagedCourses(string prof_id)
         {
             var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();
-            return _mapper.Map<List<CourseDTO>>(res);
+            List<ProfessorCoursesDTO> ProfCourses = new List<ProfessorCoursesDTO>();
+            foreach ( var i in res )
+            {
+              var checkit=  _examService.GetExamdetailsByCourseId(i.Id);
+                if (checkit == null)
+                {
+                    ProfCourses.Add(new ProfessorCoursesDTO()
+                    {
+                        Id=i.Id,
+                        Name=i.Name,
+                        CreditHrs=i.CreditHrs,
+                        FLevel_Id=i.FLevel_Id,
+                        IsConfigured=false
+
+                    });
+                }
+                else
+                {
+                    ProfCourses.Add(new ProfessorCoursesDTO()
+                    {
+                        Id = i.Id,
+                        Name = i.Name,
+                        CreditHrs = i.CreditHrs,
+                        FLevel_Id = i.FLevel_Id,
+                        IsConfigured = true
+
+                    });
+                }
+            }
+            return new GlobalResponseDTO(true, "succeeded", ProfCourses);
+            //return _mapper.Map<List<CourseDTO>>(res);
 
         }
 

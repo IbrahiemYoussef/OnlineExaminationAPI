@@ -24,7 +24,7 @@ namespace FinalYearProject.Services
             _context = context;
             _mapper = mapper;
         }
-        public void AddExamDetails(ExamDetailsDTO examdetail)
+        public GlobalResponseDTO AddExamDetails(ExamDetailsDTO examdetail)
         {
             
                 var _examdetaill = new ExamDetails()
@@ -41,24 +41,34 @@ namespace FinalYearProject.Services
                 {
                     _context.ExamDetails.Add(_examdetaill);
                     _context.SaveChanges();
+                return  new GlobalResponseDTO(true, "succeeded", _examdetaill);
                 }
                 else
                 {
-                    throw new Exception("please enter the right details");
+                return new GlobalResponseDTO(false, "Failed", "Wrong data entry");
                 }
             
             
         }
 
 
-        public void DeleteExamDetails(int id)
+        public GlobalResponseDTO DeleteExamDetails(int id)
         {
             var examdetail = new ExamDetails();
             examdetail = _context.ExamDetails.FirstOrDefault(x => x.Course_id == id);
-            _context.ExamDetails.Remove(examdetail);
-            _context.SaveChanges();
+            if (examdetail != null)
+            {
+                _context.ExamDetails.Remove(examdetail);
+                _context.SaveChanges();
+                return new GlobalResponseDTO(true, "succeeded", "Deleted Successfully");
+            }
+            else
+            {
+                return new GlobalResponseDTO(false, "Failed", "this course doesn't have a exam details");
+            }
+            
         }
-        public ExamDetails UpdateExamDetails(int id, ExamDetailsDTO examdetail)
+        public GlobalResponseDTO UpdateExamDetails(int id, ExamDetailsDTO examdetail)
         {
             var examdetaill = new ExamDetails();
             examdetaill = _context.ExamDetails.FirstOrDefault(x => x.Course_id == id);
@@ -73,18 +83,27 @@ namespace FinalYearProject.Services
                 {
                     
                     _context.SaveChanges();
+                    return new GlobalResponseDTO(true, "succeeded", examdetaill);
                 }
                 else
                 {
-                    throw new Exception("please enter the right details");
+                    return new GlobalResponseDTO(false, "Failed", "Wrong data entry");
                 }
             }
-            return examdetaill;
+            return new GlobalResponseDTO(false, "failed", "Not exist");
         }
 
-        public ExamDetails GetExamdetailsByCourseId(int course_id)
+        public GlobalResponseDTO GetExamdetailsByCourseId(int course_id)
         {
-            return _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
+            var examdetail= _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
+            if (examdetail != null)
+            {
+                return new GlobalResponseDTO(true, "succeeded", examdetail);
+            }
+            else
+            {
+                return new GlobalResponseDTO(false, "Failed", "this course doesn't have a exam details");
+            }
         }
 
 

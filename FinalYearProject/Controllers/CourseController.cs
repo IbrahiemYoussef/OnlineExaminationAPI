@@ -21,10 +21,10 @@ namespace FinalYearProject.Controllers
             
         }
 
-        [HttpGet("{prof_id}")]
-        public IActionResult GetManagedCourses(string prof_id)
+        [HttpGet("ProfessorCourses")]
+        public GlobalResponseDTO GetManagedCourses(string prof_id)
         {
-            return Ok(_courseService.GetManagedCourses(prof_id));
+            return _courseService.GetManagedCourses(prof_id);
         }
 
         [HttpGet("StudentCourses")]
