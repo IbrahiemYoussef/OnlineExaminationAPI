@@ -18,7 +18,7 @@ namespace FinalYearProject.Services
         }
         public dynamic CreateSchedule(int fac_id)
         {
-            List <Course> mycourses = _context.Courses.Where(x => x.Is_open == true).ToList();
+            List <Course> mycourses = _context.Courses.Where(x => x.Is_open == true && x.Faculty_id==fac_id).ToList();
             // error check
             List<Course> badCourses = new List<Course>();
             foreach ( var course in mycourses)
@@ -31,7 +31,7 @@ namespace FinalYearProject.Services
             }
             if (badCourses != null)
             {
-                return new GlobalResponseDTO(true,"Some courses are not complete", badCourses);
+                return new GlobalResponseDTO(false,"Some courses are not complete",  badCourses );
             }
             else
             {
