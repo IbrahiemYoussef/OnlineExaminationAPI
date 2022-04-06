@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
+using FinalYearProject.Models.DTOs;
 
 namespace FinalYearProject.Controllers
 {
@@ -35,118 +36,109 @@ namespace FinalYearProject.Controllers
             result += QuestionType.ToString() + "\n";
             if (QuestionType.ToUpper()[0].ToString() == "M")
             {           
-                if (CheckIfExcelFile(file))
+                using (var reader = new StreamReader(file.OpenReadStream()))
+                using (var csvReader = new CsvReader(reader, CultureInfo.CurrentCulture))
                 {
-
-                    using (var reader = new StreamReader(file.OpenReadStream()))
-                    using (var csvReader = new CsvReader(reader, CultureInfo.CurrentCulture))
+                    var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
                     {
-                        var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
-                        {
-                            HasHeaderRecord = true
-                        };
-                        var MCQques = csvReader.GetRecords<MCQquestions>();
-                        foreach (var s in MCQques)
-                        {
+                        HasHeaderRecord = true
+                    };
+                    var MCQques = csvReader.GetRecords<MCQquestions>();
+                    foreach (var s in MCQques)
+                    {
                             
-                            if (s.goal.Length == 1 && s.c != ""  && s.d !="" )
-                            { 
-                                var questionnn = new Question()
-                                {
-                                Questionx = s.question,
-                                Qtype = 'M',
-                                A = s.a,
-                                B = s.b,
-                                C=s.c,
-                                D=s.d,
-                                Goal = s.goal,
-                                Difficulty = s.difficulty,
-                                CourseId=CourseIdd
-                                };
-                                _context.Questions.Add(questionnn);
-                            }
-                            else if (s.goal.Length > 1)
+                        if (s.goal.Length == 1 && s.c != ""  && s.d !="" )
+                        { 
+                            var questionnn = new Question()
                             {
-                                var questionnn = new Question()
-                                {
-                                    Questionx = s.question,
-                                    Qtype = 'Y',
-                                    A = s.a,
-                                    B = s.b,
-                                    C = s.c,
-                                    D = s.d,
-                                    Goal = String.Concat(s.goal.Replace(",", "").OrderBy(c => c)),
-                                    Difficulty = s.difficulty,
-                                    CourseId = CourseIdd
-                                };
-                                _context.Questions.Add(questionnn);
-                            }
-                            else
-                            {
-                                var questionnn = new Question()
-                                {
-                                    Questionx = s.question,
-                                    Qtype = 'T',
-                                    A = s.a,
-                                    B = s.b,
-                                    C = s.c,
-                                    D = s.d,
-                                    Goal = s.goal,
-                                    Difficulty = s.difficulty,
-                                    CourseId = CourseIdd
-                                };
-                                _context.Questions.Add(questionnn);
-                            }
-
-                            /*need to change cause this is taking time while using*/
-                            result += s.question + "\n";
+                            Questionx = s.question,
+                            Qtype = 'M',
+                            A = s.a,
+                            B = s.b,
+                            C=s.c,
+                            D=s.d,
+                            Goal = s.goal,
+                            Difficulty = s.difficulty,
+                            CourseId=CourseIdd
+                            };
+                            _context.Questions.Add(questionnn);
                         }
-                       // _context.SaveChanges();
-                    }
-                    return Ok(result );
-                }
-            }
-            else if (QuestionType.ToUpper()[0].ToString() == "W")
-            {
-                
-                if (CheckIfExcelFile(file))
-                {
-
-                    using (var reader = new StreamReader(file.OpenReadStream()))
-                    using (var csvReader = new CsvReader(reader, CultureInfo.CurrentCulture))
-                    {
-                        var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
-                        {
-                            HasHeaderRecord = true
-                        };
-                        var sheet = csvReader.GetRecords<WrittenQ>();
-
-                        foreach (var s in sheet)
+                        else if (s.goal.Length > 1)
                         {
                             var questionnn = new Question()
                             {
                                 Questionx = s.question,
-                                Qtype = 'W',
-                                Answer=s.answer,
-                                Hint=s.Hint,
+                                Qtype = 'Y',
+                                A = s.a,
+                                B = s.b,
+                                C = s.c,
+                                D = s.d,
+                                Goal = String.Concat(s.goal.Replace(",", "").OrderBy(c => c)),
                                 Difficulty = s.difficulty,
                                 CourseId = CourseIdd
                             };
-                            // _context.Questions.Add(questionnn);
-
-                            result += s.question + "\n";
+                            _context.Questions.Add(questionnn);
                         }
-                       // _context.SaveChanges();
+                        else
+                        {
+                            var questionnn = new Question()
+                            {
+                                Questionx = s.question,
+                                Qtype = 'T',
+                                A = s.a,
+                                B = s.b,
+                                C = s.c,
+                                D = s.d,
+                                Goal = s.goal,
+                                Difficulty = s.difficulty,
+                                CourseId = CourseIdd
+                            };
+                            _context.Questions.Add(questionnn);
+                        }
+
+                        /*need to change cause this is taking time while using*/
+                        result += s.question + "\n";
                     }
-                    return Ok(result);
+                    _context.SaveChanges();
                 }
+                return Ok(new GlobalResponseDTO(true,"MCQ Added Sucessfully",result));
+                
+            }
+            else if (QuestionType.ToUpper()[0].ToString() == "W")
+            {   
+                using (var reader = new StreamReader(file.OpenReadStream()))
+                using (var csvReader = new CsvReader(reader, CultureInfo.CurrentCulture))
+                {
+                    var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+                    {
+                        HasHeaderRecord = true
+                    };
+                    var sheet = csvReader.GetRecords<WrittenQ>();
+
+                    foreach (var s in sheet)
+                    {
+                        var questionnn = new Question()
+                        {
+                            Questionx = s.question,
+                            Qtype = 'W',
+                            Answer=s.answer,
+                            Hint=s.Hint,
+                            Difficulty = s.difficulty,
+                            CourseId = CourseIdd
+                        };
+                            _context.Questions.Add(questionnn);
+
+                        result += s.question + "\n";
+                    }
+                    _context.SaveChanges();
+                }
+                return Ok(new GlobalResponseDTO(true, "Written Questions Added Sucessfully", result));   
             }
             else
             {
-                //throw new Exception("We deal with MCQ Or Written question");
+                return Ok(new GlobalResponseDTO(true, "Please provide a valid file type", result));
             }
 
-            return Ok(result);
         }
 
         private bool CheckIfExcelFile(IFormFile file)
