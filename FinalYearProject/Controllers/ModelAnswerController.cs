@@ -23,10 +23,8 @@ namespace FinalYearProject.Controllers
         private readonly mydbcon _context;
         public ModelAnswerController(mydbcon context)
         {
-            _context = context;
-            
+            _context = context; 
         }
-
 
         [HttpPost]
         public IActionResult UploadFile(IFormFile file ,string QuestionType,int CourseIdd)

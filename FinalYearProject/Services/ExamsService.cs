@@ -41,11 +41,11 @@ namespace FinalYearProject.Services
                 {
                     _context.ExamDetails.Add(_examdetaill);
                     _context.SaveChanges();
-                return  new GlobalResponseDTO(true, "succeeded", _examdetaill);
+                    return  new GlobalResponseDTO(true, "Succeeded", _examdetaill);
                 }
                 else
                 {
-                return new GlobalResponseDTO(false, "Failed", "Wrong data entry");
+                    return new GlobalResponseDTO(false, "Failed wrong data entry", null);
                 }
             
             
@@ -117,7 +117,11 @@ namespace FinalYearProject.Services
             //get examdetails by course id
 
             //handle wrong course id
+
             ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == coursee_id);
+            if(examm==null)
+                return new GlobalResponseDTO(true, "Invalid CourseID", null);
+
             var n = examm.NumberOfQuestions;
             var neasy = examm.NumberOfEasyQuestions;
             var nmod = examm.NumberOfModQuestions;
@@ -130,9 +134,9 @@ namespace FinalYearProject.Services
             if (type.ToUpper() == "MCQ")
             {
                 questions = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).ToList();
-                List<Question> easy_questions = questions.Where(x => x.Difficulty == "Easy").OrderBy(t => Guid.NewGuid()).Take(neasy).ToList();
-                List<Question> moderate_questions = questions.Where(x => x.Difficulty == "Moderate").OrderBy(t => Guid.NewGuid()).Take(nmod).ToList();
-                List<Question> hard_questions = questions.Where(x => x.Difficulty == "Hard").OrderBy(t => Guid.NewGuid()).Take(nhard).ToList();
+                List<Question> easy_questions = questions.Where(x => x.Difficulty.ToUpper() == "EASY").OrderBy(t => Guid.NewGuid()).Take(neasy).ToList();
+                List<Question> moderate_questions = questions.Where(x => x.Difficulty.ToUpper() == "MODERATE").OrderBy(t => Guid.NewGuid()).Take(nmod).ToList();
+                List<Question> hard_questions = questions.Where(x => x.Difficulty.ToUpper() == "HARD").OrderBy(t => Guid.NewGuid()).Take(nhard).ToList();
 
                 List<Question> result;
                 result = easy_questions.Concat(moderate_questions).ToList();
