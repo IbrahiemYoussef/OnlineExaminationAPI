@@ -14,7 +14,7 @@ namespace FinalYearProject.Models.Pojo
         public string c { get; set; }
         public string d { get; set; }
         public string goal { get; set; }
-        public string Difficulty { get; set; }
+        public string difficulty { get; set; }
 
     }
 }

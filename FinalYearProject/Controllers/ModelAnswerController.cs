@@ -60,7 +60,7 @@ namespace FinalYearProject.Controllers
                                 C=s.c,
                                 D=s.d,
                                 Goal = s.goal,
-                                Difficulty = s.Difficulty,
+                                Difficulty = s.difficulty,
                                 CourseId=CourseIdd
                                 };
                                 _context.Questions.Add(questionnn);
@@ -76,7 +76,7 @@ namespace FinalYearProject.Controllers
                                     C = s.c,
                                     D = s.d,
                                     Goal = String.Concat(s.goal.Replace(",", "").OrderBy(c => c)),
-                                    Difficulty = s.Difficulty,
+                                    Difficulty = s.difficulty,
                                     CourseId = CourseIdd
                                 };
                                 _context.Questions.Add(questionnn);
@@ -92,7 +92,7 @@ namespace FinalYearProject.Controllers
                                     C = s.c,
                                     D = s.d,
                                     Goal = s.goal,
-                                    Difficulty = s.Difficulty,
+                                    Difficulty = s.difficulty,
                                     CourseId = CourseIdd
                                 };
                                 _context.Questions.Add(questionnn);
@@ -129,7 +129,7 @@ namespace FinalYearProject.Controllers
                                 Qtype = 'W',
                                 Answer=s.answer,
                                 Hint=s.Hint,
-                                Difficulty = s.Difficulty,
+                                Difficulty = s.difficulty,
                                 CourseId = CourseIdd
                             };
                             // _context.Questions.Add(questionnn);

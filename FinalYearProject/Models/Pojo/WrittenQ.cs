@@ -10,6 +10,6 @@ namespace FinalYearProject.Models.Pojo
         public string question { get; set; }
         public string answer { get; set; }
         public string Hint { get; set; }
-        public string Difficulty { get; set; }
+        public string difficulty { get; set; }
     }
 }
