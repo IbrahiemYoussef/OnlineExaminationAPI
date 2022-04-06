@@ -17,7 +17,6 @@ namespace FinalYearProject.Models
         public string B { get; set; }
         public string C { get; set; }
         public string D { get; set; }
-        public string Hint { get; set; }
         public string Goal { get; set; }
         
         public int CourseId { get; set; }

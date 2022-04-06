@@ -149,11 +149,6 @@ namespace FinalYearProject.Models
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("goal");
-
-                entity.Property(e => e.Hint)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("hint");
                 entity.Property(e => e.Difficulty)
                     .IsRequired()
                     .HasMaxLength(15)

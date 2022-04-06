@@ -122,7 +122,6 @@ namespace FinalYearProject.Controllers
                             Questionx = s.question,
                             Qtype = 'W',
                             Answer=s.answer,
-                            Hint=s.Hint,
                             Difficulty = s.difficulty,
                             CourseId = CourseIdd
                         };
