@@ -68,7 +68,7 @@ namespace FinalYearProject.Services
             }
             
         }
-        public GlobalResponseDTO UpdateExamDetails(int id, ExamDetailsDTO examdetail)
+        public GlobalResponseDTO UpdateExamDetails(int id, UpdateExamDetailsDTO examdetail)
         {
             var examdetaill = new ExamDetails();
             examdetaill = _context.ExamDetails.FirstOrDefault(x => x.Course_id == id);
