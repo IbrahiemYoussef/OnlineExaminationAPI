@@ -26,16 +26,15 @@ namespace FinalYearProject.Controllers
             
         }
 
-        //public Question getQuestion(char choice)
-        //{
 
-        //}
         [HttpPost]
         public IActionResult UploadFile(IFormFile file ,string QuestionType,int CourseIdd)
         {
-            if (QuestionType == "MCQ")
-            {
-                
+            string result = "";
+            result += CourseIdd.ToString() + "\n";
+            result += QuestionType.ToString() + "\n";
+            if (QuestionType.ToUpper()[0].ToString() == "M")
+            {           
                 if (CheckIfExcelFile(file))
                 {
 
@@ -61,7 +60,7 @@ namespace FinalYearProject.Controllers
                                 C=s.c,
                                 D=s.d,
                                 Goal = s.goal,
-                                Difficulty = s.Difficulty,
+                                Difficulty = s.difficulty,
                                 CourseId=CourseIdd
                                 };
                                 _context.Questions.Add(questionnn);
@@ -77,7 +76,7 @@ namespace FinalYearProject.Controllers
                                     C = s.c,
                                     D = s.d,
                                     Goal = String.Concat(s.goal.Replace(",", "").OrderBy(c => c)),
-                                    Difficulty = s.Difficulty,
+                                    Difficulty = s.difficulty,
                                     CourseId = CourseIdd
                                 };
                                 _context.Questions.Add(questionnn);
@@ -93,21 +92,21 @@ namespace FinalYearProject.Controllers
                                     C = s.c,
                                     D = s.d,
                                     Goal = s.goal,
-                                    Difficulty = s.Difficulty,
+                                    Difficulty = s.difficulty,
                                     CourseId = CourseIdd
                                 };
                                 _context.Questions.Add(questionnn);
                             }
-                            
-     /*need to change cause this is taking time while using*/ 
-                            
+
+                            /*need to change cause this is taking time while using*/
+                            result += s.question + "\n";
                         }
-                        _context.SaveChanges();
+                       // _context.SaveChanges();
                     }
-                    return Ok();
+                    return Ok(result );
                 }
             }
-            else if (QuestionType == "Written")
+            else if (QuestionType.ToUpper()[0].ToString() == "W")
             {
                 
                 if (CheckIfExcelFile(file))
@@ -130,26 +129,24 @@ namespace FinalYearProject.Controllers
                                 Qtype = 'W',
                                 Answer=s.answer,
                                 Hint=s.Hint,
-                                Difficulty = s.Difficulty,
+                                Difficulty = s.difficulty,
                                 CourseId = CourseIdd
                             };
-                            _context.Questions.Add(questionnn);
-                            
+                            // _context.Questions.Add(questionnn);
 
+                            result += s.question + "\n";
                         }
-                        _context.SaveChanges();
+                       // _context.SaveChanges();
                     }
-                    return Ok();
+                    return Ok(result);
                 }
             }
             else
             {
-                throw new Exception("We deal with MCQ Or Written question");
+                //throw new Exception("We deal with MCQ Or Written question");
             }
 
-            return Ok();
-
-
+            return Ok(result);
         }
 
         private bool CheckIfExcelFile(IFormFile file)

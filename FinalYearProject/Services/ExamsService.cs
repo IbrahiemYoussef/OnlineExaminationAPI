@@ -110,7 +110,7 @@ namespace FinalYearProject.Services
 
 
 
-        public List<QuestionDTO> GetUniqueExam(int coursee_id)
+        public GlobalResponseDTO GetUniqueExam(int coursee_id)
         {
             //if n > nrows in the table
 
@@ -150,14 +150,12 @@ namespace FinalYearProject.Services
                 List<Question> wr_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr).ToList();
                 List<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq).ToList();
                 questions = wr_ques.Concat(mcq_ques).ToList();
-
             }
             //time of exam in seconds 
 
 
-            return _mapper.Map<List<QuestionDTO>>(questions);
-           // return new GlobalResponseDTO(true, "Exam Sucessfully Graded",
-           // {q=questions,time=int,course_name=get from db});
+            var list= _mapper.Map<List<QuestionDTO>>(questions);
+            return new GlobalResponseDTO(true, "Exam Generated", list);
         }
 
 
