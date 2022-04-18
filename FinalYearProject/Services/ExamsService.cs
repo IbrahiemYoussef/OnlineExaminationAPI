@@ -81,7 +81,7 @@ namespace FinalYearProject.Services
                 examdetaill.NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions;
                 examdetaill.NumberOfModQuestions = examdetail.NumberOfModQuestions;
                 examdetaill.NumberOfHardQuestions = examdetail.NumberOfHardQuestions;
-                examdetaill.TypeOfQuestions = examdetail.TypeOfQuestions;
+                examdetaill.TypeOfQuestions = examdetail.TypeOfQuestions; //mcq or mixed
                 if (examdetaill.NumberOfEasyQuestions + examdetaill.NumberOfModQuestions + examdetaill.NumberOfHardQuestions == examdetaill.NumberOfQuestions)
                 {
                     _context.SaveChanges();

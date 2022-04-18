@@ -113,9 +113,10 @@ namespace FinalYearProject.Controllers
         }
 
         [HttpPost]
-        [Route("register-admin")]
-        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
+        [Route("RegisterAny")]
+        public async Task<IActionResult> RegisterProfessor([FromBody] RegisterModel model,string choice)
         {
+            //admin , student, professor
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
@@ -140,12 +141,39 @@ namespace FinalYearProject.Controllers
             if (!await roleManager.RoleExistsAsync(UserRoles.Professor))
                 await roleManager.CreateAsync(new IdentityRole(UserRoles.Professor));
 
-            if (await roleManager.RoleExistsAsync(UserRoles.Admin))
+            //if (await roleManager.RoleExistsAsync(UserRoles.Student))
+            //{
+            //    await userManager.AddToRoleAsync(user, UserRoles.Student);
+            //}
+
+            if(choice[0].ToString().ToUpper() == "A")
             {
                 await userManager.AddToRoleAsync(user, UserRoles.Admin);
             }
+            else if (choice[0].ToString().ToUpper() == "S")
+            {
+                await userManager.AddToRoleAsync(user, UserRoles.Student);
+            }
+            else if (choice[0].ToString().ToUpper() == "P")
+            {
+                await userManager.AddToRoleAsync(user, UserRoles.Professor);
+            }
+            else
+            {
+                return Ok(new GlobalResponseDTO(false, "User creation failed!", null));
+            }
+            return Ok(new GlobalResponseDTO(true, $"{choice.ToUpper()} created successfully!", null));
 
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+
+        [HttpGet]
+        [Route("GetRoleName")]
+        public async Task<IList<string>> GetUserRole(string username)
+        {
+
+            var user = await userManager.FindByNameAsync(username);
+            var rolenames = await userManager.GetRolesAsync(user);
+            return rolenames;
         }
     }
 }
