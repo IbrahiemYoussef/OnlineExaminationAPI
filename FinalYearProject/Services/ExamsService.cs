@@ -30,10 +30,10 @@ namespace FinalYearProject.Services
                 var _examdetaill = new ExamDetails()
                 {
                     NumberOfQuestions = examdetail.NumberOfQuestions,
-                    NumberOfMultipleMCQ=examdetail.NumberOfMultipleMCQ,
-                    NumberOfSingleMCQ=examdetail.NumberOfSingleMCQ,
-                    NumberOfTrueFalse=examdetail.NumberOfTrueFalse,
-                    NumberOfWritten=examdetail.NumberOfWritten,
+                    //NumberOfMultipleMCQ=examdetail.NumberOfMultipleMCQ,
+                    //NumberOfSingleMCQ=examdetail.NumberOfSingleMCQ,
+                    //NumberOfTrueFalse=examdetail.NumberOfTrueFalse,
+                    //NumberOfWritten=examdetail.NumberOfWritten,
                     NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions,
                     NumberOfModQuestions = examdetail.NumberOfModQuestions,
                     NumberOfHardQuestions = examdetail.NumberOfHardQuestions,
@@ -118,6 +118,10 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO GetUniqueExam(int coursee_id)
         {
+            //seyahak tarab
+            //ehda ela Ibrahiem Yousef
+            //3lk IT & CS
+
             //if n > nrows in the table
 
             //get examdetails by course id
@@ -126,7 +130,7 @@ namespace FinalYearProject.Services
 
             ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == coursee_id);
             if(examm==null)
-                return new GlobalResponseDTO(true, "Invalid CourseID", null);
+                return new GlobalResponseDTO(false, "Invalid CourseID", null);
 
             var n = examm.NumberOfQuestions;
             var neasy = examm.NumberOfEasyQuestions;

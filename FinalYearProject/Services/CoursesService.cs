@@ -20,6 +20,11 @@ namespace FinalYearProject.Services
             _examService = examService;
         }
 
+        public GlobalResponseDTO GetAllCourses()
+        {
+            List<Course> courses = _context.Courses.ToList<Course>();
+            return new GlobalResponseDTO(true, "Fetched all courses in DB", courses);
+        }
         public GlobalResponseDTO GetManagedCourses(string prof_id)
         {
             var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();

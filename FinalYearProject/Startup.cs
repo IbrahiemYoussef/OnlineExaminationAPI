@@ -60,6 +60,7 @@ namespace FinalYearProject
             services.AddDbContext<mydbcon>(options => options.UseSqlServer(ConnectionString));
             services.AddTransient<ExamsService>();
             services.AddTransient<CoursesService>();
+            services.AddTransient<QuestionBankService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             

@@ -64,13 +64,5 @@ namespace FinalYearProject.Controllers
              return Ok(_examService.GetExamResult(obj.std_id,obj.course_id,obj.answers));
         }
 
-
-        //[HttpGet("SubmittingExam"), HttpPost("SubmittingExam")]
-        ////public IActionResult SubmittingExam(int std_id,int coursee_id,List<AnswerDTO>? answers)
-        ////{
-        ////    Examinate(coursee_id);
-        ////    return Ok(_examService.GetExamResult(coursee_id, std_id, answers));
-
-        ////}
     }
 }
