@@ -13,6 +13,7 @@ namespace FinalYearProject.Models
         public int NumberOfEasyQuestions { get; set; }
         public int NumberOfModQuestions { get; set; }
         public int NumberOfHardQuestions { get; set; }
+        public string TypeOfQuestions { get; set; }
         public int Course_id { get; set; }
         public Course Course { get; set; }
     }

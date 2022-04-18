@@ -37,8 +37,8 @@ namespace FinalYearProject.Services
                     NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions,
                     NumberOfModQuestions = examdetail.NumberOfModQuestions,
                     NumberOfHardQuestions = examdetail.NumberOfHardQuestions,
+                    TypeOfQuestions = examdetail.TypeOfQuestions,
                     Course_id = examdetail.Course_id
-
                 };
                 if (_examdetaill.NumberOfEasyQuestions + _examdetaill.NumberOfModQuestions + _examdetaill.NumberOfHardQuestions == _examdetaill.NumberOfQuestions)
                 {
@@ -78,16 +78,12 @@ namespace FinalYearProject.Services
             if (examdetaill != null)
             {
                 examdetaill.NumberOfQuestions = examdetail.NumberOfQuestions;
-                //NumberOfMultipleMCQ = examdetail.NumberOfMultipleMCQ,
-                //    NumberOfSingleMCQ = examdetail.NumberOfSingleMCQ,
-                //    NumberOfTrueFalse = examdetail.NumberOfTrueFalse,
-                //    NumberOfWritten = examdetail.NumberOfWritten,
                 examdetaill.NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions;
                 examdetaill.NumberOfModQuestions = examdetail.NumberOfModQuestions;
                 examdetaill.NumberOfHardQuestions = examdetail.NumberOfHardQuestions;
+                examdetaill.TypeOfQuestions = examdetail.TypeOfQuestions;
                 if (examdetaill.NumberOfEasyQuestions + examdetaill.NumberOfModQuestions + examdetaill.NumberOfHardQuestions == examdetaill.NumberOfQuestions)
                 {
-                    
                     _context.SaveChanges();
                     return new GlobalResponseDTO(true, "succeeded", examdetaill);
                 }
@@ -136,7 +132,7 @@ namespace FinalYearProject.Services
             var neasy = examm.NumberOfEasyQuestions;
             var nmod = examm.NumberOfModQuestions;
             var nhard = examm.NumberOfHardQuestions;
-            var type = "";//examm.TypeOfQuestions;
+            var type = examm.TypeOfQuestions;
 
 
             List<Question> questions;
