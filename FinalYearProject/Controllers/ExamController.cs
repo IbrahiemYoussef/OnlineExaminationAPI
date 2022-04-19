@@ -22,24 +22,24 @@ namespace FinalYearProject.Controllers
             _examService = examService;
         }
         [HttpPost("PostExamDetails")]
-        public GlobalResponseDTO AddExamDetails( [FromBody] ExamDetailsDTO examdto)
+        public GlobalResponseDTO AddExamDetails(int course_id,[FromBody] ExamDetailsDTO examdto)
         {
-           return _examService.AddExamDetails(examdto);
-           
+           return _examService.AddExamDetails(course_id,examdto);
         }
-        [HttpDelete("DeleteExamDetails")]
-        public GlobalResponseDTO DeleteExamDetails(int Course_id)
+
+        [HttpPut("PutExamDetails")]
+        public GlobalResponseDTO UpdateExamByCourseId(int course_id, [FromBody] UpdateExamDetailsDTO examdto)
         {
-          return  _examService.DeleteExamDetails(Course_id);
+            return _examService.UpdateExamDetails(course_id, examdto);
+        }
+
+        [HttpDelete("DeleteExamDetails")]
+        public GlobalResponseDTO DeleteExamDetails(int course_id)
+        {
+          return  _examService.DeleteExamDetails(course_id);
              
         }
-        [HttpPut("PutExamDetails")]
-        public GlobalResponseDTO UpdateExamByCourseId(int Course_id, [FromBody] UpdateExamDetailsDTO examdto)
-        {
-            return _examService.UpdateExamDetails(Course_id, examdto);
 
-
-        }
         [HttpGet("GetExamDetails")]
         public GlobalResponseDTO GetExamBycourseId(int course_id)
         {

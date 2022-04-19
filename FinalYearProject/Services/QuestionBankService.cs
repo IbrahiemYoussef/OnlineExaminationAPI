@@ -32,7 +32,7 @@ namespace FinalYearProject.Services
         {
             _context.Questions.RemoveRange(_context.Questions.Where(q => q.CourseId == course_id));
             _context.SaveChanges();
-            return new GlobalResponseDTO(true, "Succesfully Deleted the Question Bank",null );
+            return new GlobalResponseDTO(true, "Succesfully erased the question bank",null );
         }
 
         public GlobalResponseDTO UploadFile(IFormFile file, string QuestionType, int CourseIdd)
@@ -48,7 +48,7 @@ namespace FinalYearProject.Services
 
                 
 
-                if (!isCsvFile(file)) return new GlobalResponseDTO(false, "Invalid File type", null);
+                //if (!isCsvFile(file)) return new GlobalResponseDTO(false, "Invalid File type", null);
 
                 if (_context.Courses.Find(CourseIdd) == null)
                     return new GlobalResponseDTO(false, "Invalid Course id", null);

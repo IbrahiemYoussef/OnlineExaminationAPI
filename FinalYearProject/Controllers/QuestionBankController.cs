@@ -19,10 +19,10 @@ namespace FinalYearProject.Controllers
         }
 
         [HttpPost("UploadQuestionBank")]
-        public IActionResult UploadFile(IFormFile file ,string questionBankType,int courseId)
+        public IActionResult UploadFile(IFormFile file ,string questionBankType,int course_id)
         {
 
-            return Ok(_questionBankService.UploadFile(file, questionBankType, courseId));
+            return Ok(_questionBankService.UploadFile(file, questionBankType, course_id));
 
         }
 

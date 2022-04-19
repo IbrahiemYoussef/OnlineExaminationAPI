@@ -24,7 +24,7 @@ namespace FinalYearProject.Services
             _context = context;
             _mapper = mapper;
         }
-        public GlobalResponseDTO AddExamDetails(ExamDetailsDTO examdetail)
+        public GlobalResponseDTO AddExamDetails(int course_id,ExamDetailsDTO examdetail)
         {
             
                 var _examdetaill = new ExamDetails()
@@ -38,7 +38,7 @@ namespace FinalYearProject.Services
                     NumberOfModQuestions = examdetail.NumberOfModQuestions,
                     NumberOfHardQuestions = examdetail.NumberOfHardQuestions,
                     TypeOfQuestions = examdetail.TypeOfQuestions,
-                    Course_id = examdetail.Course_id
+                    Course_id = course_id
                 };
                 if (_examdetaill.NumberOfEasyQuestions + _examdetaill.NumberOfModQuestions + _examdetaill.NumberOfHardQuestions == _examdetaill.NumberOfQuestions)
                 {
@@ -55,10 +55,10 @@ namespace FinalYearProject.Services
         }
 
 
-        public GlobalResponseDTO DeleteExamDetails(int id)
+        public GlobalResponseDTO DeleteExamDetails(int course_id)
         {
             var examdetail = new ExamDetails();
-            examdetail = _context.ExamDetails.FirstOrDefault(x => x.Course_id == id);
+            examdetail = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
             if (examdetail != null)
             {
                 _context.ExamDetails.Remove(examdetail);
@@ -71,28 +71,29 @@ namespace FinalYearProject.Services
             }
             
         }
-        public GlobalResponseDTO UpdateExamDetails(int id, UpdateExamDetailsDTO examdetail)
+        public GlobalResponseDTO UpdateExamDetails(int course_id, UpdateExamDetailsDTO examdetail)
         {
             var examdetaill = new ExamDetails();
-            examdetaill = _context.ExamDetails.FirstOrDefault(x => x.Course_id == id);
+            examdetaill = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
             if (examdetaill != null)
+                return new GlobalResponseDTO(false, "Failed invalid course id",null );
+
+            examdetaill.NumberOfQuestions = examdetail.NumberOfQuestions;
+            examdetaill.NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions;
+            examdetaill.NumberOfModQuestions = examdetail.NumberOfModQuestions;
+            examdetaill.NumberOfHardQuestions = examdetail.NumberOfHardQuestions;
+            examdetaill.TypeOfQuestions = examdetail.TypeOfQuestions; //mcq or mixed
+            if (examdetaill.NumberOfEasyQuestions + examdetaill.NumberOfModQuestions + examdetaill.NumberOfHardQuestions == examdetaill.NumberOfQuestions)
             {
-                examdetaill.NumberOfQuestions = examdetail.NumberOfQuestions;
-                examdetaill.NumberOfEasyQuestions = examdetail.NumberOfEasyQuestions;
-                examdetaill.NumberOfModQuestions = examdetail.NumberOfModQuestions;
-                examdetaill.NumberOfHardQuestions = examdetail.NumberOfHardQuestions;
-                examdetaill.TypeOfQuestions = examdetail.TypeOfQuestions; //mcq or mixed
-                if (examdetaill.NumberOfEasyQuestions + examdetaill.NumberOfModQuestions + examdetaill.NumberOfHardQuestions == examdetaill.NumberOfQuestions)
-                {
-                    _context.SaveChanges();
-                    return new GlobalResponseDTO(true, "succeeded", examdetaill);
-                }
-                else
-                {
-                    return new GlobalResponseDTO(false, "Failed", "Wrong data entry");
-                }
+                _context.SaveChanges();
+                return new GlobalResponseDTO(true, "Succeeded", examdetaill);
             }
-            return new GlobalResponseDTO(false, "failed", "Not exist");
+            else
+            {
+                return new GlobalResponseDTO(false, "Wrong data entry!", null);
+            }
+            
+            
         }
 
         public GlobalResponseDTO GetExamdetailsByCourseId(int course_id)
