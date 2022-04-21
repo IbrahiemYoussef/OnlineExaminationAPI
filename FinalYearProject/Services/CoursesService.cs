@@ -27,37 +27,39 @@ namespace FinalYearProject.Services
         }
         public GlobalResponseDTO GetManagedCourses(string prof_id)
         {
-            var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();
-            List<ProfessorCoursesDTO> ProfCourses = new List<ProfessorCoursesDTO>();
-            foreach ( var i in res )
-            {
-              var checkit=  _examService.GetExamdetailsByCourseId(i.Id);
-                if (checkit == null)
-                {
-                    ProfCourses.Add(new ProfessorCoursesDTO()
-                    {
-                        Id=i.Id,
-                        Name=i.Name,
-                        CreditHrs=i.CreditHrs,
-                        FLevel_Id=i.FLevel_Id,
-                        IsConfigured=false
+            return null;
+            //under maintenance
+            //var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();
+            //List<ProfessorCoursesDTO> ProfCourses = new List<ProfessorCoursesDTO>();
+            //foreach ( var i in res )
+            //{
+            //  var checkit=  _examService.GetExamdetailsByCourseId(i.Id);
+            //    if (checkit == null)
+            //    {
+            //        ProfCourses.Add(new ProfessorCoursesDTO()
+            //        {
+            //            Id=i.Id,
+            //            Name=i.Name,
+            //            CreditHrs=i.CreditHrs,
+            //            FLevel_Id=i.FLevel_Id,
+            //            IsConfigured=false
 
-                    });
-                }
-                else
-                {
-                    ProfCourses.Add(new ProfessorCoursesDTO()
-                    {
-                        Id = i.Id,
-                        Name = i.Name,
-                        CreditHrs = i.CreditHrs,
-                        FLevel_Id = i.FLevel_Id,
-                        IsConfigured = true
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ProfCourses.Add(new ProfessorCoursesDTO()
+            //        {
+            //            Id = i.Id,
+            //            Name = i.Name,
+            //            CreditHrs = i.CreditHrs,
+            //            FLevel_Id = i.FLevel_Id,
+            //            IsConfigured = true
 
-                    });
-                }
-            }
-            return new GlobalResponseDTO(true, "succeeded", ProfCourses);
+            //        });
+            //    }
+            //}
+            //return new GlobalResponseDTO(true, "succeeded", ProfCourses);
             //return _mapper.Map<List<CourseDTO>>(res);
 
         }

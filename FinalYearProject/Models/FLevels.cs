@@ -8,7 +8,6 @@ namespace FinalYearProject.Models
     public class FLevels
     {
         public int Id { get; set; }
-        // is unique
         public string Level_name  { get; set; }
         public ICollection<Course> Courses { get; set; }
     }

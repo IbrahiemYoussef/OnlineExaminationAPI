@@ -4,14 +4,16 @@ using FinalYearProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    partial class mydbconModelSnapshot : ModelSnapshot
+    [Migration("20220421201510_GoodStuff")]
+    partial class GoodStuff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

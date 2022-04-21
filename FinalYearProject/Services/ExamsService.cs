@@ -109,10 +109,6 @@ namespace FinalYearProject.Services
             }
         }
 
-
-
-
-
         public GlobalResponseDTO GetUniqueExam(int coursee_id)
         {
             //seyahak tarab
@@ -162,13 +158,11 @@ namespace FinalYearProject.Services
                 List<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq).ToList();
                 questions = wr_ques.Concat(mcq_ques).ToList();
             }
-            //time of exam in seconds 
 
 
             var list= _mapper.Map<List<QuestionDTO>>(questions);
             return new GlobalResponseDTO(true, "Exam Generated", list);
         }
-
 
         public static async Task<ScoreDTO> get_written_result(string url, List<string> user_answersx, List<string> model_answersx)
         {
@@ -191,14 +185,14 @@ namespace FinalYearProject.Services
         public GlobalResponseDTO GetExamResult(string std_id,int coursee_id, List<AnswerDTO> answers)
         {
             var mcq_counter = 0;
-            List<string> user_answers = answers.Where(x=> x.qtype.ToString().ToLower() == "w")
+            List<string> user_answers = answers.Where(x=> x.Qtype.ToString().ToLower() == "w")
                           .Select(a => a.Answer).ToList();
 
             List<string> model_answers= new List<string>();
             
             foreach (AnswerDTO ans in answers)
             {
-                if (ans.qtype.ToString().ToLower() == "w")
+                if (ans.Qtype.ToString().ToLower() == "w")
                 {
                     Question que = _context.Questions.Where(x => x.Id == ans.Id).FirstOrDefault();
                     model_answers.Add(que.Answer);
@@ -241,44 +235,4 @@ namespace FinalYearProject.Services
 
     }
     
-
-    //public List<QuestionDTO> GetUniqueExam(string course_name, int n,int neasy, int nmod, int nhard, string type)
-    //{
-    //    //if n > nrows in the table
-
-    //    //get course id by name
-    //    Course course = _context.Courses.FirstOrDefault(x => x.Name == course_name);
-    //    List<Question> questions;
-
-    //    if (type.ToUpper() == "MCQ")
-    //    {
-    //        questions = _context.Questions.Where(x => x.CourseId == course.Id && x.Goal != null).ToList();
-    //        List<Question> easy_questions = questions.Where(x => x.Difficulty == "Easy").OrderBy(t => Guid.NewGuid()).Take(neasy).ToList();
-    //        List<Question> moderate_questions = questions.Where(x => x.Difficulty == "Moderate").OrderBy(t => Guid.NewGuid()).Take(nmod).ToList();
-    //        List<Question> hard_questions = questions.Where(x => x.Difficulty == "Hard").OrderBy(t => Guid.NewGuid()).Take(nhard).ToList();
-
-    //        List<Question> result;
-    //        result = easy_questions.Concat(moderate_questions).ToList();
-    //        result = result.Concat(hard_questions).OrderBy(x => Guid.NewGuid()).ToList(); //shuffle overall
-
-    //        questions = result;
-    //    }
-    //    else
-    //    {
-    //        //if exam is mix 20% written 
-    //        int numofwr = Convert.ToInt32(Math.Ceiling(.2 * n));
-    //        int numofmcq = n - numofwr;
-
-    //        questions = _context.Questions.Where(x => x.CourseId == course.Id).ToList();
-    //        List<Question> wr_ques = questions.Where(x => x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr).ToList();
-    //        List<Question> mcq_ques =   questions.Where(x => x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq).ToList();
-    //        questions = wr_ques.Concat(mcq_ques).ToList();
-
-    //    }
-
-    //    return _mapper.Map<List<QuestionDTO>>(questions);
-
-    //}
-
-
 }

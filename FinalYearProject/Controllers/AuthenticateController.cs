@@ -114,7 +114,7 @@ namespace FinalYearProject.Controllers
 
         [HttpPost]
         [Route("RegisterAny")]
-        public async Task<IActionResult> RegisterProfessor([FromBody] RegisterModel model,string choice)
+        public async Task<IActionResult> RegisterAny([FromBody] RegisterModel model,string choice)
         {
             //admin , student, professor
             var userExists = await userManager.FindByNameAsync(model.Username);
@@ -170,7 +170,6 @@ namespace FinalYearProject.Controllers
         [Route("GetRoleName")]
         public async Task<IList<string>> GetUserRole(string username)
         {
-
             var user = await userManager.FindByNameAsync(username);
             var rolenames = await userManager.GetRolesAsync(user);
             return rolenames;

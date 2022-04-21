@@ -9,6 +9,7 @@ namespace FinalYearProject.Models.DTOs
     {
         public int Id { get; set; }
         public string Answer { get; set; }
-        public char qtype { get; set; }
+        public int TotalNumberOfQuestions { get; set; }
+        public char Qtype { get; set; }
     }
 }

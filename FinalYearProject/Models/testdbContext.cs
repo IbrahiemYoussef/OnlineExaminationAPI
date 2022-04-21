@@ -27,6 +27,8 @@ namespace FinalYearProject.Models
         public virtual DbSet<FLevels> FLevels { get; set; }
         public virtual DbSet<ScheduleWithCourse> ScheduleWithCourse { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
+        public virtual DbSet<EnrolementProfessor> EnrolementProfessors { get; set; }
         public object Course { get; internal set; }
         
 
@@ -48,14 +50,6 @@ namespace FinalYearProject.Models
                     .IsRequired()
                     .HasMaxLength(30)
                     .HasColumnName("name");
-
-                entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
-
-                entity.HasOne(d => d.ApplicationUser)
-                    .WithMany(p => p.Courses)
-                    .HasForeignKey(d => d.ApplicationUserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_ApplicationUser");
 
                 entity.HasOne(f => f.Faculty)
                     .WithMany(p => p.Courses)
@@ -79,8 +73,6 @@ namespace FinalYearProject.Models
                 .HasForeignKey<ScheduleWithCourse>(s => s.course_id)
                 .OnDelete(DeleteBehavior.NoAction);
             });
-
-
 
 
             modelBuilder.Entity<Enrollment>(entity =>
@@ -112,10 +104,31 @@ namespace FinalYearProject.Models
                     .HasConstraintName("FK_Enrollment_Course");
             });
 
-            
 
-           
-            
+            modelBuilder.Entity<EnrolementProfessor>(entity =>
+            {
+                entity.HasKey(e => new { e.CourseId, e.ApplicationUserId });
+
+                entity.ToTable("EnrolementProfessor");
+
+                entity.Property(e => e.CourseId).HasColumnName("course_id");
+
+                entity.Property(e => e.ApplicationUserId).HasColumnName("application_user_id");
+
+                entity.HasOne(d => d.ApplicationUser)
+                    .WithMany(p => p.EnrollmentProfessors)
+                    .HasForeignKey(d => d.ApplicationUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Enrollment_Professor");
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.EnrolementProfessors)
+                    .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Enrollment_CourseProf");
+            });
+
+
 
             modelBuilder.Entity<Faculty>(entity =>
             {

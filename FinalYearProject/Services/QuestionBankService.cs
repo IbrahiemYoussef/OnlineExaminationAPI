@@ -40,15 +40,15 @@ namespace FinalYearProject.Services
 
             var records_count = 0;
             //client form + params
-            try
-            {
+            //try
+            //{
                 string result = "";
                 result += CourseIdd.ToString() + "\n";
                 result += QuestionType.ToString() + "\n";
 
-                
 
-                //if (!isCsvFile(file)) return new GlobalResponseDTO(false, "Invalid File type", null);
+
+            //if (!isCsvFile(file)) return new GlobalResponseDTO(false, "Invalid File type", null);
 
                 if (_context.Courses.Find(CourseIdd) == null)
                     return new GlobalResponseDTO(false, "Invalid Course id", null);
@@ -165,11 +165,11 @@ namespace FinalYearProject.Services
                 _context.SaveChanges();
                 return new GlobalResponseDTO(true, "Question bank inserted successfully", result);
 
-            }
-            catch (Exception ex)
-            {
-                return new GlobalResponseDTO(false, ex.Message, null);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return new GlobalResponseDTO(false, ex.Message, null);
+            //}
         }
         private bool isCsvFile(IFormFile file)
         {
