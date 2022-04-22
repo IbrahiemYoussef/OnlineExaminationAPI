@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FinalYearProject.Models
 {
-    public class EnrolementProfessor
+    public class EnrollementProfessor
     {
         public int CourseId { get; set; }
         public string ApplicationUserId { get; set; }

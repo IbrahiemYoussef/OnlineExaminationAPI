@@ -18,7 +18,7 @@ namespace FinalYearProject.Models
         public virtual Faculty Faculty { get; set; }
         public virtual FLevels FLevels { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual ICollection<EnrolementProfessor> EnrolementProfessors { get; set; }
+        public virtual ICollection<EnrollementProfessor> EnrolementProfessors { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ExamDetails ExamDetails { get; set; }
         public virtual ScheduleWithCourse ScheduleWithCourse { get; set; }

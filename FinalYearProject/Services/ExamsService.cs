@@ -111,13 +111,6 @@ namespace FinalYearProject.Services
         public GlobalResponseDTO GetUniqueExam(string student_id,int coursee_id)
         {
 
-            //check isExaminated status
-            //flip isExam..... at the end of this code when everything is successful
-            //if (db.Orderss.Any(o => o.Transaction == txnId)) return
-
-            if(!_context.ApplicationUsers.Any(user => user.Id == student_id))
-                return new GlobalResponseDTO(false, "Invalid Student ID", null);
-
             Enrollment enrollment = _context.Enrollments.Where(e => e.CourseId == coursee_id && e.ApplicationUserId == student_id).FirstOrDefault();
             if(enrollment==null)
                 return new GlobalResponseDTO(false, "Student is not enrolled to this course", null);

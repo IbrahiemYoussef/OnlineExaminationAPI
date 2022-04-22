@@ -28,7 +28,7 @@ namespace FinalYearProject.Models
         public virtual DbSet<ScheduleWithCourse> ScheduleWithCourse { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-        public virtual DbSet<EnrolementProfessor> EnrolementProfessors { get; set; }
+        public virtual DbSet<EnrollementProfessor> EnrollementProfessors { get; set; }
         public object Course { get; internal set; }
         
 
@@ -103,7 +103,7 @@ namespace FinalYearProject.Models
             });
 
 
-            modelBuilder.Entity<EnrolementProfessor>(entity =>
+            modelBuilder.Entity<EnrollementProfessor>(entity =>
             {
                 entity.HasKey(e => new { e.CourseId, e.ApplicationUserId });
 

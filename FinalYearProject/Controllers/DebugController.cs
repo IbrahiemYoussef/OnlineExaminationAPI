@@ -15,36 +15,92 @@ namespace FinalYearProject.Controllers
     public class DebugController : ControllerBase
     {
         private readonly mydbcon _context;
-        public DebugController(mydbcon context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public DebugController(mydbcon context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        [HttpPost("EnrollStudent")]
-        public IActionResult EnrollStudentByID(string id)
+        private async Task<string> getUserRole(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            var rolenames = await _userManager.GetRolesAsync(user);
+            return rolenames[0];
+        }
+
+        [HttpPost("EnrollStudents")]
+        public IActionResult EnrollStudents()
         {
             //it will give cycle error but all works -- search google
             IQueryable<int> courses_ids = _context.Courses.Select(c => c.Id);
 
-            ApplicationUser user = _context.ApplicationUsers.Where(a => a.Id == id).FirstOrDefault();
+            IQueryable<ApplicationUser> users = _context.ApplicationUsers;
             
-            if (user == null)
-                return  BadRequest(new GlobalResponseDTO(false,"Invalid ID",null));
+            if (users == null)
+                return  BadRequest(new GlobalResponseDTO(false,"No students in the database",null));
 
-            List<Enrollment> enrollments = new List<Enrollment>();
-            foreach (int cid in courses_ids)
+            List<List<Enrollment>> all_enrollments = new List<List<Enrollment>>();
+            foreach(ApplicationUser user in users)
             {
-                enrollments.Add(new Enrollment()
+                List<Enrollment> enrollments = new List<Enrollment>();
+                foreach (int cid in courses_ids)
                 {
-                    ApplicationUserId = user.Id,
-                    CourseId = cid
-                });   
+                    enrollments.Add(new Enrollment()
+                    {
+                        ApplicationUserId = user.Id,
+                        CourseId = cid
+                    });
+                }
+                all_enrollments.Add(enrollments);
+                _context.Enrollments.AddRange(enrollments);
             }
-              _context.Enrollments.AddRange(enrollments);
-              _context.SaveChanges();
+              
+             _context.SaveChanges();
 
-            return Ok(new GlobalResponseDTO(true, "Enrolled to all courses successfully", enrollments));
+            return Ok(new GlobalResponseDTO(true, "Enrolled students to all courses successfully", all_enrollments));
         }
+
+        [HttpPost("EnrollProfessors")]
+        public IActionResult EnrollProfessors()
+        {
+            //it will give cycle error but all works -- search google
+            List<int> courses_ids = _context.Courses.Select(c => c.Id).ToList();
+    
+            List<ApplicationUser> users = _context.ApplicationUsers.ToList();
+
+            foreach(ApplicationUser user in users.ToList())
+            {
+                bool ok = getUserRole(user.UserName).Result == UserRoles.Professor;
+                if (!ok)
+                    users.Remove(user);
+            }
+
+            if (users == null)
+                return BadRequest(new GlobalResponseDTO(false, "No professors in the database", null));
+            
+            List<List<EnrollementProfessor>> all_enrollments = new List<List<EnrollementProfessor>>();
+            for(int i=0;i<users.Count();i++)
+            {
+                List<EnrollementProfessor> enrollments = new List<EnrollementProfessor>();
+                foreach (int cid in courses_ids)
+                {
+                    enrollments.Add(new EnrollementProfessor()
+                    {
+                        ApplicationUserId = users[i].Id,
+                        CourseId = cid
+                    });
+                }
+                all_enrollments.Add(enrollments);
+                _context.EnrollementProfessors.AddRange(enrollments);
+                _context.SaveChanges();
+            }
+
+            
+
+            return Ok(new GlobalResponseDTO(true, "Enrolled professors to all courses successfully", all_enrollments));
+        }
+
 
         [HttpPost("ClearStudentGrades")]
         public IActionResult ClearStudentGrades(string id)
