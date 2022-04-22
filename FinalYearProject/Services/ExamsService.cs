@@ -122,6 +122,8 @@ namespace FinalYearProject.Services
             if(examm==null)
                 return new GlobalResponseDTO(false, "Administartion didn't setup this exam yet", null);
 
+            //if it's not the time don't open (please handle)
+
             if(examm.NumberOfQuestions > _context.Questions.Where(q=>q.CourseId==coursee_id).Count())
                 return new GlobalResponseDTO(false, "Failed to create an exam, Question Bank is in shortage mode", null);
 

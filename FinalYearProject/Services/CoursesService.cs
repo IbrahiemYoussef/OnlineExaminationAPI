@@ -25,10 +25,12 @@ namespace FinalYearProject.Services
             List<Course> courses = _context.Courses.ToList<Course>();
             return new GlobalResponseDTO(true, "Fetched all courses in DB", courses);
         }
-        public GlobalResponseDTO GetProfessorCourses(string prof_id)
+
+        public GlobalResponseDTO GetProfessorCourses(string professor_id)
         {
-            return null;
+            return new GlobalResponseDTO(false,null,null);
             //under maintenance
+            //full join prof where id ->  enrollprof ->    course 
             //var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();
             //List<ProfessorCoursesDTO> ProfCourses = new List<ProfessorCoursesDTO>();
             //foreach ( var i in res )
@@ -43,7 +45,6 @@ namespace FinalYearProject.Services
             //            CreditHrs=i.CreditHrs,
             //            FLevel_Id=i.FLevel_Id,
             //            IsConfigured=false
-
             //        });
             //    }
             //    else
