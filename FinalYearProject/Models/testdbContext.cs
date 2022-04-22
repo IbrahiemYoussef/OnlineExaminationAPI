@@ -42,8 +42,6 @@ namespace FinalYearProject.Models
             {
                 entity.ToTable("Course");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.CreditHrs).HasColumnName("credit_hrs");
 
                 entity.Property(e => e.Name)

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    [Migration("20220406223309_ChangedExamdetails")]
-    partial class ChangedExamdetails
+    [Migration("20220421215516_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,12 +103,13 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("application_user_id");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CreditHrs")
                         .HasColumnType("int")
@@ -140,9 +141,26 @@ namespace FinalYearProject.Migrations
                     b.ToTable("Course");
                 });
 
+            modelBuilder.Entity("FinalYearProject.Models.EnrolementProfessor", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int")
+                        .HasColumnName("course_id");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("application_user_id");
+
+                    b.HasKey("CourseId", "ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("EnrolementProfessor");
+                });
+
             modelBuilder.Entity("FinalYearProject.Models.Enrollment", b =>
                 {
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int")
                         .HasColumnName("course_id");
 
@@ -162,6 +180,9 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("int")
                         .HasColumnName("totalMarks");
 
+                    b.Property<bool>("isExaminated")
+                        .HasColumnType("bit");
+
                     b.HasKey("CourseId", "ApplicationUserId");
 
                     b.HasIndex("ApplicationUserId");
@@ -179,6 +200,9 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("Course_id")
                         .HasColumnType("int");
 
+                    b.Property<int>("ExamDurationInMinutes")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumberOfEasyQuestions")
                         .HasColumnType("int");
 
@@ -188,20 +212,11 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("NumberOfModQuestions")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfMultipleMCQ")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberOfQuestions")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfSingleMCQ")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfTrueFalse")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfWritten")
-                        .HasColumnType("int");
+                    b.Property<string>("TypeOfQuestions")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -512,11 +527,9 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.Course", b =>
                 {
-                    b.HasOne("FinalYearProject.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("FinalYearProject.Models.ApplicationUser", null)
                         .WithMany("Courses")
-                        .HasForeignKey("ApplicationUserId")
-                        .HasConstraintName("FK_ApplicationUser")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("FinalYearProject.Models.FLevels", "FLevels")
                         .WithMany("Courses")
@@ -532,11 +545,28 @@ namespace FinalYearProject.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
-
                     b.Navigation("Faculty");
 
                     b.Navigation("FLevels");
+                });
+
+            modelBuilder.Entity("FinalYearProject.Models.EnrolementProfessor", b =>
+                {
+                    b.HasOne("FinalYearProject.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("EnrollmentProfessors")
+                        .HasForeignKey("ApplicationUserId")
+                        .HasConstraintName("FK_Enrollment_Professor")
+                        .IsRequired();
+
+                    b.HasOne("FinalYearProject.Models.Course", "Course")
+                        .WithMany("EnrolementProfessors")
+                        .HasForeignKey("CourseId")
+                        .HasConstraintName("FK_Enrollment_CourseProf")
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Enrollment", b =>
@@ -666,11 +696,15 @@ namespace FinalYearProject.Migrations
                 {
                     b.Navigation("Courses");
 
+                    b.Navigation("EnrollmentProfessors");
+
                     b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.Course", b =>
                 {
+                    b.Navigation("EnrolementProfessors");
+
                     b.Navigation("Enrollments");
 
                     b.Navigation("ExamDetails");

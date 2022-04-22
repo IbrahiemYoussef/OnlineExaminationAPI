@@ -109,7 +109,7 @@ namespace FinalYearProject.Services
             }
         }
 
-        public GlobalResponseDTO GetUniqueExam(int coursee_id)
+        public GlobalResponseDTO GetUniqueExam(string student_id,int coursee_id)
         {
             //seyahak tarab
             //ehda ela Ibrahiem Yousef
@@ -182,7 +182,7 @@ namespace FinalYearProject.Services
             return given_score;
         }
 
-        public GlobalResponseDTO GetExamResult(string std_id,int coursee_id, List<AnswerDTO> answers)
+        public GlobalResponseDTO GetExamResult(string std_id,int coursee_id,int total_num_of_questions, List<AnswerDTO> answers)
         {
             var mcq_counter = 0;
             List<string> user_answers = answers.Where(x=> x.Qtype.ToString().ToLower() == "w")
@@ -207,25 +207,25 @@ namespace FinalYearProject.Services
                 }
             }
 
-            
-         
-                string target_url = "http://127.0.0.1:5000/evaluate";
-                Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
 
-            // Console.WriteLine(sc.Result.score);
-            //Console.WriteLine(sc.Result.total_num_of_ques);
+            string target_url = "http://127.0.0.1:5000/evaluate";
+            Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
 
-                ResultDTO robj = new ResultDTO()
-                {
-                    CurrentScore = mcq_counter + sc.Result.score,
-                    TotalScore = answers.Count()
+
+            int current_score = mcq_counter + sc.Result.score;
+
+            ResultDTO robj = new ResultDTO()
+            {
+                CurrentScore = current_score,
+                TotalScore = total_num_of_questions
              
-                };
+            };
             
-            Enrollment std_enrol = new Enrollment();
-            std_enrol = _context.Enrollments.Where(x => x.ApplicationUserId == std_id && x.CourseId == coursee_id).FirstOrDefault();
-            std_enrol.CurrentMarks = robj.CurrentScore;
-            std_enrol.TotalMarks = robj.TotalScore;
+            Enrollment std_enrollment = new Enrollment();
+            std_enrollment = _context.Enrollments.Where(x => x.ApplicationUserId == std_id && x.CourseId == coursee_id).FirstOrDefault();
+            std_enrollment.CurrentMarks = robj.CurrentScore;
+            std_enrollment.TotalMarks = robj.TotalScore;
+            std_enrollment.Grade = getGrade(current_score, total_num_of_questions);
             _context.SaveChanges();
             
 
@@ -233,6 +233,29 @@ namespace FinalYearProject.Services
             return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         }
 
+        private string getGrade(int current_score,int total_score)
+        {
+            double score = (double) Math.Round(Convert.ToDecimal(current_score / total_score));
+            if (score >= 95)
+                return "A+";           
+            else if (score >= 90)
+                return "A";
+            else if (score >= 85)
+                return "A-";
+            else if (score >= 80)
+                return "B+";
+            else if (score >= 75)
+                return "B";
+            else if (score >= 70)
+                return "C+";
+            else if (score >= 65)
+                return "C";
+            else if (score >= 60)
+                return "D";
+            else
+                return "F";
+            
+        }
     }
     
 }

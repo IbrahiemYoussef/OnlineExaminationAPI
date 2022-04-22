@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalYearProject.Migrations
 {
-    public partial class coursefaculty : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -215,24 +215,25 @@ namespace FinalYearProject.Migrations
                 name: "Course",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    CourseCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     credit_hrs = table.Column<int>(type: "int", nullable: false),
                     Is_open = table.Column<bool>(type: "bit", nullable: false),
                     FLevel_Id = table.Column<int>(type: "int", nullable: false),
-                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Faculty_id = table.Column<int>(type: "int", nullable: false)
+                    Faculty_id = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Course", x => x.id);
+                    table.PrimaryKey("PK_Course", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApplicationUser",
-                        column: x => x.application_user_id,
+                        name: "FK_Course_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Faculty_iD",
                         column: x => x.Faculty_id,
@@ -247,6 +248,30 @@ namespace FinalYearProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EnrolementProfessor",
+                columns: table => new
+                {
+                    course_id = table.Column<int>(type: "int", nullable: false),
+                    application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnrolementProfessor", x => new { x.course_id, x.application_user_id });
+                    table.ForeignKey(
+                        name: "FK_Enrollment_CourseProf",
+                        column: x => x.course_id,
+                        principalTable: "Course",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Enrollment_Professor",
+                        column: x => x.application_user_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enrollment",
                 columns: table => new
                 {
@@ -254,7 +279,8 @@ namespace FinalYearProject.Migrations
                     application_user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     grade = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: true),
                     CurrentMarks = table.Column<int>(type: "int", nullable: true),
-                    totalMarks = table.Column<int>(type: "int", nullable: true)
+                    totalMarks = table.Column<int>(type: "int", nullable: true),
+                    isExaminated = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,7 +289,7 @@ namespace FinalYearProject.Migrations
                         name: "FK_Enrollment_Course",
                         column: x => x.course_id,
                         principalTable: "Course",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Enrollment_Student",
@@ -284,7 +310,7 @@ namespace FinalYearProject.Migrations
                     NumberOfModQuestions = table.Column<int>(type: "int", nullable: false),
                     NumberOfHardQuestions = table.Column<int>(type: "int", nullable: false),
                     TypeOfQuestions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Duration = table.Column<int>(type: "int", nullable: false),
+                    ExamDurationInMinutes = table.Column<int>(type: "int", nullable: false),
                     Course_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -294,7 +320,7 @@ namespace FinalYearProject.Migrations
                         name: "FK_ExamDetails_Course_Course_id",
                         column: x => x.Course_id,
                         principalTable: "Course",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -311,7 +337,6 @@ namespace FinalYearProject.Migrations
                     B = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     C = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     D = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    hint = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     goal = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true),
                     course_id = table.Column<int>(type: "int", nullable: false),
                     Diffculty = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false)
@@ -323,7 +348,7 @@ namespace FinalYearProject.Migrations
                         name: "FK_Question_Course",
                         column: x => x.course_id,
                         principalTable: "Course",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -343,7 +368,7 @@ namespace FinalYearProject.Migrations
                         name: "FK_ScheduleWithCourse_Course_course_id",
                         column: x => x.course_id,
                         principalTable: "Course",
-                        principalColumn: "id");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ScheduleWithCourse_Schedule_schedule_id",
                         column: x => x.schedule_id,
@@ -396,9 +421,9 @@ namespace FinalYearProject.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Course_application_user_id",
+                name: "IX_Course_ApplicationUserId",
                 table: "Course",
-                column: "application_user_id");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Course_Faculty_id",
@@ -409,6 +434,11 @@ namespace FinalYearProject.Migrations
                 name: "IX_Course_FLevel_Id",
                 table: "Course",
                 column: "FLevel_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnrolementProfessor_application_user_id",
+                table: "EnrolementProfessor",
+                column: "application_user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_application_user_id",
@@ -460,6 +490,9 @@ namespace FinalYearProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "EnrolementProfessor");
 
             migrationBuilder.DropTable(
                 name: "Enrollment");

@@ -9,7 +9,7 @@ namespace FinalYearProject.Models.DTOs
     {
         public string std_id { get; set; }
         public int course_id { get; set; }
-
+        public int total_num_of_questions { get; set; }
         public List<AnswerDTO>? answers { get; set; }
     }
 }

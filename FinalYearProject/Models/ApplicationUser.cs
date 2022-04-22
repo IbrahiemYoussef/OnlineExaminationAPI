@@ -16,7 +16,6 @@ namespace FinalYearProject.Models
         public int FacultyId { get; set; }
         public virtual Faculty Faculties { get; set; }
         public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<EnrolementProfessor> EnrollmentProfessors { get; set; }
     }
 }

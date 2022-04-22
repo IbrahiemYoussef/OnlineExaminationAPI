@@ -46,22 +46,16 @@ namespace FinalYearProject.Controllers
             return _examService.GetExamdetailsByCourseId(course_id);
         }
 
-        [HttpGet("GetMyExam")]
-        public IActionResult GetMyExam(int course_id)
-        {
-            return Ok(_examService.GetUniqueExam(course_id));
-        }
-
         [HttpGet("Examinate")]
-        public IActionResult ExaminateG(int course_id)
+        public IActionResult ExaminateG(string student_id,int course_id)
         {
-            return Ok(_examService.GetUniqueExam(course_id));
+            return Ok(_examService.GetUniqueExam(student_id,course_id));
         }
 
         [HttpPost("Examinate")]
         public IActionResult ExaminateP([FromBody] ExaminateDTO obj)
         {
-             return Ok(_examService.GetExamResult(obj.std_id,obj.course_id,obj.answers));
+             return Ok(_examService.GetExamResult(obj.std_id,obj.course_id,obj.total_num_of_questions,obj.answers));
         }
 
     }

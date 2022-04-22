@@ -46,5 +46,19 @@ namespace FinalYearProject.Controllers
             return Ok(new GlobalResponseDTO(true, "Enrolled to all courses successfully", enrollments));
         }
 
+        [HttpPost("ClearStudentGrades")]
+        public IActionResult ClearStudentGrades(string id)
+        {
+            IQueryable<Enrollment> enrollments =_context.Enrollments.Where(e => e.ApplicationUserId == id);
+            foreach(Enrollment enrollment in enrollments)
+            {
+                enrollment.CurrentMarks = enrollment.TotalMarks = null; 
+                enrollment.Grade = null;
+                enrollment.isExaminated = false;
+            }
+            _context.SaveChanges();
+            return Ok(new GlobalResponseDTO(true, "Reset successful for all of the student subjects", enrollments));
+        }
+
     }
 }

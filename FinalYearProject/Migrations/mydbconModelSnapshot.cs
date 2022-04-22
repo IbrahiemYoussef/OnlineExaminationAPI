@@ -101,11 +101,7 @@ namespace FinalYearProject.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CourseCode")
                         .HasColumnType("nvarchar(max)");
@@ -130,8 +126,6 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("FLevel_Id");
 
@@ -526,10 +520,6 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.Course", b =>
                 {
-                    b.HasOne("FinalYearProject.Models.ApplicationUser", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("FinalYearProject.Models.FLevels", "FLevels")
                         .WithMany("Courses")
                         .HasForeignKey("FLevel_Id")
@@ -693,8 +683,6 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Courses");
-
                     b.Navigation("EnrollmentProfessors");
 
                     b.Navigation("Enrollments");
