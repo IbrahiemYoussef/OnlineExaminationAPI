@@ -54,7 +54,6 @@ namespace FinalYearProject.Services
             
         }
 
-
         public GlobalResponseDTO DeleteExamDetails(int course_id)
         {
             var examdetail = new ExamDetails();
@@ -111,19 +110,29 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO GetUniqueExam(string student_id,int coursee_id)
         {
-            //seyahak tarab
-            //ehda ela Ibrahiem Yousef
-            //3lk IT & CS
 
-            //if n > nrows in the table
+            //check isExaminated status
+            //flip isExam..... at the end of this code when everything is successful
+            //if (db.Orderss.Any(o => o.Transaction == txnId)) return
 
-            //get examdetails by course id
+            if(!_context.ApplicationUsers.Any(user => user.Id == student_id))
+                return new GlobalResponseDTO(false, "Invalid Student ID", null);
 
-            //handle wrong course id
+            Enrollment enrollment = _context.Enrollments.Where(e => e.CourseId == coursee_id && e.ApplicationUserId == student_id).FirstOrDefault();
+            if(enrollment==null)
+                return new GlobalResponseDTO(false, "Student is not enrolled to this course", null);
+
+            if(enrollment.isExaminated)
+                return new GlobalResponseDTO(false, "Student can't retake this exam", null);
 
             ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == coursee_id);
             if(examm==null)
-                return new GlobalResponseDTO(false, "Invalid CourseID", null);
+                return new GlobalResponseDTO(false, "Invalid Course ID", null);
+
+            if(examm.NumberOfQuestions > _context.Questions.Where(q=>q.CourseId==coursee_id).Count())
+                return new GlobalResponseDTO(false, "Failed to create an exam, Question Bank is in shortage mode", null);
+
+            
 
             var n = examm.NumberOfQuestions;
             var neasy = examm.NumberOfEasyQuestions;
@@ -131,19 +140,18 @@ namespace FinalYearProject.Services
             var nhard = examm.NumberOfHardQuestions;
             var type = examm.TypeOfQuestions;
 
-
-            List<Question> questions;
+            IQueryable<Question> questions;
 
             if (type.ToUpper() == "MCQ")
             {
-                questions = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).ToList();
-                List<Question> easy_questions = questions.Where(x => x.Difficulty.ToUpper() == "EASY").OrderBy(t => Guid.NewGuid()).Take(neasy).ToList();
-                List<Question> moderate_questions = questions.Where(x => x.Difficulty.ToUpper() == "MODERATE").OrderBy(t => Guid.NewGuid()).Take(nmod).ToList();
-                List<Question> hard_questions = questions.Where(x => x.Difficulty.ToUpper() == "HARD").OrderBy(t => Guid.NewGuid()).Take(nhard).ToList();
+                questions = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null);
+                IQueryable<Question> easy_questions = questions.Where(x => x.Difficulty.ToUpper() == "EASY").OrderBy(t => Guid.NewGuid()).Take(neasy);
+                IQueryable<Question> moderate_questions = questions.Where(x => x.Difficulty.ToUpper() == "MODERATE").OrderBy(t => Guid.NewGuid()).Take(nmod);
+                IQueryable<Question> hard_questions = questions.Where(x => x.Difficulty.ToUpper() == "HARD").OrderBy(t => Guid.NewGuid()).Take(nhard);
 
-                List<Question> result;
-                result = easy_questions.Concat(moderate_questions).ToList();
-                result = result.Concat(hard_questions).OrderBy(x => Guid.NewGuid()).ToList(); //shuffle overall
+                IQueryable<Question> result;
+                result = easy_questions.Concat(moderate_questions);
+                result = result.Concat(hard_questions).OrderBy(x => Guid.NewGuid()); //shuffle overall
 
                 questions = result;
             }
@@ -152,13 +160,13 @@ namespace FinalYearProject.Services
                 //if exam is mix 20% written 
                 int numofwr = Convert.ToInt32(Math.Ceiling(.2 * n));
                 int numofmcq = n - numofwr;
-
-                //questions = _context.Questions.Where(x => x.CourseId == coursee_id).ToList();
-                List<Question> wr_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr).ToList();
-                List<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq).ToList();
-                questions = wr_ques.Concat(mcq_ques).ToList();
+                 
+                IQueryable<Question> wr_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr);
+                IQueryable<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq);
+                questions = wr_ques.Concat(mcq_ques);
             }
 
+            enrollment.isExaminated = true; //very important to lock him out
 
             var list= _mapper.Map<List<QuestionDTO>>(questions);
             return new GlobalResponseDTO(true, "Exam Generated", list);
