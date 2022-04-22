@@ -10,6 +10,6 @@ namespace FinalYearProject.Models.DTOs
         public string CourseName { get; set; }
         public DateTime StartTime { get; set; }
         public int DurationInMins { get; set; }
-        public bool isExaminated { get; set; }
+        public bool IsExaminated { get; set; }
     }
 }

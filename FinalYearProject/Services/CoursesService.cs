@@ -25,7 +25,7 @@ namespace FinalYearProject.Services
             List<Course> courses = _context.Courses.ToList<Course>();
             return new GlobalResponseDTO(true, "Fetched all courses in DB", courses);
         }
-        public GlobalResponseDTO GetManagedCourses(string prof_id)
+        public GlobalResponseDTO GetProfessorCourses(string prof_id)
         {
             return null;
             //under maintenance
@@ -55,7 +55,6 @@ namespace FinalYearProject.Services
             //            CreditHrs = i.CreditHrs,
             //            FLevel_Id = i.FLevel_Id,
             //            IsConfigured = true
-
             //        });
             //    }
             //}
@@ -66,21 +65,30 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO GetStudentCourses(string student_id)
         {
-            IQueryable<StudentScheduleDTO> query = from enroll in _context.Enrollments.Where(x=>x.ApplicationUserId==student_id)
-                        join schedule_course in _context.ScheduleWithCourses
-                             on enroll.CourseId equals schedule_course.course_id
-                        join course in _context.Courses
-                             on schedule_course.course_id equals course.Id
-                        join examdetail in _context.ExamDetails
-                             on course.Id equals examdetail.Course_id     
-                        select new StudentScheduleDTO
-                        {
-                            CourseName=course.Name,
-                            StartTime=schedule_course.StartTime,
-                            DurationInMins = examdetail.ExamDurationInMinutes,
-                            isExaminated=enroll.isExaminated
-                        };
+            IQueryable<StudentScheduleDTO> query;
+            try
+            {
+                query = 
+                    from enroll in _context.Enrollments.Where(x => x.ApplicationUserId == student_id)
+                    join schedule_course in _context.ScheduleWithCourses
+                        on enroll.CourseId equals schedule_course.course_id
+                    join course in _context.Courses
+                        on schedule_course.course_id equals course.Id
+                    join examdetail in _context.ExamDetails
+                        on course.Id equals examdetail.Course_id
+                    select new StudentScheduleDTO
+                    {
+                        CourseName = course.Name,
+                        StartTime = schedule_course.StartTime,
+                        DurationInMins = examdetail.ExamDurationInMinutes,
+                        IsExaminated = enroll.isExaminated
+                    };
 
+            }
+            catch(Exception ex)
+            {
+                return new GlobalResponseDTO(false, ex.Message, null);
+            }
             //full join enrollments with SCW-MN filter at last
             return new GlobalResponseDTO (true,"Fetched student table successfully", query);
         }

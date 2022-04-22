@@ -120,12 +120,10 @@ namespace FinalYearProject.Services
 
             ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == coursee_id);
             if(examm==null)
-                return new GlobalResponseDTO(false, "Invalid Course ID", null);
+                return new GlobalResponseDTO(false, "Administartion didn't setup this exam yet", null);
 
             if(examm.NumberOfQuestions > _context.Questions.Where(q=>q.CourseId==coursee_id).Count())
                 return new GlobalResponseDTO(false, "Failed to create an exam, Question Bank is in shortage mode", null);
-
-            
 
             var n = examm.NumberOfQuestions;
             var neasy = examm.NumberOfEasyQuestions;
@@ -235,11 +233,13 @@ namespace FinalYearProject.Services
             return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         }
 
-        private string getGrade(int current_score,int total_score)
+        private string getGrade(float current_score, float total_score)
         {
-            double score = (double) Math.Round(Convert.ToDecimal(current_score / total_score));
+            double score = (double)(Convert.ToDecimal(current_score / total_score) * 100);
+
+            Console.WriteLine(score);
             if (score >= 95)
-                return "A+";           
+                return "A+";
             else if (score >= 90)
                 return "A";
             else if (score >= 85)
@@ -256,7 +256,7 @@ namespace FinalYearProject.Services
                 return "D";
             else
                 return "F";
-            
+
         }
     }
     
