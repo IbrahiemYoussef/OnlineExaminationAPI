@@ -160,6 +160,7 @@ namespace FinalYearProject.Services
             }
 
             enrollment.isExaminated = true; //very important to lock him out
+            _context.SaveChanges();
 
             var list= _mapper.Map<List<QuestionDTO>>(questions);
             return new GlobalResponseDTO(true, "Exam Generated", list);

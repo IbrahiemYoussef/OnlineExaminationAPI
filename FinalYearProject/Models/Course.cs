@@ -6,8 +6,7 @@ using System.Collections.Generic;
 namespace FinalYearProject.Models
 {
     public partial class Course
-    {
-       
+    {  
         public int Id { get; set; }
         public string Name { get; set; }
         public string CourseCode { get; set; }
@@ -21,6 +20,6 @@ namespace FinalYearProject.Models
         public virtual ICollection<EnrollementProfessor> EnrolementProfessors { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ExamDetails ExamDetails { get; set; }
-        public virtual ScheduleWithCourse ScheduleWithCourse { get; set; }
+        public virtual ICollection<ScheduleWithCourse> ScheduleWithCourses { get; set; }
     }
 }

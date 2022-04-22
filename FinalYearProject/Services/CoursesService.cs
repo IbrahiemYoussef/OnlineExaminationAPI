@@ -64,58 +64,25 @@ namespace FinalYearProject.Services
 
         }
 
-        public GlobalResponseDTO GetStudentCourses(string std_id)
+        public GlobalResponseDTO GetStudentCourses(string student_id)
         {
-            var student_enrollments = _context.Enrollments.Where(x => x.ApplicationUserId == std_id).ToList();
-            List<ScheduleWithCourse> SchCou = new List<ScheduleWithCourse>();
-            List<Course> mycourses = new List<Course>();
-            //to check he examinated or not
-            List<bool> isExaminated = new List<bool>();
-            List<Schedule> CoursesTime = new List<Schedule>();
+            IQueryable<StudentScheduleDTO> query = from enroll in _context.Enrollments.Where(x=>x.ApplicationUserId==student_id)
+                        join schedule_course in _context.ScheduleWithCourses
+                             on enroll.CourseId equals schedule_course.course_id
+                        join course in _context.Courses
+                             on schedule_course.course_id equals course.Id
+                        join examdetail in _context.ExamDetails
+                             on course.Id equals examdetail.Course_id     
+                        select new StudentScheduleDTO
+                        {
+                            CourseName=course.Name,
+                            StartTime=schedule_course.StartTime,
+                            DurationInMins = examdetail.ExamDurationInMinutes,
+                            isExaminated=enroll.isExaminated
+                        };
 
-            foreach (var enroll in student_enrollments)
-            {
-                if (enroll.TotalMarks == null)
-                {
-                    isExaminated.Add(false);
-                }
-                else
-                {
-                    isExaminated.Add(true);
-                }
-
-                var swc = _context.ScheduleWithCourse.Where(x => x.course_id == enroll.CourseId).FirstOrDefault();
-                if(swc!=null)
-                    SchCou.Add(swc);
-            }
-            
-            
-            foreach (var examtime in SchCou)
-            {
-                var std_corse = _context.Courses.Where(x => x.Id == examtime.course_id).FirstOrDefault();
-                mycourses.Add(std_corse);
-                var coursedate = _context.Schedules.Where(x => x.Id == examtime.schedule_id).FirstOrDefault();
-                CoursesTime.Add(coursedate);
-            }
-            var examdetail = CoursesTime.Select(x => new { x.StartTime, x.Duration }).ToList();
-
-            //statues + mycourses + examdetail
-            List<StudentCoursesDTO> result = new List<StudentCoursesDTO>();
-            for (int i = 0; i < mycourses.Count; i++)
-            {
-                result.Add(new StudentCoursesDTO()
-                {
-                    CourseId=mycourses[i].Id,
-                    CourseName = mycourses[i].Name,
-                    StartTime=examdetail[i].StartTime,
-                    DurationInMinutes = examdetail[i].Duration,
-                    isExaminated = isExaminated[i],
-                    CurrentMarks= student_enrollments[i].CurrentMarks,
-                    TotalMarks= student_enrollments[i].TotalMarks
-                });
-            }
-            // List<object> objectlist = mycourses.Cast<object>().Concat(examdetail).ToList();
-            return new GlobalResponseDTO(true, "succeeded",result);
+            //full join enrollments with SCW-MN filter at last
+            return new GlobalResponseDTO (true,"Fetched student table successfully", query);
         }
 
 

@@ -7,10 +7,11 @@ namespace FinalYearProject.Models
 {
     public class ScheduleWithCourse
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public int schedule_id { get; set; }
         public int course_id { get; set; }
         public virtual Course Course { get; set; }
         public virtual Schedule Schedule { get; set; }
+        public DateTime StartTime { get; set; }
     }
 }

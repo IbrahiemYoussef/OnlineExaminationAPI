@@ -33,10 +33,17 @@ namespace FinalYearProject.Controllers
         public IActionResult EnrollStudents()
         {
             //it will give cycle error but all works -- search google
-            IQueryable<int> courses_ids = _context.Courses.Select(c => c.Id);
+            List<int> courses_ids = _context.Courses.Select(c => c.Id).ToList();
 
-            IQueryable<ApplicationUser> users = _context.ApplicationUsers;
-            
+            List<ApplicationUser> users = _context.ApplicationUsers.ToList();
+
+            foreach (ApplicationUser user in users.ToList())
+            {
+                bool ok = getUserRole(user.UserName).Result == UserRoles.Student;
+                if (!ok)
+                    users.Remove(user);
+            }
+
             if (users == null)
                 return  BadRequest(new GlobalResponseDTO(false,"No students in the database",null));
 
@@ -44,6 +51,7 @@ namespace FinalYearProject.Controllers
             foreach(ApplicationUser user in users)
             {
                 List<Enrollment> enrollments = new List<Enrollment>();
+
                 foreach (int cid in courses_ids)
                 {
                     enrollments.Add(new Enrollment()
@@ -54,10 +62,9 @@ namespace FinalYearProject.Controllers
                 }
                 all_enrollments.Add(enrollments);
                 _context.Enrollments.AddRange(enrollments);
+                _context.SaveChanges();
             }
               
-             _context.SaveChanges();
-
             return Ok(new GlobalResponseDTO(true, "Enrolled students to all courses successfully", all_enrollments));
         }
 

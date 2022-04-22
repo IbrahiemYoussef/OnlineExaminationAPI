@@ -4,14 +4,16 @@ using FinalYearProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    partial class mydbconModelSnapshot : ModelSnapshot
+    [Migration("20220422144057_deleted-dur-in-schedule")]
+    partial class deleteddurinschedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,6 +341,9 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("name");
 
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FacultyId");
@@ -348,18 +353,24 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.ScheduleWithCourse", b =>
                 {
-                    b.Property<int>("schedule_id")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("course_id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("schedule_id")
+                        .HasColumnType("int");
 
-                    b.HasKey("schedule_id", "course_id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("course_id");
+                    b.HasIndex("course_id")
+                        .IsUnique();
+
+                    b.HasIndex("schedule_id")
+                        .IsUnique();
 
                     b.ToTable("ScheduleWithCourse");
                 });
@@ -602,15 +613,15 @@ namespace FinalYearProject.Migrations
             modelBuilder.Entity("FinalYearProject.Models.ScheduleWithCourse", b =>
                 {
                     b.HasOne("FinalYearProject.Models.Course", "Course")
-                        .WithMany("ScheduleWithCourses")
-                        .HasForeignKey("course_id")
-                        .HasConstraintName("FK_SWC_Course")
+                        .WithOne("ScheduleWithCourse")
+                        .HasForeignKey("FinalYearProject.Models.ScheduleWithCourse", "course_id")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FinalYearProject.Models.Schedule", "Schedule")
-                        .WithMany("ScheduleWithCourses")
-                        .HasForeignKey("schedule_id")
-                        .HasConstraintName("FK_SWC_Schedule")
+                        .WithOne("ScheduleWithCourse")
+                        .HasForeignKey("FinalYearProject.Models.ScheduleWithCourse", "schedule_id")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -686,7 +697,7 @@ namespace FinalYearProject.Migrations
 
                     b.Navigation("Questions");
 
-                    b.Navigation("ScheduleWithCourses");
+                    b.Navigation("ScheduleWithCourse");
                 });
 
             modelBuilder.Entity("FinalYearProject.Models.FLevels", b =>
@@ -705,7 +716,7 @@ namespace FinalYearProject.Migrations
 
             modelBuilder.Entity("FinalYearProject.Models.Schedule", b =>
                 {
-                    b.Navigation("ScheduleWithCourses");
+                    b.Navigation("ScheduleWithCourse");
                 });
 #pragma warning restore 612, 618
         }

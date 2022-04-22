@@ -30,15 +30,15 @@ namespace FinalYearProject.Controllers
         }
 
         [HttpGet("ProfessorCourses")]
-        public GlobalResponseDTO GetManagedCourses(string prof_id)
+        public GlobalResponseDTO GetManagedCourses(string professor_id)
         {
-            return _courseService.GetManagedCourses(prof_id);
+            return _courseService.GetManagedCourses(professor_id);
         }
 
         [HttpGet("StudentCourses")]
-        public GlobalResponseDTO GetStudentCourses(string std_id)
+        public GlobalResponseDTO GetStudentCourses(string student_id)
         {
-            return _courseService.GetStudentCourses(std_id);
+            return _courseService.GetStudentCourses(student_id);
         }
     }
 }

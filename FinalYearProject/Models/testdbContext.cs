@@ -25,7 +25,7 @@ namespace FinalYearProject.Models
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<FLevels> FLevels { get; set; }
-        public virtual DbSet<ScheduleWithCourse> ScheduleWithCourse { get; set; }
+        public virtual DbSet<ScheduleWithCourse> ScheduleWithCourses { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public virtual DbSet<EnrollementProfessor> EnrollementProfessors { get; set; }
@@ -66,10 +66,6 @@ namespace FinalYearProject.Models
                 .WithOne(i => i.Course)
                 .HasForeignKey<ExamDetails>(b => b.Course_id);
 
-                entity.HasOne(a => a.ScheduleWithCourse)
-                .WithOne(b => b.Course)
-                .HasForeignKey<ScheduleWithCourse>(s => s.course_id)
-                .OnDelete(DeleteBehavior.NoAction);
             });
 
 
@@ -194,10 +190,6 @@ namespace FinalYearProject.Models
                     .IsRequired()
                     .HasMaxLength(40)
                     .HasColumnName("name");
-                entity.HasOne(a => a.ScheduleWithCourse)
-                .WithOne(b => b.Schedule)
-                .HasForeignKey<ScheduleWithCourse>(s => s.schedule_id)
-                .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.Faculty)
                     .WithMany(p => p.Schedules)
@@ -207,7 +199,25 @@ namespace FinalYearProject.Models
 
             });
 
-            
+
+            modelBuilder.Entity<ScheduleWithCourse>(entity =>
+            {
+                entity.HasKey(e => new { e.schedule_id, e.course_id });
+
+                entity.ToTable("ScheduleWithCourse");
+
+                entity.HasOne(d => d.Schedule)
+                    .WithMany(p => p.ScheduleWithCourses)
+                    .HasForeignKey(d => d.schedule_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SWC_Schedule");
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.ScheduleWithCourses)
+                    .HasForeignKey(d => d.course_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SWC_Course");
+            });
 
 
             OnModelCreatingPartial(modelBuilder);
