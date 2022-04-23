@@ -79,10 +79,14 @@ namespace FinalYearProject.Services
                         on course.Id equals examdetail.Course_id
                     select new StudentScheduleDTO
                     {
-                        CourseName = course.Name,
-                        StartTime = schedule_course.StartTime,
-                        DurationInMins = examdetail.ExamDurationInMinutes,
-                        IsExaminated = enroll.isExaminated
+                        courseId=course.Id,
+                        courseName = course.Name,
+                        startTime = schedule_course.StartTime,
+                        durationInMinutes = examdetail.ExamDurationInMinutes,
+                        isExaminated = enroll.isExaminated,
+                        currentMarks=enroll.CurrentMarks,
+                        totalMarks=enroll.TotalMarks
+
                     };
 
             }

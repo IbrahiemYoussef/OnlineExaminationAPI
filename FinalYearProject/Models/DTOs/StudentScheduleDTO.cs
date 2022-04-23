@@ -7,9 +7,12 @@ namespace FinalYearProject.Models.DTOs
 {
     public class StudentScheduleDTO
     {
-        public string CourseName { get; set; }
-        public DateTime StartTime { get; set; }
-        public int DurationInMins { get; set; }
-        public bool IsExaminated { get; set; }
+        public int courseId { get; set; }
+        public string courseName { get; set; }
+        public DateTime startTime { get; set; }
+        public int durationInMinutes { get; set; }
+        public bool isExaminated { get; set; }
+        public int? currentMarks { get; set; }
+        public int? totalMarks { get; set; }
     }
 }
