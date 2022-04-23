@@ -55,7 +55,7 @@ namespace FinalYearProject.Controllers
         [HttpPost("Examinate")]
         public IActionResult ExaminateP([FromBody] ExaminateDTO obj)
         {
-             return Ok(_examService.GetExamResult(obj.std_id,obj.course_id,obj.total_num_of_questions,obj.answers));
+             return Ok(_examService.GetExamResult(obj.student_id,obj.course_id,obj.total_num_of_questions,obj.answers));
         }
 
     }
