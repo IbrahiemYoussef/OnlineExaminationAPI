@@ -28,39 +28,34 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO GetProfessorCourses(string professor_id)
         {
-            return new GlobalResponseDTO(false,null,null);
-            //under maintenance
-            //full join prof where id ->  enrollprof ->    course 
-            //var res= _context.Courses.Where(x => x.ApplicationUserId == prof_id).ToList();
-            //List<ProfessorCoursesDTO> ProfCourses = new List<ProfessorCoursesDTO>();
-            //foreach ( var i in res )
-            //{
-            //  var checkit=  _examService.GetExamdetailsByCourseId(i.Id);
-            //    if (checkit == null)
-            //    {
-            //        ProfCourses.Add(new ProfessorCoursesDTO()
-            //        {
-            //            Id=i.Id,
-            //            Name=i.Name,
-            //            CreditHrs=i.CreditHrs,
-            //            FLevel_Id=i.FLevel_Id,
-            //            IsConfigured=false
-            //        });
-            //    }
-            //    else
-            //    {
-            //        ProfCourses.Add(new ProfessorCoursesDTO()
-            //        {
-            //            Id = i.Id,
-            //            Name = i.Name,
-            //            CreditHrs = i.CreditHrs,
-            //            FLevel_Id = i.FLevel_Id,
-            //            IsConfigured = true
-            //        });
-            //    }
-            //}
-            //return new GlobalResponseDTO(true, "succeeded", ProfCourses);
-            //return _mapper.Map<List<CourseDTO>>(res);
+            IQueryable<ProfessorCoursesDTO> query;
+            try
+            {
+                query =
+                    from enroll in _context.EnrollementProfessors.Where(x => x.ApplicationUserId == professor_id)
+                    join schedule_course in _context.ScheduleWithCourses
+                        on enroll.CourseId equals schedule_course.course_id
+                    join course in _context.Courses
+                        on schedule_course.course_id equals course.Id
+                    join examdetail in _context.ExamDetails
+                        on course.Id equals examdetail.Course_id
+                    select new ProfessorCoursesDTO
+                    {
+                        CourseId=course.Id,
+                        CourseName=course.Name,
+                        CourseCode=course.CourseCode,
+                        CreditHrs=course.CreditHrs,
+                        FLevel_Id=course.FLevel_Id,
+                        IsConfigured = Convert.ToBoolean(examdetail.NumberOfQuestions) ? true : false
+                    };
+
+            }
+            catch (Exception ex)
+            {
+                return new GlobalResponseDTO(false, ex.Message, null);
+            }
+            //full join enrollments with SCW-MN filter at last
+            return new GlobalResponseDTO(true, "Fetched Professor table successfully", query);
 
         }
 
