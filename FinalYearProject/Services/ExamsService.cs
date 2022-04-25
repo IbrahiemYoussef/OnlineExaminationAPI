@@ -70,6 +70,7 @@ namespace FinalYearProject.Services
             }
             
         }
+
         public GlobalResponseDTO UpdateExamDetails(int course_id, UpdateExamDetailsDTO examdetail)
         {
             var examdetaill = new ExamDetails();
@@ -108,23 +109,25 @@ namespace FinalYearProject.Services
             }
         }
 
-        public GlobalResponseDTO GetUniqueExam(string student_id,int coursee_id)
+        public GlobalResponseDTO GetUniqueExam(string student_id,int course_id)
         {
 
-            Enrollment enrollment = _context.Enrollments.Where(e => e.CourseId == coursee_id && e.ApplicationUserId == student_id).FirstOrDefault();
+            Enrollment enrollment = _context.Enrollments.Where(e => e.CourseId == course_id && e.ApplicationUserId == student_id).FirstOrDefault();
             if(enrollment==null)
                 return new GlobalResponseDTO(false, "Student is not enrolled to this course", null);
 
             if(enrollment.isExaminated)
                 return new GlobalResponseDTO(false, "Student can't retake this exam", null);
 
-            ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == coursee_id);
+            ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
             if(examm==null)
                 return new GlobalResponseDTO(false, "Administartion didn't setup this exam yet", null);
 
-            //if it's not the time don't open (please handle)
+            //<0 − If date1 is earlier than date2
+            if (DateTime.Compare(getCairoTime().Result,_context.ScheduleWithCourses.Where(c=>c.course_id==course_id).FirstOrDefault().StartTime)<0)
+                return new GlobalResponseDTO(false, "You can't have this exam at this time", null);
 
-            if(examm.NumberOfQuestions > _context.Questions.Where(q=>q.CourseId==coursee_id).Count())
+            if (examm.NumberOfQuestions > _context.Questions.Where(q=>q.CourseId==course_id).Count())
                 return new GlobalResponseDTO(false, "Failed to create an exam, Question Bank is in shortage mode", null);
 
             var n = examm.NumberOfQuestions;
@@ -137,7 +140,7 @@ namespace FinalYearProject.Services
 
             if (type.ToUpper() == "MCQ")
             {
-                questions = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null);
+                questions = _context.Questions.Where(x => x.CourseId == course_id && x.Goal != null);
                 IQueryable<Question> easy_questions = questions.Where(x => x.Difficulty.ToUpper() == "EASY").OrderBy(t => Guid.NewGuid()).Take(neasy);
                 IQueryable<Question> moderate_questions = questions.Where(x => x.Difficulty.ToUpper() == "MODERATE").OrderBy(t => Guid.NewGuid()).Take(nmod);
                 IQueryable<Question> hard_questions = questions.Where(x => x.Difficulty.ToUpper() == "HARD").OrderBy(t => Guid.NewGuid()).Take(nhard);
@@ -154,8 +157,8 @@ namespace FinalYearProject.Services
                 int numofwr = Convert.ToInt32(Math.Ceiling(.2 * n));
                 int numofmcq = n - numofwr;
                  
-                IQueryable<Question> wr_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr);
-                IQueryable<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == coursee_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq);
+                IQueryable<Question> wr_ques = _context.Questions.Where(x => x.CourseId == course_id && x.Goal == null).OrderBy(t => Guid.NewGuid()).Take(numofwr);
+                IQueryable<Question> mcq_ques = _context.Questions.Where(x => x.CourseId == course_id && x.Goal != null).OrderBy(t => Guid.NewGuid()).Take(numofmcq);
                 questions = wr_ques.Concat(mcq_ques);
             }
 
@@ -184,7 +187,19 @@ namespace FinalYearProject.Services
             return given_score;
         }
 
-        public GlobalResponseDTO GetExamResult(string std_id,int coursee_id,int total_num_of_questions, List<AnswerDTO> answers)
+        private static async Task<DateTime> getCairoTime()
+        {
+            using var _httpClient = new HttpClient();
+            JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var response = await _httpClient.GetAsync("http://worldtimeapi.org/api/timezone/Africa/Cairo");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            WorldTime obj = JsonSerializer.Deserialize<WorldTime>(content, _options);
+
+            return obj.datetime;
+        }
+
+        public GlobalResponseDTO GetExamResult(string std_id,int course_id,int total_num_of_questions, List<AnswerDTO> answers)
         {
             var mcq_counter = 0;
             List<string> user_answers = answers.Where(x=> x.Qtype.ToString().ToLower() == "w")
@@ -202,7 +217,7 @@ namespace FinalYearProject.Services
                 else
                 {
                     var sorted_ans = String.Concat(ans.Answer.OrderBy(c => c));
-                    Question que = _context.Questions.Where(x => x.CourseId == coursee_id).
+                    Question que = _context.Questions.Where(x => x.CourseId == course_id).
                     Where(x => x.Id == ans.Id && x.Goal == sorted_ans).FirstOrDefault();
                         if (que != null)
                         mcq_counter++;
@@ -211,10 +226,10 @@ namespace FinalYearProject.Services
 
 
             string target_url = "http://127.0.0.1:5000/evaluate";
-            Task<ScoreDTO> sc = get_written_result(target_url, user_answers, model_answers);
+            Task<ScoreDTO> obj = get_written_result(target_url, user_answers, model_answers);
 
 
-            int current_score = mcq_counter + sc.Result.score;
+            int current_score = mcq_counter + obj.Result.score;
 
             ResultDTO robj = new ResultDTO()
             {
@@ -224,7 +239,7 @@ namespace FinalYearProject.Services
             };
             
             Enrollment std_enrollment = new Enrollment();
-            std_enrollment = _context.Enrollments.Where(x => x.ApplicationUserId == std_id && x.CourseId == coursee_id).FirstOrDefault();
+            std_enrollment = _context.Enrollments.Where(x => x.ApplicationUserId == std_id && x.CourseId == course_id).FirstOrDefault();
             std_enrollment.CurrentMarks = robj.CurrentScore;
             std_enrollment.TotalMarks = robj.TotalScore;
             std_enrollment.Grade = getGrade(current_score, total_num_of_questions);
@@ -233,7 +248,7 @@ namespace FinalYearProject.Services
 
 
             return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
-        }
+        } 
 
         private string getGrade(float current_score, float total_score)
         {
