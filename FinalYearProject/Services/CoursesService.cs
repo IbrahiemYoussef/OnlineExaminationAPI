@@ -28,6 +28,7 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO GetProfessorCourses(string professor_id)
         {
+            
             IQueryable<ProfessorCoursesDTO> query;
             try
             {
@@ -46,8 +47,11 @@ namespace FinalYearProject.Services
                         CourseCode=course.CourseCode,
                         CreditHrs=course.CreditHrs,
                         FLevel_Id=course.FLevel_Id,
-                        IsConfigured = Convert.ToBoolean(examdetail.NumberOfQuestions) ? true : false
+                        IsConfigured = examdetail.isQuestionBankConfigured
                     };
+
+                if (query.FirstOrDefault()==null)
+                    return new GlobalResponseDTO(false, "This Professor doesn't have any enrollments", null);
 
             }
             catch (Exception ex)
@@ -84,6 +88,8 @@ namespace FinalYearProject.Services
 
                     };
 
+                if (query.FirstOrDefault() == null)
+                    return new GlobalResponseDTO(false, "This Student doesn't have any enrollments", null);
             }
             catch(Exception ex)
             {

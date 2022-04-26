@@ -31,29 +31,31 @@ namespace FinalYearProject.Services
         public GlobalResponseDTO DeleteQuestionsById(int course_id)
         {
             _context.Questions.RemoveRange(_context.Questions.Where(q => q.CourseId == course_id));
+            ExamDetails examdetail = _context.ExamDetails.Where(x => x.Course_id == course_id).FirstOrDefault();
+            examdetail.isQuestionBankConfigured = false;
             _context.SaveChanges();
             return new GlobalResponseDTO(true, "Succesfully erased the question bank",null );
         }
 
-        public GlobalResponseDTO UploadFile(IFormFile file, string QuestionType, int CourseIdd)
+        public GlobalResponseDTO UploadFile(IFormFile file, string QuestionType, int course_id)
         {
 
             var records_count = 0;
             //client form + params
-            //try
-            //{
+            try
+            {
                 string result = "";
-                result += CourseIdd.ToString() + "\n";
+                result += course_id.ToString() + "\n";
                 result += QuestionType.ToString() + "\n";
 
 
 
             //if (!isCsvFile(file)) return new GlobalResponseDTO(false, "Invalid File type", null);
 
-                if (_context.Courses.Find(CourseIdd) == null)
+                if (_context.Courses.Find(course_id) == null)
                     return new GlobalResponseDTO(false, "Invalid Course id", null);
 
-                ExamDetails exam_details_obj = _context.ExamDetails.Where(e => e.Course_id == CourseIdd).FirstOrDefault();
+                ExamDetails exam_details_obj = _context.ExamDetails.Where(e => e.Course_id == course_id).FirstOrDefault();
                 if (exam_details_obj == null)
                     return new GlobalResponseDTO(false, "You have to set the exam details before uploading the question bank", null);
 
@@ -81,7 +83,7 @@ namespace FinalYearProject.Services
                                     D = s.d,
                                     Goal = s.goal,
                                     Difficulty = s.difficulty.ToUpper(),
-                                    CourseId = CourseIdd
+                                    CourseId = course_id
                                 };
                                 _context.Questions.Add(questionnn);
                             }
@@ -97,7 +99,7 @@ namespace FinalYearProject.Services
                                     D = s.d,
                                     Goal = String.Concat(s.goal.Replace(",", "").OrderBy(c => c)),
                                     Difficulty = s.difficulty.ToUpper(),
-                                    CourseId = CourseIdd
+                                    CourseId = course_id
                                 };
                                 _context.Questions.Add(questionnn);
                             }
@@ -113,7 +115,7 @@ namespace FinalYearProject.Services
                                     D = s.d,
                                     Goal = s.goal,
                                     Difficulty = s.difficulty.ToUpper(),
-                                    CourseId = CourseIdd
+                                    CourseId = course_id
                                 };
                                 _context.Questions.Add(questionnn);
                             }
@@ -141,7 +143,7 @@ namespace FinalYearProject.Services
                                 Qtype = 'W',
                                 Answer = s.answer,
                                 Difficulty = s.difficulty.ToUpper(),
-                                CourseId = CourseIdd
+                                CourseId = course_id
                             };
                             _context.Questions.Add(questionnn);
 
@@ -161,15 +163,16 @@ namespace FinalYearProject.Services
                 if (exam_details_obj.NumberOfQuestions > records_count)
                     return new GlobalResponseDTO(false, "Number of Question bank records are less than required in the exam details", new {res=result,count=records_count });
 
+                exam_details_obj.isQuestionBankConfigured = true;
 
                 _context.SaveChanges();
                 return new GlobalResponseDTO(true, "Question bank inserted successfully", result);
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    return new GlobalResponseDTO(false, ex.Message, null);
-            //}
+            }
+            catch (Exception ex)
+            {
+                return new GlobalResponseDTO(false, ex.Message, null);
+            }
         }
         private bool isCsvFile(IFormFile file)
         {

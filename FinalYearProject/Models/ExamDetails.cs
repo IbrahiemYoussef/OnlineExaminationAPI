@@ -16,6 +16,8 @@ namespace FinalYearProject.Models
         public int NumberOfHardQuestions { get; set; }
         public string TypeOfQuestions { get; set; }
 
+        public bool isQuestionBankConfigured { get; set; } = false;
+
         [Required]
         public int ExamDurationInMinutes { get; set; }
         public int Course_id { get; set; }
