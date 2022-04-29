@@ -15,6 +15,8 @@ namespace FinalYearProject.Models.AutoMapper
             CreateMap<Course, CourseDTO >();
 
             CreateMap<Question, QuestionDTO>();
+
+            CreateMap<ExamDetails, ExamDetailsDTO>();
     
         }
     }

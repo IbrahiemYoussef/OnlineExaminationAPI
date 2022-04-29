@@ -24,10 +24,18 @@ namespace FinalYearProject.Services
             _context = context;
             _mapper = mapper;
         }
+
+        private int calculateExamDurationInMinutes(int nOfEasy,int nOfModerate,int nOfHard)
+        {
+            return nOfEasy + nOfModerate + nOfHard * 2;
+        }
         public GlobalResponseDTO AddExamDetails(int course_id,ExamDetailsDTO examdetail)
         {
-            
-                var _examdetaill = new ExamDetails()
+
+            if( _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id)==null )
+                return new GlobalResponseDTO(false, "Failed invalid course id", null);
+
+            var _examdetaill = new ExamDetails()
                 {
                     NumberOfQuestions = examdetail.NumberOfQuestions,
                     //NumberOfMultipleMCQ=examdetail.NumberOfMultipleMCQ,
@@ -38,13 +46,14 @@ namespace FinalYearProject.Services
                     NumberOfModQuestions = examdetail.NumberOfModQuestions,
                     NumberOfHardQuestions = examdetail.NumberOfHardQuestions,
                     TypeOfQuestions = examdetail.TypeOfQuestions,
+                    ExamDurationInMinutes=calculateExamDurationInMinutes(examdetail.NumberOfEasyQuestions, examdetail.NumberOfModQuestions, examdetail.NumberOfHardQuestions),
                     Course_id = course_id
                 };
                 if (_examdetaill.NumberOfEasyQuestions + _examdetaill.NumberOfModQuestions + _examdetaill.NumberOfHardQuestions == _examdetaill.NumberOfQuestions)
                 {
                     _context.ExamDetails.Add(_examdetaill);
                     _context.SaveChanges();
-                    return  new GlobalResponseDTO(true, "Succeeded", _examdetaill);
+                    return  new GlobalResponseDTO(true, "Exam Details was set successfully!", _examdetaill);
                 }
                 else
                 {
@@ -73,9 +82,9 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO UpdateExamDetails(int course_id, UpdateExamDetailsDTO examdetail)
         {
-            var examdetaill = new ExamDetails();
-            examdetaill = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
-            if (examdetaill != null)
+
+            ExamDetails examdetaill = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
+            if (examdetaill == null)
                 return new GlobalResponseDTO(false, "Failed invalid course id",null );
 
             examdetaill.NumberOfQuestions = examdetail.NumberOfQuestions;
@@ -83,10 +92,11 @@ namespace FinalYearProject.Services
             examdetaill.NumberOfModQuestions = examdetail.NumberOfModQuestions;
             examdetaill.NumberOfHardQuestions = examdetail.NumberOfHardQuestions;
             examdetaill.TypeOfQuestions = examdetail.TypeOfQuestions; //mcq or mixed
+            examdetaill.ExamDurationInMinutes = calculateExamDurationInMinutes(examdetail.NumberOfEasyQuestions, examdetail.NumberOfModQuestions, examdetail.NumberOfHardQuestions);
             if (examdetaill.NumberOfEasyQuestions + examdetaill.NumberOfModQuestions + examdetaill.NumberOfHardQuestions == examdetaill.NumberOfQuestions)
             {
                 _context.SaveChanges();
-                return new GlobalResponseDTO(true, "Succeeded", examdetaill);
+                return new GlobalResponseDTO(true, "Exam Details Updated", examdetaill);
             }
             else
             {
@@ -101,12 +111,13 @@ namespace FinalYearProject.Services
             var examdetail= _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
             if (examdetail != null)
             {
-                return new GlobalResponseDTO(true, "succeeded", examdetail);
+                return new GlobalResponseDTO(true, "Fetched the exam details of this course successfully",_mapper.Map<ExamDetailsDTO>(examdetail));
             }
             else
             {
-                return new GlobalResponseDTO(false, "Failed", "this course doesn't have a exam details");
+                return new GlobalResponseDTO(false, "No any exam details was set to this course!", null);
             }
+
         }
 
         public GlobalResponseDTO GetUniqueExam(string student_id,int course_id)
