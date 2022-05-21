@@ -130,7 +130,7 @@ namespace FinalYearProject.Services
             Enrollment enrollment = _context.Enrollments.Where(e => e.CourseId == course_id && e.ApplicationUserId == student_id).FirstOrDefault();
             if(enrollment==null)
                 return new GlobalResponseDTO(false, "Student is not enrolled to this course", null);
-
+            //if duration+starttime from schedulewithcourse <DateTimeOffSet.Now  return exam ended
             if(enrollment.isExaminated)
                 return new GlobalResponseDTO(false, "Student can't retake this exam", null);
 

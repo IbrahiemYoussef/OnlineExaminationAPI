@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
 using FinalYearProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,19 +25,19 @@ namespace FinalYearProject.Controllers
             _courseService = courseService;
             
         }
-
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet("GetAllCourses")]
         public IActionResult GetAllCourses()
         {
             return Ok(_courseService.GetAllCourses());
         }
-
+        [Authorize(Roles = UserRoles.Professor)]
         [HttpGet("ProfessorCourses")]
         public GlobalResponseDTO GetProfessorCourses(string professor_id)
         {
             return _courseService.GetProfessorCourses(professor_id);
         }
-
+        [Authorize(Roles = UserRoles.Student)]
         [HttpGet("StudentCourses")]
         public GlobalResponseDTO GetStudentCourses(string student_id)
         {

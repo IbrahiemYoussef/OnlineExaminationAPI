@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace FinalYearProject.Services
 {
+    
     public class CoursesService
     {
         private ExamsService _examService;
@@ -25,7 +27,7 @@ namespace FinalYearProject.Services
             List<Course> courses = _context.Courses.ToList<Course>();
             return new GlobalResponseDTO(true, "Fetched all courses in DB", courses);
         }
-
+       
         public GlobalResponseDTO GetProfessorCourses(string professor_id)
         {
             
@@ -62,7 +64,7 @@ namespace FinalYearProject.Services
             return new GlobalResponseDTO(true, "Fetched Professor table successfully", query);
 
         }
-
+        
         public GlobalResponseDTO GetStudentCourses(string student_id)
         {
             IQueryable<StudentScheduleDTO> query;
