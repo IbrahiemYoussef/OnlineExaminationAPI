@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace FinalYearProject.Controllers
 {
-
+    
     [Route("api/[controller]")]
     [ApiController]
     
@@ -74,6 +74,7 @@ namespace FinalYearProject.Controllers
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                         );
 
+                        var userdata = _context.ApplicationUsers.Where(x => x.UserName == model.Username).Select(s => new { s.Id, s.firstname, s.lastname, s.UserName, s.Email }).FirstOrDefault();
 
                         //return Ok(new{token = new JwtSecurityTokenHandler().WriteToken(token),expiration = token.ValidTo});
                         return new GlobalResponseDTO(true, "successed",
@@ -81,7 +82,8 @@ namespace FinalYearProject.Controllers
                             {
                                 token = new JwtSecurityTokenHandler().WriteToken(token),
                                 expiration = token.ValidTo,
-                                userDetails = _context.ApplicationUsers.Where(x => x.UserName == model.Username).Select(s => new { s.Id, s.firstname, s.lastname, s.UserName, s.Email }).FirstOrDefault()
+                                userDetails = userdata,
+                                role= await GetUserRole(model.Username)
                             }
                         );
                     }
