@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 
+
 namespace FinalYearProject.Services
 {
 
@@ -32,7 +33,7 @@ namespace FinalYearProject.Services
         public GlobalResponseDTO AddExamDetails(int course_id,ExamDetailsDTO examdetail)
         {
 
-            if( _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id)==null )
+            if( _context.Courses.FirstOrDefault(x => x.Id == course_id)==null )
                 return new GlobalResponseDTO(false, "Failed invalid course id", null);
 
             var _examdetaill = new ExamDetails()
@@ -65,8 +66,11 @@ namespace FinalYearProject.Services
 
         public GlobalResponseDTO DeleteExamDetails(int course_id)
         {
+            var Check_course = _context.ScheduleWithCourses.Where(x => x.course_id == course_id).ToList();
+            //if (Check_course.StartTime
             var examdetail = new ExamDetails();
             examdetail = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
+            
             if (examdetail != null)
             {
                 _context.ExamDetails.Remove(examdetail);

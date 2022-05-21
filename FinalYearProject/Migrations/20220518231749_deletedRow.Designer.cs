@@ -4,14 +4,16 @@ using FinalYearProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FinalYearProject.Migrations
 {
     [DbContext(typeof(mydbcon))]
-    partial class mydbconModelSnapshot : ModelSnapshot
+    [Migration("20220518231749_deletedRow")]
+    partial class deletedRow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,11 +326,23 @@ namespace FinalYearProject.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("description");
+
                     b.Property<int>("FacultyId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Is_set")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
@@ -343,9 +357,6 @@ namespace FinalYearProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("course_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Duration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartTime")

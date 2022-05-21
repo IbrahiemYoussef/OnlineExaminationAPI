@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace FinalYearProject
 {
@@ -61,6 +62,12 @@ namespace FinalYearProject
             services.AddTransient<ExamsService>();
             services.AddTransient<CoursesService>();
             services.AddTransient<QuestionBankService>();
+            //added next row
+            //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
+
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             

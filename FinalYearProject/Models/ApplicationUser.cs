@@ -11,7 +11,7 @@ namespace FinalYearProject.Models
         //public int ApplicationUserId { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
-        
+
         [ForeignKey("FacultyId")]
         public int FacultyId { get; set; }
         public virtual Faculty Faculties { get; set; }

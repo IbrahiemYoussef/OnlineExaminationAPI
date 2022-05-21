@@ -12,6 +12,5 @@ namespace FinalYearProject.Models.DTOs
         public int NumberOfModQuestions { get; set; }
         public int NumberOfHardQuestions { get; set; }
         public string TypeOfQuestions { get; set; }
-        public int ExamDurationInMinutes { get; set; }
     }
 }

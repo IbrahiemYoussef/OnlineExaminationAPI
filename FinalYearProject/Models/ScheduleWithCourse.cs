@@ -13,5 +13,6 @@ namespace FinalYearProject.Models
         public virtual Course Course { get; set; }
         public virtual Schedule Schedule { get; set; }
         public DateTime StartTime { get; set; }
+        public int Duration { get; set; }
     }
 }

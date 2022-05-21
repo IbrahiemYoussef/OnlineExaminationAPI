@@ -11,7 +11,7 @@ using System.Web.Http.Cors;
 
 namespace FinalYearProject.Controllers
 {
-    [EnableCors(origins:"*",headers:"*",methods:"*")]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CourseController : ControllerBase

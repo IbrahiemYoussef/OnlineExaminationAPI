@@ -9,7 +9,6 @@ namespace FinalYearProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors]
     public class QuestionBankController : ControllerBase
     {
         private QuestionBankService _questionBankService;

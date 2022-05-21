@@ -181,15 +181,6 @@ namespace FinalYearProject.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("description");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(40)
-                    .HasColumnName("name");
 
                 entity.HasOne(d => d.Faculty)
                     .WithMany(p => p.Schedules)
