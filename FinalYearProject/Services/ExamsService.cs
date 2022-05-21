@@ -130,8 +130,13 @@ namespace FinalYearProject.Services
             Enrollment enrollment = _context.Enrollments.Where(e => e.CourseId == course_id && e.ApplicationUserId == student_id).FirstOrDefault();
             if(enrollment==null)
                 return new GlobalResponseDTO(false, "Student is not enrolled to this course", null);
-            //if duration+starttime from schedulewithcourse <DateTimeOffSet.Now  return exam ended
-            if(enrollment.isExaminated)
+
+            //>0 if duration+starttime from schedulewithcourse <DateTimeOffSet.Now  return exam ended
+            ScheduleWithCourse exam_info = _context.ScheduleWithCourses.Where(c => c.course_id == course_id).FirstOrDefault();
+            if (DateTime.Compare(getCairoTime().Result, exam_info.StartTime.AddMinutes(exam_info.Duration)) > 0)
+                return new GlobalResponseDTO(false, "This exam has ended :(", null);
+
+            if (enrollment.isExaminated)
                 return new GlobalResponseDTO(false, "Student can't retake this exam", null);
 
             ExamDetails examm = _context.ExamDetails.FirstOrDefault(x => x.Course_id == course_id);
@@ -214,12 +219,13 @@ namespace FinalYearProject.Services
             return obj.datetime;
         }
 
-        public GlobalResponseDTO GetExamResult(string std_id,int course_id,int total_num_of_questions, List<AnswerDTO> answers)
+        public GlobalResponseDTO GetExamResult(string student_id,int course_id,int total_num_of_questions, List<AnswerDTO> answers)
         {
-            var mcq_counter = 0;
-            List<string> user_answers = answers.Where(x=> x.Qtype.ToString().ToLower() == "w")
-                          .Select(a => a.Answer).ToList();
 
+            int mcq_counter = 0;
+            int current_score = 0;
+            
+            List<string> user_answers = answers.Where(x=> x.Qtype.ToString().ToLower() == "w").Select(a => a.Answer).ToList();
             List<string> model_answers= new List<string>();
             
             foreach (AnswerDTO ans in answers)
@@ -244,26 +250,34 @@ namespace FinalYearProject.Services
             Task<ScoreDTO> obj = get_written_result(target_url, user_answers, model_answers);
 
 
-            int current_score = mcq_counter + obj.Result.score;
+            current_score = mcq_counter + obj.Result.score;
+
+
+            //>0 − If date1 is later than date2
+            ScheduleWithCourse exam_info = _context.ScheduleWithCourses.Where(c => c.course_id == course_id).FirstOrDefault();
+            if (DateTime.Compare(getCairoTime().Result, exam_info.StartTime.AddMinutes(exam_info.Duration + 3)) > 0)
+                current_score = 0;
 
             ResultDTO robj = new ResultDTO()
             {
                 CurrentScore = current_score,
-                TotalScore = total_num_of_questions
-             
+                TotalScore = total_num_of_questions,
+                Grade= getGrade(current_score,total_num_of_questions)
             };
-            
-            Enrollment std_enrollment = new Enrollment();
-            std_enrollment = _context.Enrollments.Where(x => x.ApplicationUserId == std_id && x.CourseId == course_id).FirstOrDefault();
-            std_enrollment.CurrentMarks = robj.CurrentScore;
-            std_enrollment.TotalMarks = robj.TotalScore;
-            std_enrollment.Grade = getGrade(current_score, total_num_of_questions);
-            _context.SaveChanges();
-            
-
 
             return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         } 
+
+        private void saveStudentEvaluation(string student_id,int course_id,int current_score,int total_score)
+        {
+            Enrollment std_enrollment = new Enrollment();
+            std_enrollment = _context.Enrollments.Where(x => x.ApplicationUserId == student_id && x.CourseId == course_id).FirstOrDefault();
+
+            std_enrollment.CurrentMarks = current_score;
+            std_enrollment.TotalMarks = total_score;
+            std_enrollment.Grade = getGrade(current_score, total_score);
+            _context.SaveChanges();
+        }
 
         private string getGrade(float current_score, float total_score)
         {

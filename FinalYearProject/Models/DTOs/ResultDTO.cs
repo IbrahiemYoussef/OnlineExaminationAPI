@@ -10,5 +10,7 @@ namespace FinalYearProject.Models.DTOs
         public int Id { get; set; }
         public int CurrentScore { get; set; }
         public int TotalScore { get; set; }
+
+        public string Grade { get; set; }
     }
 }
