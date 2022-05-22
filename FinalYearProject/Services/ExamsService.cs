@@ -264,7 +264,8 @@ namespace FinalYearProject.Services
                 TotalScore = total_num_of_questions,
                 Grade= getGrade(current_score,total_num_of_questions)
             };
-
+            //add this
+            saveStudentEvaluation(student_id, course_id, robj.CurrentScore, robj.TotalScore);
             return new GlobalResponseDTO(true, "Exam Sucessfully Graded", robj);
         } 
 
