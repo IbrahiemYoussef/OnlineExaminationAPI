@@ -45,15 +45,15 @@ namespace FinalYearProject.Controllers
         public async Task<GlobalResponseDTO> Login([FromBody] LoginModel model)
         {
             var user = await userManager.FindByNameAsync(model.Username);
-            if (user.LockoutEnd > DateTimeOffset.Now)
-            {
-                return new GlobalResponseDTO(false, "the account has been disabled", null);
-            }
-            else
-            {
+            
+            
                 if (user != null)
                 {
-                    if (await userManager.CheckPasswordAsync(user, model.Password))
+                if (user.LockoutEnd > DateTimeOffset.Now)
+                {
+                    return new GlobalResponseDTO(false, "the account has been disabled", null);
+                }
+                if (await userManager.CheckPasswordAsync(user, model.Password))
                     {
                         var userRoles = await userManager.GetRolesAsync(user);
                         var authClaims = new List<Claim>
@@ -97,7 +97,7 @@ namespace FinalYearProject.Controllers
                 {
                     return new GlobalResponseDTO(false, "wrong username", null);
                 }
-            }
+            
             
             
         }
@@ -190,6 +190,88 @@ namespace FinalYearProject.Controllers
             return rolenames;
         }
         [HttpGet]
+        [Route("GetAllStudents")]
+        public GlobalResponseDTO GetStudents()
+        {
+            var rolenamess = _context.Roles.Where(x => x.Name == "Student").Select(g => g.Id).FirstOrDefault();
+            var listofstudent = _context.UserRoles.Where(x => x.RoleId == rolenamess).ToList();
+            List<AccountsDTO> mylis = new List<AccountsDTO>();
+            foreach (var std in listofstudent)
+            {
+                var sutd= _context.ApplicationUsers.Where(x => x.Id == std.UserId).FirstOrDefault();
+                if (sutd.LockoutEnd != null)
+                {
+                    AccountsDTO acc = new AccountsDTO()
+                    {
+                        firstname = sutd.firstname,
+                        lastname = sutd.lastname,
+                        Id = sutd.Id,
+                        Isbanned = true,
+                        Username = sutd.UserName
+                    };
+                    mylis.Add(acc);
+                }
+                else
+                {
+                    AccountsDTO acc = new AccountsDTO()
+                    {
+                        firstname = sutd.firstname,
+                        lastname = sutd.lastname,
+                        Id = sutd.Id,
+                        Isbanned = false,
+                        Username = sutd.UserName
+                    };
+                    mylis.Add(acc);
+                }
+                
+            }
+            return new GlobalResponseDTO(true,"fetched successfully", mylis);
+
+
+        }
+        [HttpGet]
+        [Route("GetAllProfessors")]
+        public GlobalResponseDTO GetProfessors()
+        {
+            var rolenamess = _context.Roles.Where(x => x.Name == "Professor").Select(g => g.Id).FirstOrDefault();
+            var listofstudent = _context.UserRoles.Where(x => x.RoleId == rolenamess).ToList();
+            List<AccountsDTO> mylis = new List<AccountsDTO>();
+            foreach (var std in listofstudent)
+            {
+                var sutd = _context.ApplicationUsers.Where(x => x.Id == std.UserId).FirstOrDefault();
+                if (sutd.LockoutEnd != null)
+                {
+                    AccountsDTO acc = new AccountsDTO()
+                    {
+                        firstname = sutd.firstname,
+                        lastname = sutd.lastname,
+                        Id = sutd.Id,
+                        Isbanned = true,
+                        Username = sutd.UserName
+                    };
+                    mylis.Add(acc);
+                }
+                else
+                {
+                    AccountsDTO acc = new AccountsDTO()
+                    {
+                        firstname = sutd.firstname,
+                        lastname = sutd.lastname,
+                        Id = sutd.Id,
+                        Isbanned = false,
+                        Username = sutd.UserName
+                    };
+                    mylis.Add(acc);
+                }
+
+            }
+            return new GlobalResponseDTO(true, "fetched successfully", mylis);
+
+
+        }
+
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPost]
         [Route("DisableUsername")]
         public async Task<IActionResult> BanAccs(string Id)
         {
@@ -207,7 +289,8 @@ namespace FinalYearProject.Controllers
                 return Ok(new GlobalResponseDTO(false, "wrong Id", null));
             }
         }
-        [HttpGet]
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPost]
         [Route("UnDisableUsername")]
         public async Task<IActionResult> UnBanAccs(string Id)
         {
