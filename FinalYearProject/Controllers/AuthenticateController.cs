@@ -271,7 +271,7 @@ namespace FinalYearProject.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost]
+        [HttpPut]
         [Route("DisableUsername")]
         public async Task<IActionResult> BanAccs(string Id)
         {
@@ -290,7 +290,7 @@ namespace FinalYearProject.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost]
+        [HttpPut]
         [Route("UnDisableUsername")]
         public async Task<IActionResult> UnBanAccs(string Id)
         {
