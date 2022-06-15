@@ -122,6 +122,11 @@ namespace FinalYearProject.Controllers
             _context.SaveChanges();
             return Ok(new GlobalResponseDTO(true, "Reset successful for all of the student subjects", enrollments));
         }
+        [HttpPost("postFaculty")]
+        public IActionResult PostFaculty ()
+        {
+            return Ok();
+        }
 
     }
 }

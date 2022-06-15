@@ -54,7 +54,7 @@ namespace FinalYearProject.Services
                 {
                     _context.ExamDetails.Add(_examdetaill);
                     _context.SaveChanges();
-                    return  new GlobalResponseDTO(true, "Exam Details was set successfully!", _examdetaill);
+                    return  new GlobalResponseDTO(true, "Exam Details was set successfully!", null);
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace FinalYearProject.Services
             {
                 _context.ExamDetails.Remove(examdetail);
                 _context.SaveChanges();
-                return new GlobalResponseDTO(true, "succeeded", "Deleted Successfully");
+                return new GlobalResponseDTO(true, "succeeded", null);
             }
             else
             {
@@ -100,7 +100,7 @@ namespace FinalYearProject.Services
             if (examdetaill.NumberOfEasyQuestions + examdetaill.NumberOfModQuestions + examdetaill.NumberOfHardQuestions == examdetaill.NumberOfQuestions)
             {
                 _context.SaveChanges();
-                return new GlobalResponseDTO(true, "Exam Details Updated", examdetaill);
+                return new GlobalResponseDTO(true, "Exam Details Updated", null);
             }
             else
             {

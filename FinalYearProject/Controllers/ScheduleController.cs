@@ -2,6 +2,7 @@
 using FinalYearProject.Models;
 using FinalYearProject.Models.DTOs;
 using FinalYearProject.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,7 @@ namespace FinalYearProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class ScheduleController : ControllerBase
     {
         //private ScheduleService _ScheduleService;
@@ -40,6 +42,9 @@ namespace FinalYearProject.Controllers
                 Dictionary<object, object> mydict = new Dictionary<object, object>();
                 foreach (var fac in Allfaculties)
                 {
+                    var checksch = _context.Schedules.Where(x => x.FacultyId == fac.Id).FirstOrDefault();
+                    if (checksch != null)
+                        return new GlobalResponseDTO(false, " the faculties already have an schedule", null);
                     List<Course> mycourses = _context.Courses.Where(x => x.Is_open == true && x.Faculty_id == fac.Id).ToList();
                     // error check
                     List<Course> badCourses = new List<Course>();
@@ -138,7 +143,7 @@ namespace FinalYearProject.Controllers
                 var schedul = _context.Schedules.Where(x => x.FacultyId == fac.Id).FirstOrDefault();
             if (schedul == null)
             {
-                return new GlobalResponseDTO(false, "there is a  faculty doesn't have schedule", null);
+                return new GlobalResponseDTO(false, "there is no schedule", null);
             }
             else
             {
@@ -161,14 +166,6 @@ namespace FinalYearProject.Controllers
             }
             return new GlobalResponseDTO(true, "fetched all schedules successfully", mydict);
         }
-
-
-
-
-
-
-
-
 
         //[HttpPost]
         //[Route("CreateScheduleeeee")]

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace FinalYearProject.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class ExamController : ControllerBase
     {
         private ExamsService _examService;
@@ -23,9 +23,9 @@ namespace FinalYearProject.Controllers
         }
         [Authorize(Roles = UserRoles.Professor)]
         [HttpPost("PostExamDetails")]
-        public GlobalResponseDTO AddExamDetails(int course_id,[FromBody] ExamDetailsDTO examdto)
+        public GlobalResponseDTO AddExamDetails(int course_id, [FromBody] ExamDetailsDTO examdto)
         {
-           return _examService.AddExamDetails(course_id,examdto);
+            return _examService.AddExamDetails(course_id, examdto);
         }
         [Authorize(Roles = UserRoles.Professor)]
         [HttpPut("PutExamDetails")]
@@ -37,8 +37,8 @@ namespace FinalYearProject.Controllers
         [HttpDelete("DeleteExamDetails")]
         public GlobalResponseDTO DeleteExamDetails(int course_id)
         {
-          return  _examService.DeleteExamDetails(course_id);
-             
+            return _examService.DeleteExamDetails(course_id);
+
         }
         [Authorize(Roles = UserRoles.Professor)]
         [HttpGet("GetExamDetails")]
@@ -48,15 +48,15 @@ namespace FinalYearProject.Controllers
         }
         [Authorize(Roles = UserRoles.Student)]
         [HttpGet("Examinate")]
-        public IActionResult ExaminateG(string student_id,int course_id)
+        public IActionResult ExaminateG(string student_id, int course_id)
         {
-            return Ok(_examService.GetUniqueExam(student_id,course_id));
+            return Ok(_examService.GetUniqueExam(student_id, course_id));
         }
         [Authorize(Roles = UserRoles.Student)]
         [HttpPost("Examinate")]
         public IActionResult ExaminateP([FromBody] ExaminateDTO obj)
         {
-             return Ok(_examService.GetExamResult(obj.student_id,obj.course_id,obj.total_num_of_questions,obj.answers));
+            return Ok(_examService.GetExamResult(obj.student_id, obj.course_id, obj.total_num_of_questions, obj.answers));
         }
 
     }

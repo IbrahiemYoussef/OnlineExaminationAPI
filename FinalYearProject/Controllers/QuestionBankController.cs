@@ -18,7 +18,7 @@ namespace FinalYearProject.Controllers
             _questionBankService = questionBankService; 
         }
 
-        [Authorize(Roles = UserRoles.Professor)]
+        //[Authorize(Roles = UserRoles.Professor)]
         [HttpPost("UploadQuestionBank")]
         public IActionResult UploadFile(IFormFile file ,string questionBankType,int course_id)
         {
@@ -26,7 +26,7 @@ namespace FinalYearProject.Controllers
             return Ok(_questionBankService.UploadFile(file, questionBankType, course_id));
 
         }
-        [Authorize(Roles = UserRoles.Professor)]
+        //[Authorize(Roles = UserRoles.Professor)]
         [HttpGet("GetQuestionsById")]
         public IActionResult GetQuestionsById(int course_id)
         {
@@ -34,7 +34,7 @@ namespace FinalYearProject.Controllers
             return Ok(_questionBankService.GetQuestionsById(course_id));
 
         }
-        [Authorize(Roles = UserRoles.Professor)]
+        //[Authorize(Roles = UserRoles.Professor)]
         [HttpDelete("DeleteQuestionsById")]
         public IActionResult DeleteQuestionsById(int course_id)
         {
