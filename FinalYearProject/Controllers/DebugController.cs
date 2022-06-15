@@ -136,6 +136,15 @@ namespace FinalYearProject.Controllers
             _context.SaveChanges();
             return Ok(new GlobalResponseDTO(true, "created successfuly", null));
         }
+        [HttpPut]
+        [Route("updateDatetimeSchWithCour")]
+        public IActionResult UpdatDate(int course_id,DateTime starttime)
+        {
+            var sche = _context.ScheduleWithCourses.Where(x => x.course_id == course_id);
+            if (sche ==null)
+                return Ok(new GlobalResponseDTO(false, "Wrong data", null));
+            return Ok();
+        }
 
     }
 }

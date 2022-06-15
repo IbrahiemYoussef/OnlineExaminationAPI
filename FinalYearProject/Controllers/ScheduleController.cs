@@ -155,12 +155,18 @@ namespace FinalYearProject.Controllers
                     var query = from i in _context.Schedules.Where(x => x.FacultyId == fac.Id)
                                 join schedule_course in _context.ScheduleWithCourses
                                 on i.Id equals schedule_course.schedule_id
-                                select new ScheduleWithCourse
+                                join Course in _context.Courses
+                                on schedule_course.course_id equals  Course.Id
+                                select new 
                                 {
                                     course_id = schedule_course.course_id,
                                     schedule_id = schedule_course.schedule_id,
                                     StartTime = schedule_course.StartTime,
-                                    Duration = schedule_course.Duration
+                                    Duration = schedule_course.Duration,
+                                    CourseName=Course.Name,
+                                    EndTime= schedule_course.StartTime.AddMinutes(schedule_course.Duration),
+                                    CourseCode=Course.CourseCode
+
                                 };
                     mydict.Add(fac.Name, query);
             }
