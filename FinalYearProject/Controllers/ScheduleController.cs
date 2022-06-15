@@ -33,8 +33,9 @@ namespace FinalYearProject.Controllers
         }
         [HttpPost]
         [Route("CreateSchedule")]
-        public GlobalResponseDTO CreateSchedule(DateTime startdate)
+        public GlobalResponseDTO CreateSchedule(string startdatee)
         {
+            DateTime startdate= Convert.ToDateTime(startdatee);
             //foreach for bad courses
             if (DateTime.Now < startdate)
             {
@@ -166,6 +167,21 @@ namespace FinalYearProject.Controllers
             }
             return new GlobalResponseDTO(true, "fetched all schedules successfully", mydict);
         }
+
+        [HttpDelete]
+        [Route("DeleteSchedule")]
+        public GlobalResponseDTO DelSchdeule()
+        {
+            var sch = _context.Schedules.ToList();
+            if (sch == null)
+                return new GlobalResponseDTO(false, "Schedules are empty", null);
+            _context.Schedules.RemoveRange(sch);
+            var schwithcour = _context.ScheduleWithCourses.ToList();
+            _context.ScheduleWithCourses.RemoveRange(schwithcour);
+            _context.SaveChanges();
+            return new GlobalResponseDTO(true, "successfuly deleted schedules", null);
+        }
+
 
         //[HttpPost]
         //[Route("CreateScheduleeeee")]
