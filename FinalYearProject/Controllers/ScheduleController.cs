@@ -45,7 +45,7 @@ namespace FinalYearProject.Controllers
                 {
                     var checksch = _context.Schedules.Where(x => x.FacultyId == fac.Id).FirstOrDefault();
                     if (checksch != null)
-                        return new GlobalResponseDTO(false, " the faculties already have an schedule", null);
+                        return new GlobalResponseDTO(false, " The faculties already have thier schedule", null);
                     List<Course> mycourses = _context.Courses.Where(x => x.Is_open == true && x.Faculty_id == fac.Id).ToList();
                     // error check
                     List<Course> badCourses = new List<Course>();
@@ -66,7 +66,7 @@ namespace FinalYearProject.Controllers
                 }
                 if (mydict.Values.Count != 0)
                 {
-                    return new GlobalResponseDTO(false, "Some courses doesn't have examdetails in faculty of ", mydict);
+                    return new GlobalResponseDTO(false, "Some courses doesn't have examdetails in faculty of the following: ", mydict);
                 }
                 foreach (var fac in Allfaculties)
                 {
@@ -127,7 +127,7 @@ namespace FinalYearProject.Controllers
             }
             else
             {
-                return new GlobalResponseDTO(false, "invailed date time", null);
+                return new GlobalResponseDTO(false, "invalid date time", null);
 
             }
         }
