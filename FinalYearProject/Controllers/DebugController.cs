@@ -140,10 +140,12 @@ namespace FinalYearProject.Controllers
         [Route("updateDatetimeSchWithCour")]
         public IActionResult UpdatDate(int course_id,DateTime starttime)
         {
-            var sche = _context.ScheduleWithCourses.Where(x => x.course_id == course_id);
+            ScheduleWithCourse sche = _context.ScheduleWithCourses.Where(x => x.course_id == course_id).FirstOrDefault();
             if (sche ==null)
                 return Ok(new GlobalResponseDTO(false, "Wrong data", null));
-            return Ok();
+            sche.StartTime = starttime;
+            _context.SaveChanges();
+            return Ok(new GlobalResponseDTO(true, "updated successfuly", null));
         }
 
     }
