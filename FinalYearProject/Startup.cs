@@ -62,6 +62,7 @@ namespace FinalYearProject
             services.AddTransient<ExamsService>();
             services.AddTransient<CoursesService>();
             services.AddTransient<QuestionBankService>();
+            services.AddTransient<ScheduleService>();
             //added next row
             //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
