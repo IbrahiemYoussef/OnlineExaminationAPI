@@ -41,6 +41,7 @@ namespace FinalYearProject.Controllers
             {
                 List<Faculty> Allfaculties = _context.Faculties.ToList();
                 Dictionary<object, object> mydict = new Dictionary<object, object>();
+                Dictionary<object, object> mydictt = new Dictionary<object, object>();
                 foreach (var fac in Allfaculties)
                 {
                     var checksch = _context.Schedules.Where(x => x.FacultyId == fac.Id).FirstOrDefault();
@@ -49,20 +50,34 @@ namespace FinalYearProject.Controllers
                     List<Course> mycourses = _context.Courses.Where(x => x.Is_open == true && x.Faculty_id == fac.Id).ToList();
                     // error check
                     List<Course> badCourses = new List<Course>();
-                 
+                    List<Course> noquestionBankcour = new List<Course>();
                     foreach (var course in mycourses)
                     {
                         var res = _context.ExamDetails.Where(x => x.Course_id == course.Id).FirstOrDefault();
+                        
+                        if (res.isQuestionBankConfigured== false)
+                        {
+                            noquestionBankcour.Add(course);
+                        }
                         if (res == null)
                         {
                             badCourses.Add(course);
                         }
+                    }
+                    if (noquestionBankcour.Count !=0)
+                    {
+                        var list = _mapper.Map<List<CourseDTO>>(noquestionBankcour);
+                        mydictt.Add(fac.Name, list);
                     }
                     if (badCourses.Count != 0)
                     {
                         var list = _mapper.Map<List<CourseDTO>>(badCourses);
                         mydict.Add(fac.Name, list);
                     }
+                }
+                if (mydictt.Values.Count != 0)
+                {
+                    return new GlobalResponseDTO(false, "Some courses doesn't have question banks in faculty of the following: ", mydictt);
                 }
                 if (mydict.Values.Count != 0)
                 {

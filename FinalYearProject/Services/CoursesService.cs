@@ -36,10 +36,8 @@ namespace FinalYearProject.Services
             {
                 query =
                     from enroll in _context.EnrollementProfessors.Where(x => x.ApplicationUserId == professor_id)
-                    join schedule_course in _context.ScheduleWithCourses
-                        on enroll.CourseId equals schedule_course.course_id
                     join course in _context.Courses
-                        on schedule_course.course_id equals course.Id
+                        on enroll.CourseId equals course.Id
                     join examdetail in _context.ExamDetails
                         on course.Id equals examdetail.Course_id
                     
