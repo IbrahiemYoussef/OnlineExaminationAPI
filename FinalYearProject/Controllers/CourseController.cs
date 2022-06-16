@@ -31,7 +31,7 @@ namespace FinalYearProject.Controllers
         {
             return Ok(_courseService.GetAllCourses());
         }
-        [Authorize(Roles = UserRoles.Professor)]
+        //[Authorize(Roles = UserRoles.Professor)]
         [HttpGet("ProfessorCourses")]
         public GlobalResponseDTO GetProfessorCourses(string professor_id)
         {

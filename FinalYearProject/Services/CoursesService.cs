@@ -42,6 +42,7 @@ namespace FinalYearProject.Services
                         on schedule_course.course_id equals course.Id
                     join examdetail in _context.ExamDetails
                         on course.Id equals examdetail.Course_id
+                    
                     select new ProfessorCoursesDTO
                     {
                         CourseId=course.Id,
@@ -49,7 +50,8 @@ namespace FinalYearProject.Services
                         CourseCode=course.CourseCode,
                         CreditHrs=course.CreditHrs,
                         FLevel_Id=course.FLevel_Id,
-                        IsConfigured = examdetail.isQuestionBankConfigured
+                        IsQuestionBankConfigured = examdetail.isQuestionBankConfigured,
+                        IsExamdetailsConfigured=_context.ExamDetails.Where(x => x.Id == examdetail.Id).FirstOrDefault() != null
                     };
 
                 if (query.FirstOrDefault()==null)

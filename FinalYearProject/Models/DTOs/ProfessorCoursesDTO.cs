@@ -12,6 +12,7 @@ namespace FinalYearProject.Models.DTOs
         public string CourseCode { get; set; }
         public int CreditHrs { get; set; }
         public int FLevel_Id { get; set; }
-        public bool IsConfigured { get; set; }
+        public bool IsExamdetailsConfigured { get; set; }
+        public bool IsQuestionBankConfigured { get; set; }
     }
 }
